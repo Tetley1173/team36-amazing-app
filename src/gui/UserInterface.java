@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class UserInterface {
 
-    public static void main(String[] args)
+    public static void mainInterface()
     {
         // Setting up canvas
 
@@ -37,13 +37,14 @@ public class UserInterface {
 
         JTabbedPane panel = new JTabbedPane();
         //panel.setBorder(BorderFactory.createTitledBorder("Label Names"));
+
+        // Assets Tab
+        JPanel interiorPanel = new JPanel();
+        panel.add("Assets", interiorPanel);
         panel.add("Edit", buttonpanel);
         panel.add("Export", new JLabel());
 
-        // Assets Tab
 
-        JPanel interiorPanel = new JPanel();
-        panel.add("Assets", interiorPanel);
 
 
         // Finalising program

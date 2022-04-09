@@ -1,4 +1,5 @@
 package collections;
+import static gui.UserInterface.mainInterface;
 
 public class Main {
 
@@ -9,6 +10,8 @@ public class Main {
      */
     public static void main (String[] args){
 
+        // Start the user interface.
+        mainInterface();
         System.out.print("It does something!");
 
     }
