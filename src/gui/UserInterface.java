@@ -40,14 +40,11 @@ public class UserInterface {
 
         // Assets Tab
         JPanel assetsPanel = new JPanel();
+        panel.add("Assets", assetsPanel);
         assetContents(assetsPanel);
 
-        panel.add("Assets", assetsPanel);
         panel.add("Edit", buttonPanel);
         panel.add("Export", new JLabel());
-
-
-
 
         // Finalising program
 
