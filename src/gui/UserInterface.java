@@ -21,6 +21,7 @@ public class UserInterface {
         FileMenu.add("Exit");
         menuBar.add(FileMenu);
 
+        // ######### Maybe we should make this a place to toggle things like what type of exit is being used?
         // Adding Menu option (Edit)
         JMenu editMenu = new JMenu("Edit");
         editMenu.add("Cut");
