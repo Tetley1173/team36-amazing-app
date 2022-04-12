@@ -16,6 +16,4 @@ public class Main {
 
     }
 
-    // A comment to demonstrate pushing
-
 }
