@@ -1,4 +1,4 @@
-import Components.customizedButton;
+import components.customizedButton;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

@@ -1,5 +1,7 @@
+package gui;
+
 import components.Cell;
-import mazeFunctions.mazeGen;
+import mazeFunctions.MazeGen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +11,11 @@ public class Grid {
     private final int X_dim, Y_dim; // Dimension of the maze grid
     private final int rows, cols; // # of rows and columns of the maze
     private final Cell[] startEndCell;
-    private final mazeGen maze;
+    private final MazeGen maze;
     private final int OFFSET = 20;
 
     public Grid(int rows, int cols) {
-        maze = new  mazeGen(rows, cols);
+        maze = new MazeGen(rows, cols);
         maze.createMaze();
         startEndCell = maze.genMaze();
         this.X_dim = rows * size;
@@ -27,10 +29,10 @@ public class Grid {
         g.setColor(Color.white);
         for (int row = 0; row < this.rows; row++) {
             for (int col = 0; col < this.cols; col++) {
-//                if (maze.mazeWall(row, col, 0) == 1) pnl.add(new customizedButton(row, col,0));
-//                if (maze.mazeWall(row, col, 1) == 1) pnl.add(new customizedButton(row, col,1));
-//                if (maze.mazeWall(row, col, 2) == 1) pnl.add(new customizedButton(row, col,2));
-//                if (maze.mazeWall(row, col, 3) == 1) pnl.add(new customizedButton(row, col,3));
+//                if (maze.mazeWall(row, col, 0) == 1) pnl.add(new CustomizedButton(row, col,0));
+//                if (maze.mazeWall(row, col, 1) == 1) pnl.add(new CustomizedButton(row, col,1));
+//                if (maze.mazeWall(row, col, 2) == 1) pnl.add(new CustomizedButton(row, col,2));
+//                if (maze.mazeWall(row, col, 3) == 1) pnl.add(new CustomizedButton(row, col,3));
                 if (maze.mazeWall(row, col, 0) == 1) g.drawLine(col * this.size + OFFSET,row * this.size + OFFSET,(col + 1) * this.size + OFFSET,row * this.size + OFFSET);
                 if (maze.mazeWall(row, col, 3) == 1) g.drawLine(col * this.size + OFFSET,row * this.size + OFFSET,col * this.size + OFFSET,(row + 1) * this.size + OFFSET);
                 if (maze.mazeWall(row, col, 2) == 1) g.drawLine(col * this.size + OFFSET,(row + 1) * this.size + OFFSET,(col + 1) * this.size + OFFSET,(row + 1) * this.size + OFFSET);

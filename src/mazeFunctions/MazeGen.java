@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-public class mazeGen {
+public class MazeGen {
     private final int rows;
     private final int cols;
     private final Cell[][] cells;
     ArrayList<Cell> distanceDeadEndStart = new ArrayList<>();
-    public mazeGen(int rows, int cols) {
+    public MazeGen(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.cells = new Cell[rows][cols];

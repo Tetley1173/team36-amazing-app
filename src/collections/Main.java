@@ -1,5 +1,8 @@
 package collections;
+import gui.UserInterface;
+
 import static gui.UserInterface.mainInterface;
+import gui.UserInterface;
 
 public class Main {
 
@@ -11,7 +14,9 @@ public class Main {
     public static void main (String[] args){
 
         // Start the user interface.
-        mainInterface();
+        //mainInterface();
+        UserInterface frame = new UserInterface();
+        frame.setVisible(true);
         System.out.print("It does something!");
 
     }

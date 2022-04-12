@@ -3,7 +3,7 @@ package components;
 import javax.swing.*;
 import java.awt.*;
 
-public class customizedButton extends JButton {
+public class CustomizedButton extends JButton {
     private enum buttonTypes {simpleButton, wallButton}
     private int width = 20;
     private int height = 40;
@@ -23,22 +23,22 @@ public class customizedButton extends JButton {
     private String name = "";
 
     // wall buttons
-    public customizedButton(int row, int col, int wallIndex) {
-            this.row = row;
-            this.col = col;
-            if (wallIndex == 0 || wallIndex == 2) {
-                this.locationX = row * (widthHorizontal + heightHorizontal);
-                this.locationY = col * (widthHorizontal + heightHorizontal);
-            }
-            else {
-                this.locationX = row * (widthVertical + heightVertical);
-                this.locationY = col * (widthVertical + heightVertical);
-            }
-            this.type = buttonTypes.wallButton;
-            this.wallIndex = wallIndex;
+    public CustomizedButton(int row, int col, int wallIndex) {
+        this.row = row;
+        this.col = col;
+        if (wallIndex == 0 || wallIndex == 2) {
+            this.locationX = row * (widthHorizontal + heightHorizontal);
+            this.locationY = col * (widthHorizontal + heightHorizontal);
+        }
+        else {
+            this.locationX = row * (widthVertical + heightVertical);
+            this.locationY = col * (widthVertical + heightVertical);
+        }
+        this.type = buttonTypes.wallButton;
+        this.wallIndex = wallIndex;
     }
     // simple buttons
-    public customizedButton(String str, int x, int y, int width, int height) {
+    public CustomizedButton(String str, int x, int y, int width, int height) {
         this.locationX = x;
         this.locationY = y;
         this.width = width;
