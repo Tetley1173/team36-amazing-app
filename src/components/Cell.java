@@ -2,12 +2,14 @@ package components;
 
 public class Cell {
     private final int row, col;
-    private final int[] wall = {1, 1, 1, 1};
+    private final int[] wall = {1, 1, 1, 1}; // the state of the wall (1 - ON, 0 - OFF)
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
     }
-    public void knockWall(int wallIndex) { this.wall[wallIndex] = 1 - this.wall[wallIndex]; }
+
+    // Invert the wall
+    public void invertWall(int wallIndex) { this.wall[wallIndex] = 1 - this.wall[wallIndex]; }
 
     public int getRow() {
         return row;
