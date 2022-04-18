@@ -90,8 +90,8 @@ public class CustomizedButton extends JButton {
         if (this.type == buttonTypes.simpleButton) {
             ((Graphics2D) g).setRenderingHint(
                     RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setColor(new Color(255, 116, 0));
-            g.drawRoundRect(0, 0, this.width, this.height, 40, 40);
+           // g.setColor(new Color(255, 116, 0));
+           // g.drawRoundRect(0, 0, this.width, this.height, 40, 40);
         }
     }
 
