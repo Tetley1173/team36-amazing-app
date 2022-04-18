@@ -3,6 +3,7 @@ package gui;
 import components.CustomizedButton;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicLookAndFeel;
 import java.awt.*;
 
 public class EditTab extends JFrame{
@@ -12,6 +13,8 @@ public class EditTab extends JFrame{
 
     // Buttons
     private final JButton mazeGeneration;
+    private final JButton BlankGenerate;
+
     // Toggle buttons
     private final JRadioButton toggleOptimumPath;
     private final JRadioButton toggleEntryExit;
@@ -30,10 +33,14 @@ public class EditTab extends JFrame{
         buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(Color.BLACK);
         editTab.add(buttonPanel, BorderLayout.WEST);
-        buttonPanel.setPreferredSize(new Dimension(150, 400));
+        buttonPanel.setPreferredSize(new Dimension(180, 400));
 
-        mazeGeneration = new CustomizedButton("Start",20,0,70,20);
+        // Generate Button
+        mazeGeneration = new CustomizedButton("Generate",20,0,70,20);
         mazeGeneration.addActionListener(event -> fill());
+
+        // Blank Button
+        BlankGenerate = new CustomizedButton("Blank",120,0,70,20);
 
         toggleOptimumPath = new JRadioButton("Optimum Solution");
         toggleOptimumPath.setLocation(20,30);
@@ -52,6 +59,7 @@ public class EditTab extends JFrame{
         toggleIndicators.setForeground(Color.WHITE);
 
         buttonPanel.add(mazeGeneration);
+        buttonPanel.add(BlankGenerate);
         buttonPanel.add(toggleOptimumPath);
         buttonPanel.add(toggleEntryExit);
         buttonPanel.add(toggleIndicators);
