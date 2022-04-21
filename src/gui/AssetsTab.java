@@ -118,17 +118,17 @@ public class AssetsTab extends JFrame {
     }
 
 
-    /**
-     * Method that adds content to the Assets Tab.
-     * @param p requires a JPanel object so that it knows where to render its content.
-     * @deprecated This is Shannon's original method for rendering the Assets tab. It got replaced with the AssetsTab
-     * method. Call the new method to render the Assets tab.
-     */
-    public static void assetContents(JPanel p) {
-        p.add(new JButton("Select Entry Image"));
-        p.add(new JButton("Select Exit Image"));
-        p.add(new JButton("Select Logo 1 Image"));
-        p.add(new JButton("Select Logo 2 Image"));
-    }
+//    /**
+//     * Method that adds content to the Assets Tab.
+//     * @param p requires a JPanel object so that it knows where to render its content.
+//     * @deprecated This is Shannon's original method for rendering the Assets tab. It got replaced with the AssetsTab
+//     * method. Call the new method to render the Assets tab.
+//     */
+//    public static void assetContents(JPanel p) {
+//        p.add(new JButton("Select Entry Image"));
+//        p.add(new JButton("Select Exit Image"));
+//        p.add(new JButton("Select Logo 1 Image"));
+//        p.add(new JButton("Select Logo 2 Image"));
+//    }
 
 }

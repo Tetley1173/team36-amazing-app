@@ -101,7 +101,6 @@ public class UserInterface extends JFrame implements ActionListener {
         // Assets Tab
         JPanel assetsPanel = new JPanel();
         panel.add("Assets", assetsPanel);
-        //assetContents(assetsPanel);
 
         panel.add("Edit", buttonPanel);
         panel.add("Export", new JLabel());
