@@ -17,8 +17,8 @@ public class Main {
         //mainInterface();
         UserInterface frame = new UserInterface();
         frame.setVisible(true);
-        System.out.print("It does something!");
 
     }
+
 
 }

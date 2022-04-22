@@ -23,7 +23,7 @@ public class UserInterface extends JFrame implements ActionListener {
     Grid grid;
     public UserInterface() {
         setTitle("Amazing software");
-        setPreferredSize(new Dimension(800, 800));
+        setPreferredSize(new Dimension(1000, 800));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
@@ -101,7 +101,6 @@ public class UserInterface extends JFrame implements ActionListener {
         // Assets Tab
         JPanel assetsPanel = new JPanel();
         panel.add("Assets", assetsPanel);
-        //assetContents(assetsPanel);
 
         panel.add("Edit", buttonPanel);
         panel.add("Export", new JLabel());

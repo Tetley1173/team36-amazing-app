@@ -156,20 +156,20 @@ public class MazeGen {
                 if (noOfCells == 1) nextNeighbour = neighbourCellList.get(0);
                 else nextNeighbour = neighbourCellList.get(rand.nextInt(noOfCells));
                 if (nextNeighbour[0] < currentRow) {
-                    cells[currentRow][currentCol].knockWall(0);
-                    cells[nextNeighbour[0]][nextNeighbour[1]].knockWall(2);
+                    cells[currentRow][currentCol].invertWall(0);
+                    cells[nextNeighbour[0]][nextNeighbour[1]].invertWall(2);
                 }
                 else if (nextNeighbour[0] > currentRow) {
-                    cells[currentRow][currentCol].knockWall(2);
-                    cells[nextNeighbour[0]][nextNeighbour[1]].knockWall(0);
+                    cells[currentRow][currentCol].invertWall(2);
+                    cells[nextNeighbour[0]][nextNeighbour[1]].invertWall(0);
                 }
                 else if (nextNeighbour[1] < currentCol) {
-                    cells[currentRow][currentCol].knockWall(3);
-                    cells[nextNeighbour[0]][nextNeighbour[1]].knockWall(1);
+                    cells[currentRow][currentCol].invertWall(3);
+                    cells[nextNeighbour[0]][nextNeighbour[1]].invertWall(1);
                 }
                 else if (nextNeighbour[1] > currentCol) {
-                    cells[currentRow][currentCol].knockWall(1);
-                    cells[nextNeighbour[0]][nextNeighbour[1]].knockWall(3);
+                    cells[currentRow][currentCol].invertWall(1);
+                    cells[nextNeighbour[0]][nextNeighbour[1]].invertWall(3);
                 }
                 cellStack.push(cells[currentRow][currentCol]);
                 currentRow = nextNeighbour[0];
