@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
+ * User Stories:
+ *
  *  When I export a maze, I want to be able to have the option
  *  of whether to export the maze with the solution or not:
  *
@@ -18,6 +20,8 @@ import java.awt.event.ActionListener;
  *  to the dimensions of the maze:
  *
  *  When I export a maze, I want control of where I can save the file.
+ *
+ *  @author Georgia Meszaros Simon
  */
 
 public class ExportTab extends JFrame{
@@ -28,21 +32,20 @@ public class ExportTab extends JFrame{
 
     // Radio buttons -> options for export features
         // Export with solution or without
-    private JRadioButton solButton1;
-    private JRadioButton solButton2;
+    private final JRadioButton solButton1, solButton2;
 
         // Export pixel size
-    private JRadioButton sizeButton1;
-    private JRadioButton sizeButton2;
+    private final JRadioButton sizeButton1, sizeButton2;
 
         // Export as what file format - NOT FINISHED
-    private JRadioButton pdfButton;
-    private JRadioButton pngButton;
+    private final JRadioButton pdfButton, pngButton;
 
     // Button for export
-    private JButton exportToButton;
+    private final JButton exOnly,  // => exOnly: only export - does NOT save to database
+            exSave,         // => exSave: saves to database only
+            exSaveAs;      // => exSaveAs: saves to database and asks user where to save file
         // Dialog Button for export
-    private JDialog dialogWin;
+    private final JDialog dialogWin;
 
     public ExportTab(JTabbedPane tabbedPane) {
         layOut = new JPanel(new GridLayout());
@@ -71,8 +74,10 @@ public class ExportTab extends JFrame{
         g3.add(pdfButton);
         g3.add(pngButton);
 
-        exportToButton = new JButton("Export Maze?");
-        exportToButton.addActionListener(new ActionListener() {
+        exOnly = new JButton("Export As only?");
+        exSave = new JButton("Save Maze to database?");
+        exSaveAs = new JButton("Export As - as well as save to database)?");
+        exOnly.addActionListener(new ActionListener() {
             @Override   // Open export dialog window
             public void actionPerformed(ActionEvent e) {
                 dialogWin.setVisible(true);
@@ -111,7 +116,9 @@ public class ExportTab extends JFrame{
         gridPanel.add(pdfButton);
         gridPanel.add(pngButton);
 
-        gridPanel.add(exportToButton);
+        gridPanel.add(exOnly);
+        gridPanel.add(exSave);
+        gridPanel.add(exSaveAs);
         layOut.add(gridPanel, BorderLayout.WEST);
     }
 }
