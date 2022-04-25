@@ -74,9 +74,9 @@ public class ExportTab extends JFrame{
         g3.add(pdfButton);
         g3.add(pngButton);
 
-        exOnly = new JButton("Export As only?");
-        exSave = new JButton("Save Maze to database?");
-        exSaveAs = new JButton("Export As - as well as save to database)?");
+        exOnly = new JButton("Export");
+        exSave = new JButton("Save to database?");
+        exSaveAs = new JButton("Export As/ Save to database");
         exOnly.addActionListener(new ActionListener() {
             @Override   // Open export dialog window
             public void actionPerformed(ActionEvent e) {
