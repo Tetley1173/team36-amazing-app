@@ -5,10 +5,8 @@ import java.awt.*;
 
 public class CustomizedButton extends JButton {
     private enum buttonTypes {simpleButton, wallButton}
-    private int width = 20;
-    private int height = 40;
-    private int row;
-    private int col;
+    private final int width, height;
+    private int row, col;
 
     // size of horizontal walls
     private final int widthHorizontal = 40;
@@ -16,27 +14,12 @@ public class CustomizedButton extends JButton {
     // size of vertical walls
     private final int widthVertical = 5;
     private final int heightVertical = 40;
-    private int wallIndex = 4;
+    private int wallIndex;
     private final int locationX;
     private final int locationY;
     private final buttonTypes type;
-    private String name = "";
+    private final String name;
 
-    // wall buttons
-    public CustomizedButton(int row, int col, int wallIndex) {
-        this.row = row;
-        this.col = col;
-        if (wallIndex == 0 || wallIndex == 2) {
-            this.locationX = row * (widthHorizontal + heightHorizontal);
-            this.locationY = col * (widthHorizontal + heightHorizontal);
-        }
-        else {
-            this.locationX = row * (widthVertical + heightVertical);
-            this.locationY = col * (widthVertical + heightVertical);
-        }
-        this.type = buttonTypes.wallButton;
-        this.wallIndex = wallIndex;
-    }
     // simple buttons
     public CustomizedButton(String str, int x, int y, int width, int height) {
         this.locationX = x;

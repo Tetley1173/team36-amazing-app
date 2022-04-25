@@ -3,10 +3,15 @@ package gui;
 import components.CustomizedButton;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.Hashtable;
 
 public class EditTab extends JFrame{
+    // CONSTANTS
+    private final int minNumberOfRowsCols = 1;
+    private final int maxNumberOfRowsCols = 100;
     // Panel
     private final JPanel editTab;
     private final JPanel mazeEditPanel, buttonPanel;
@@ -30,6 +35,7 @@ public class EditTab extends JFrame{
 
     // Maze grid
     Grid mazeGrid;
+
     public EditTab(JTabbedPane tabbedPane) {
         // create the edit tab
         editTab = new JPanel(new BorderLayout());
@@ -47,10 +53,19 @@ public class EditTab extends JFrame{
         buttonPanel.setPreferredSize(new Dimension(200, 400));
 
         // The text field input setting the size of the maze
-        rowDecision = new JTextField("row");
-        colDecision = new JTextField("col");
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        format.setGroupingUsed(false);
+        NumberFormatter numberFormatter = new NumberFormatter(format);
+        //numberFormatter.setValueClass(Integer.class);
+        //numberFormatter.setMinimum(minNumberOfRowsCols);
+        //numberFormatter.setMaximum(maxNumberOfRowsCols);
+        //numberFormatter.setAllowsInvalid(false);
+        rowDecision = new JFormattedTextField(numberFormatter);
+        colDecision = new JFormattedTextField(numberFormatter);
         rowDecision.setPreferredSize(new Dimension(70,20));
         colDecision.setPreferredSize(new Dimension(70,20));
+        rowDecision.setColumns(3);
+        colDecision.setColumns(3);
 
         // Button for auto-gen maze
         mazeGeneration = new CustomizedButton("Generate",20,0,70,20);
@@ -93,13 +108,14 @@ public class EditTab extends JFrame{
         sizeSlideBar.setPaintLabels(true);
         sizeSlideBar.setPaintTicks(true);
 
-        // Hash table to store different labels corresponding to its value
-        Hashtable<Integer, JLabel> sliderLabels = new Hashtable<>();
-        sliderLabels.put(10, new JLabel("10"));
-        sliderLabels.put(20, new JLabel("20"));
-        sliderLabels.put(30, new JLabel("30"));
-        sliderLabels.put(40, new JLabel("40"));
-        sliderLabels.put(50, new JLabel("50"));
+//        // Hash table to store different labels corresponding to its value
+//        Hashtable<Integer, JLabel> sliderLabels = new Hashtable<>();
+//        sliderLabels.put(10, new JLabel("10"));
+//        sliderLabels.put(20, new JLabel("20"));
+//        sliderLabels.put(30, new JLabel("30"));
+//        sliderLabels.put(40, new JLabel("40"));
+//        sliderLabels.put(50, new JLabel("50"));
+//        sizeSlideBar.setLabelTable(sliderLabels);
 
         // Adding components into buttonPanel
         buttonPanel.add(rowDecision);

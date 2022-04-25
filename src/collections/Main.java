@@ -1,9 +1,6 @@
 package collections;
 import gui.UserInterface;
 
-import static gui.UserInterface.mainInterface;
-import gui.UserInterface;
-
 public class Main {
 
     /**
