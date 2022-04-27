@@ -19,8 +19,6 @@ public class UserInterface extends JFrame implements ActionListener {
     private final AssetsTab asset;
     private final ExportTab export;
 
-    // Gui.Grid
-    Grid grid;
     public UserInterface() {
         setTitle("Amazing software");
         setPreferredSize(new Dimension(1000, 800));

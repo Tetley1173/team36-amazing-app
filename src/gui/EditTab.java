@@ -1,12 +1,12 @@
 package gui;
 
 import components.CustomizedButton;
+import mazeFunctions.MazeGen;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.text.NumberFormat;
-import java.util.Hashtable;
 
 public class EditTab extends JFrame{
     // CONSTANTS
@@ -34,7 +34,7 @@ public class EditTab extends JFrame{
     private final JRadioButton toggleIndicators;
 
     // Maze grid
-    Grid mazeGrid;
+    MazeGen mazeGrid;
 
     public EditTab(JTabbedPane tabbedPane) {
         // create the edit tab
@@ -56,10 +56,6 @@ public class EditTab extends JFrame{
         NumberFormat format = NumberFormat.getIntegerInstance();
         format.setGroupingUsed(false);
         NumberFormatter numberFormatter = new NumberFormatter(format);
-        //numberFormatter.setValueClass(Integer.class);
-        //numberFormatter.setMinimum(minNumberOfRowsCols);
-        //numberFormatter.setMaximum(maxNumberOfRowsCols);
-        //numberFormatter.setAllowsInvalid(false);
         rowDecision = new JFormattedTextField(numberFormatter);
         colDecision = new JFormattedTextField(numberFormatter);
         rowDecision.setPreferredSize(new Dimension(70,20));
@@ -133,7 +129,8 @@ public class EditTab extends JFrame{
 
     // Display the auto-gen maze
     private void fill() {
-        mazeGrid = new Grid(20,20);
+        mazeGrid = new MazeGen(20, 20, 30);
+//        mazeGrid = new Grid(20,20, 25);
         mazeGrid.drawMaze(mazeEditPanel);
     }
 }

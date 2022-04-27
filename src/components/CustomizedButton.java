@@ -9,8 +9,6 @@ public class CustomizedButton extends JButton {
     private int row, col;
 
     // size of horizontal walls
-    private final int widthHorizontal = 40;
-    private final int heightHorizontal = 5;
     // size of vertical walls
     private final int widthVertical = 5;
     private final int heightVertical = 40;
@@ -29,6 +27,15 @@ public class CustomizedButton extends JButton {
         this.type = buttonTypes.simpleButton;
         this.name = str;
     }
+    public CustomizedButton(int x, int y, int width, int height, int wallIndex) {
+        this.locationX = x;
+        this.locationY = y;
+        this.width = width;
+        this.height = height;
+        this.type = buttonTypes.wallButton;
+        this.wallIndex = wallIndex;
+        this.name = null;
+    }
 
     @Override
     protected void paintComponent (Graphics g) {
@@ -37,22 +44,19 @@ public class CustomizedButton extends JButton {
 
         if (this.type == buttonTypes.wallButton) {
             g.setColor(new Color(125, 116, 0));
+            setPreferredSize(new Dimension(this.width, this.height));
+            setLocation(locationX, locationY);
             if (this.wallIndex == 0) {
-                setPreferredSize(new Dimension(this.widthHorizontal, this.heightHorizontal));
-                setLocation(locationX, locationY);
-                g.fillRoundRect(0, 0,this.widthHorizontal,this.heightHorizontal,2,2);
+                g.fillRoundRect(0, 0,this.width, this.height,2,2);
             }
             if (this.wallIndex == 2){
-                setPreferredSize(new Dimension(this.widthVertical, this.heightVertical));
-                g.fillRoundRect(0, 0,this.widthVertical,this.heightVertical,2,2);
+                g.fillRoundRect(0, 0,this.width, this.height,2,2);
             }
             if (this.wallIndex == 1) {
-                setPreferredSize(new Dimension(this.widthHorizontal, this.heightHorizontal));
-                g.fillRoundRect(0, 0,this.widthHorizontal,this.heightHorizontal,2,2);
+                g.fillRoundRect(0, 0,this.width, this.height,2,2);
             }
             if (this.wallIndex == 3){
-                setPreferredSize(new Dimension(this.widthVertical, this.heightVertical));
-                g.fillRoundRect(0, 0,this.widthVertical,this.heightVertical,2,2);
+                g.fillRoundRect(0, 0,this.width, this.height,2,2);
             }
             //setBorderPainted(false);
         }
