@@ -1,7 +1,8 @@
 package gui;
 
 import components.CustomizedButton;
-import mazeFunctions.MazeGen;
+import mazeFunctions.Maze;
+import mazeFunctions.MazeGeneration;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -34,7 +35,7 @@ public class EditTab extends JFrame{
     private final JRadioButton toggleIndicators;
 
     // Maze grid
-    MazeGen mazeGrid;
+    Maze maze;
 
     public EditTab(JTabbedPane tabbedPane) {
         // create the edit tab
@@ -65,7 +66,11 @@ public class EditTab extends JFrame{
 
         // Button for auto-gen maze
         mazeGeneration = new CustomizedButton("Generate",20,0,70,20);
-        mazeGeneration.addActionListener(event -> fill());
+        mazeGeneration.addActionListener(event -> {
+            // Display the auto-gen maze
+            maze = MazeGeneration.genMaze(new Maze(20, 20));
+            displayMaze.drawMaze(mazeEditPanel, maze);
+        });
 
         // Button for blank maze
         BlankGenerate = new CustomizedButton("Blank",120,0,70,20);
@@ -83,7 +88,7 @@ public class EditTab extends JFrame{
         // Toggle the Entry and Exit (Red - Entry, Green, Exit)
         toggleEntryExit = new JRadioButton("Show Entry/Exit");
         toggleEntryExit.addActionListener(event -> {
-            if (toggleEntryExit.isSelected()) mazeGrid.showEntryExit(mazeEditPanel);
+            if (toggleEntryExit.isSelected()) displayMaze.showEntryExit(mazeEditPanel, maze);
         });
         toggleEntryExit.setLocation(20,60);
         toggleEntryExit.setBackground(Color.DARK_GRAY);
@@ -127,10 +132,4 @@ public class EditTab extends JFrame{
         editTab.add(sizeSlideBar, BorderLayout.EAST);
     }
 
-    // Display the auto-gen maze
-    private void fill() {
-        mazeGrid = new MazeGen(20, 20, 30);
-//        mazeGrid = new Grid(20,20, 25);
-        mazeGrid.drawMaze(mazeEditPanel);
-    }
 }

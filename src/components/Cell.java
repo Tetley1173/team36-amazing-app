@@ -23,4 +23,5 @@ public class Cell {
         return sum;
     }
     public int getWall(int wallIndex) { return wall[wallIndex]; }
+
 }
