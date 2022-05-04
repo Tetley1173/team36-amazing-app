@@ -1,23 +1,47 @@
 package gui;
 
-import components.wallButton;
+import components.wallButtonCollection;
 import mazeFunctions.Maze;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class displayMaze {
-    private static int HEIGHT = 5;
+public class displayMaze{
+    private static final int HEIGHT = 5;
     private static int WIDTH = 30;
-    private static int OFFSET = 10;
+    private static int OFFSET = 5;
+    public static wallButtonCollection[][] wallButtons;
 
-    public static void drawMaze(JPanel pnl, Maze maze) {
+    public static void setWallButtons(Maze maze) {
+        wallButtons = new wallButtonCollection[maze.getRows()][maze.getCols()];
         for (int row = 0; row < maze.getRows(); row++) {
             for (int col = 0; col < maze.getCols(); col++) {
-                if (row == 0 && maze.getCell(row, col).getWall(0) == 1) pnl.add(new wallButton((col * (WIDTH + HEIGHT)) + HEIGHT + OFFSET, OFFSET, WIDTH, HEIGHT, 0));
-                if (col == 0 && maze.getCell(row, col).getWall(3) == 1) pnl.add(new wallButton(OFFSET, (row * (WIDTH + HEIGHT)) + HEIGHT + OFFSET, HEIGHT, WIDTH, 3));
-                if (maze.getCell(row, col).getWall(2) == 1) pnl.add(new wallButton(col * (WIDTH + HEIGHT) + HEIGHT + OFFSET, (row + 1) * (WIDTH + HEIGHT) + OFFSET, WIDTH, HEIGHT, 2));
-                if (maze.getCell(row, col).getWall(1) == 1) pnl.add(new wallButton((col + 1) * (WIDTH + HEIGHT) + OFFSET, row * (WIDTH + HEIGHT) + HEIGHT + OFFSET, HEIGHT, WIDTH, 1));
+                wallButtons[row][col] = new wallButtonCollection(row, col, WIDTH, HEIGHT, OFFSET);
+            }
+        }
+    }
+    public static void drawMaze(JPanel pnl, Maze maze) {
+        setWallButtons(maze);
+        for (int row = 0; row < maze.getRows(); row++) {
+            for (int col = 0; col < maze.getCols(); col++) {
+                if (row == 0){
+                    if (maze.getCell(row, col).getWall(0) == 0)
+                        wallButtons[row][col].getWallButton(0).setContentAreaFilled(false);
+                    pnl.add(wallButtons[row][col].getWallButton(0));
+                }
+                if (col == 0){
+                    if (maze.getCell(row, col).getWall(3) == 0)
+                        wallButtons[row][col].getWallButton(3).setContentAreaFilled(false);
+                    pnl.add(wallButtons[row][col].getWallButton(3));
+                }
+                if (maze.getCell(row, col).getWall(2) == 0)
+                    wallButtons[row][col].getWallButton(2).setContentAreaFilled(false);
+                if (maze.getCell(row, col).getWall(1) == 0)
+                    wallButtons[row][col].getWallButton(1).setContentAreaFilled(false);
+
+                pnl.add(wallButtons[row][col].getWallButton(2));
+                pnl.add(wallButtons[row][col].getWallButton(1));
+
             }
         }
     }
@@ -32,4 +56,5 @@ public class displayMaze {
     public void showOptimumPath(JPanel pnl, Maze maze){}
     public void showOptimumPathReachingPercentage(JPanel pnl, Maze maze){}
     public void showDeadEndPercentage(JPanel pnl, Maze maze){}
+
 }

@@ -35,7 +35,7 @@ public class EditTab extends JFrame{
     private final JRadioButton toggleIndicators;
 
     // Maze grid
-    Maze maze;
+    public static Maze maze;
 
     public EditTab(JTabbedPane tabbedPane) {
         // create the edit tab
@@ -67,16 +67,31 @@ public class EditTab extends JFrame{
         // Button for auto-gen maze
         mazeGeneration = new CustomizedButton("Generate",20,0,70,20);
         mazeGeneration.addActionListener(event -> {
+            // remove all the things in the maze panel
+            mazeEditPanel.removeAll();
             // Display the auto-gen maze
-            maze = MazeGeneration.genMaze(new Maze(20, 20));
+            maze = MazeGeneration.genMaze(new Maze(20,20));
             displayMaze.drawMaze(mazeEditPanel, maze);
+            mazeEditPanel.repaint();
+            mazeEditPanel.validate();
+
         });
 
         // Button for blank maze
         BlankGenerate = new CustomizedButton("Blank",120,0,70,20);
-
+        BlankGenerate.addActionListener(event -> {
+            maze = new Maze(20, 20);
+            displayMaze.drawMaze(mazeEditPanel, maze);
+            mazeEditPanel.repaint();
+            mazeEditPanel.validate();
+        });
         // Button to erase the maze display
         EraseButton = new CustomizedButton("Erase",20,120,70,20);
+        EraseButton.addActionListener(event -> {
+            mazeEditPanel.removeAll();
+            mazeEditPanel.repaint();
+            mazeEditPanel.validate();
+        });
 
 
         // Toggle the optimum path (should be a colored line)
@@ -108,15 +123,6 @@ public class EditTab extends JFrame{
         sizeSlideBar.setMajorTickSpacing(5);
         sizeSlideBar.setPaintLabels(true);
         sizeSlideBar.setPaintTicks(true);
-
-//        // Hash table to store different labels corresponding to its value
-//        Hashtable<Integer, JLabel> sliderLabels = new Hashtable<>();
-//        sliderLabels.put(10, new JLabel("10"));
-//        sliderLabels.put(20, new JLabel("20"));
-//        sliderLabels.put(30, new JLabel("30"));
-//        sliderLabels.put(40, new JLabel("40"));
-//        sliderLabels.put(50, new JLabel("50"));
-//        sizeSlideBar.setLabelTable(sliderLabels);
 
         // Adding components into buttonPanel
         buttonPanel.add(rowDecision);
