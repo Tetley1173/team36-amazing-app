@@ -8,26 +8,23 @@ import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
 public class EditTab extends JFrame{
     // CONSTANTS
     private final int minNumberOfRowsCols = 1;
     private final int maxNumberOfRowsCols = 100;
-
     // Panel
     private final JPanel editTab;
-    private final JPanel mazeEditPanel, setupAndInfoPanel, mazeInfoPanel, mazeSetupPanel;
+    private final JPanel mazeEditPanel, buttonPanel;
 
     // Buttons
     private final JButton mazeGeneration;
     private final JButton BlankGenerate;
     private final JButton EraseButton;
-    private final JButton RefreshButton;
 
     // Text field
-    private final JSpinner rowDecision;
-    private final JSpinner colDecision;
+    private final JTextField rowDecision;
+    private final JTextField colDecision;
 
     // Slide bar for adjusting the size of the cell
     private final JSlider sizeSlideBar;
@@ -51,39 +48,21 @@ public class EditTab extends JFrame{
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
 
         // the button panel in the edit tab
-        setupAndInfoPanel = new JPanel(new BorderLayout());
-        setupAndInfoPanel.setBackground(Color.DARK_GRAY);
-        editTab.add(setupAndInfoPanel, BorderLayout.WEST);
+        buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBackground(Color.DARK_GRAY);
+        editTab.add(buttonPanel, BorderLayout.WEST);
+        buttonPanel.setPreferredSize(new Dimension(200, 400));
 
-        GridBagLayout gbl = new GridBagLayout();
-        mazeSetupPanel = new JPanel(gbl);
-        mazeSetupPanel.setPreferredSize(new Dimension(200, 400));
-        GridBagConstraints c = new GridBagConstraints();
-        mazeSetupPanel.setBackground(Color.GRAY);
-
-        // Panel displaying info of the maze
-        mazeInfoPanel = new JPanel(new GridLayout(3, 1));
-        mazeInfoPanel.setBackground(Color.GRAY);
-
-        // Spinners for rows and cols inputs
-        // rows
-        rowDecision = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+        // The text field input setting the size of the maze
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        format.setGroupingUsed(false);
+        NumberFormatter numberFormatter = new NumberFormatter(format);
+        rowDecision = new JFormattedTextField(numberFormatter);
+        colDecision = new JFormattedTextField(numberFormatter);
         rowDecision.setPreferredSize(new Dimension(70,20));
-        rowDecision.setBackground(Color.LIGHT_GRAY);
-        rowDecision.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setEditable(false);
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setBackground(Color.GRAY);
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setForeground(Color.WHITE);
-        // cols
-        colDecision = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
         colDecision.setPreferredSize(new Dimension(70,20));
-        colDecision.setBackground(Color.LIGHT_GRAY);
-        colDecision.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setEditable(false);
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setBackground(Color.GRAY);
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setForeground(Color.WHITE);
+        rowDecision.setColumns(3);
+        colDecision.setColumns(3);
 
         // Button for auto-gen maze
         mazeGeneration = new CustomizedButton("Generate",20,0,70,20);
@@ -91,26 +70,20 @@ public class EditTab extends JFrame{
             // remove all the things in the maze panel
             mazeEditPanel.removeAll();
             // Display the auto-gen maze
-            maze = MazeGeneration.genMaze(new Maze((int)rowDecision.getValue(),(int)colDecision.getValue()));
+            maze = MazeGeneration.genMaze(new Maze(20,20));
             displayMaze.drawMaze(mazeEditPanel, maze);
             mazeEditPanel.repaint();
             mazeEditPanel.validate();
-            displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            mazeInfoPanel.add(new JLabel("ROWS: " + maze.getRows()));
-            mazeInfoPanel.add(new JLabel("COLS: " + maze.getCols()));
 
         });
 
         // Button for blank maze
         BlankGenerate = new CustomizedButton("Blank",120,0,70,20);
         BlankGenerate.addActionListener(event -> {
-            maze = new Maze((int)rowDecision.getValue(),(int)colDecision.getValue());
+            maze = new Maze(20, 20);
             displayMaze.drawMaze(mazeEditPanel, maze);
             mazeEditPanel.repaint();
             mazeEditPanel.validate();
-            displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            mazeInfoPanel.add(new JLabel("Number of ROWS: " + maze.getRows()));
-            mazeInfoPanel.add(new JLabel("Number of COLS: " + maze.getCols()));
         });
         // Button to erase the maze display
         EraseButton = new CustomizedButton("Erase",20,120,70,20);
@@ -118,26 +91,14 @@ public class EditTab extends JFrame{
             mazeEditPanel.removeAll();
             mazeEditPanel.repaint();
             mazeEditPanel.validate();
-            mazeInfoPanel.removeAll();
-            mazeInfoPanel.repaint();
-            mazeInfoPanel.validate();
         });
 
-        RefreshButton = new CustomizedButton("Refresh", 120, 120, 70, 20);
-        RefreshButton.addActionListener(event -> {
-            mazeEditPanel.removeAll();
-            displayMaze.drawMaze(mazeEditPanel, maze);
-            mazeEditPanel.repaint();
-            mazeEditPanel.validate();
-            displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            mazeInfoPanel.add(new JLabel("ROWS: " + maze.getRows()));
-            mazeInfoPanel.add(new JLabel("COLS: " + maze.getCols()));
-        });
 
         // Toggle the optimum path (should be a colored line)
         toggleOptimumPath = new JRadioButton("Optimum Solution");
         toggleOptimumPath.setLocation(20,30);
-        toggleOptimumPath.setBackground(Color.GRAY);
+        toggleOptimumPath.setBackground(Color.DARK_GRAY);
+        toggleOptimumPath.setForeground(Color.WHITE);
 
         // Toggle the Entry and Exit (Red - Entry, Green, Exit)
         toggleEntryExit = new JRadioButton("Show Entry/Exit");
@@ -145,12 +106,14 @@ public class EditTab extends JFrame{
             if (toggleEntryExit.isSelected()) displayMaze.showEntryExit(mazeEditPanel, maze);
         });
         toggleEntryExit.setLocation(20,60);
-        toggleEntryExit.setBackground(Color.GRAY);
+        toggleEntryExit.setBackground(Color.DARK_GRAY);
+        toggleEntryExit.setForeground(Color.WHITE);
 
         // Toggle the Entry and Exit indicators (An arrow)
         toggleIndicators = new JRadioButton("Indicate Entry/Exit");
         toggleIndicators.setLocation(20,90);
-        toggleIndicators.setBackground(Color.GRAY);
+        toggleIndicators.setBackground(Color.DARK_GRAY);
+        toggleIndicators.setForeground(Color.WHITE);
 
 
         // Slide bar for adjusting the size of each cell (should have a default value)
@@ -162,57 +125,17 @@ public class EditTab extends JFrame{
         sizeSlideBar.setPaintTicks(true);
 
         // Adding components into buttonPanel
-        setupAndInfoPanel.add(mazeSetupPanel, BorderLayout.CENTER);
-        setupAndInfoPanel.add(mazeInfoPanel, BorderLayout.SOUTH);
-
-        c.anchor = GridBagConstraints.LINE_END;
-        c.weightx = 3;
-        c.weighty = 0.5;
-        c.gridx = 0;
-        c.gridy = 0;
-        mazeSetupPanel.add(new JLabel("ROWS:"), c);
-        c.gridy = 1;
-        mazeSetupPanel.add(new JLabel("COLS:"), c);
-
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        mazeSetupPanel.add(rowDecision, c);
-        c.gridy = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        mazeSetupPanel.add(colDecision, c);
-
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 2;
-        mazeSetupPanel.add(mazeGeneration, c);
-        c.gridx = 1;
-        mazeSetupPanel.add(BlankGenerate, c);
-
-        c.gridx = 0;
-        c.gridy = 3;
-        //c.gridwidth = 2;
-        mazeSetupPanel.add(EraseButton, c);
-        c.gridx = 1;
-        mazeSetupPanel.add(RefreshButton, c);
-
-        c.gridx = 0;
-        c.gridy = 4;
-        c.gridwidth = 2;
-        mazeSetupPanel.add(toggleOptimumPath, c);
-        c.gridy = 5;
-        mazeSetupPanel.add(toggleEntryExit, c);
-        c.gridy = 6;
-        c.weighty = 20;
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        mazeSetupPanel.add(toggleIndicators, c);
-
+        buttonPanel.add(rowDecision);
+        buttonPanel.add(colDecision);
+        buttonPanel.add(mazeGeneration);
+        buttonPanel.add(BlankGenerate);
+        buttonPanel.add(toggleOptimumPath);
+        buttonPanel.add(toggleEntryExit);
+        buttonPanel.add(toggleIndicators);
+        buttonPanel.add(EraseButton);
 
         // Add the size decision slider to the east of the borderLayout in the edit tab
         editTab.add(sizeSlideBar, BorderLayout.EAST);
     }
-
-
 
 }
