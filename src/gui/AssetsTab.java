@@ -16,6 +16,9 @@ public class AssetsTab extends JFrame {
     private final JPanel assetPanel;
     // Buttons
     private final JButton selectEntryImage,selectExitImage,logo1stImage,logo2ndImage;
+    private final String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
+    private final GridBagConstraints constraints = new GridBagConstraints();
+
 
     /**
      * Constructor that defines the contents of the Assets tab.
@@ -29,11 +32,10 @@ public class AssetsTab extends JFrame {
 
         // Create a panel that goes into the Assets tab.
         assetPanel = new JPanel(new GridBagLayout());
+        assetPanel.setBackground(Color.DARK_GRAY);
         tabbedPane.add("Assets", assetPanel);
 
-        // Define the constraints for the grid bag layout.
-        GridBagConstraints constraints = new GridBagConstraints();
-        //Defaults
+         //Defaults
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.weightx = 100;
@@ -45,7 +47,7 @@ public class AssetsTab extends JFrame {
         logo1stImage = new JButton("Select Logo 1 Image");
         logo2ndImage = new JButton("Select Logo 2 Image");
 
-        String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
+
         String entryImagePath = defaultImagePath;
         String exitImagePath = defaultImagePath;
         String logo1ImagePath = defaultImagePath;
@@ -54,11 +56,47 @@ public class AssetsTab extends JFrame {
         // This method adds all the buttons et cetera, to the assets panel.
         widgetAdder(constraints, entryImagePath, exitImagePath, logo1ImagePath, logo2ImagePath);
 
-        selectEntryImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
+        String explorePath = "src/gui/imageAssets";
+
+        //String tempString = "";
+        selectEntryImage.addActionListener( e -> imageExplorer(explorePath, entryImagePath) );
+
         selectExitImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
         logo1stImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
         logo2ndImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
 
+    }
+
+    private void imageExplorer(String path, Object imagePath) {
+        // consider turning this variable into a singleton?
+        FileDialog fd = new FileDialog(new JFrame(), "Select Image");
+        fd.setMultipleMode(false);
+        // This line doesn't work for some reason
+        fd.setBackground(Color.darkGray);
+        fd.setVisible(true);
+        fd.setFile(path);
+        File[] f = fd.getFiles();
+        if(f.length > 0){
+            String aPath = fd.getFiles()[0].getAbsolutePath();
+            System.out.println(aPath);
+            imagePath = aPath;
+            // Duplicate variable please fix this ###############################################
+            GridBagConstraints constraints = new GridBagConstraints();
+            addImageLabel(assetPanel, aPath, constraints,2,0,1,1);
+        }
+
+        imagePath = defaultImagePath;
+
+
+//        //For reference, opens a native file explorer but cannot open a file in the context of the app.
+//        File file = new File (path);
+//        Desktop desktop = Desktop.getDesktop();
+//        // This is trying to catch invalid file paths. Make this catch better ###############################
+//        try {
+//            desktop.open(file);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
