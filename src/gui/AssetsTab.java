@@ -18,13 +18,14 @@ public class AssetsTab extends JFrame {
     private final JButton selectEntryImage,selectExitImage,logo1stImage,logo2ndImage;
 
     /**
-     * Method that defines the contents of the Assets tab. Is called by the UserInterfaceClass.
+     * Constructor that defines the contents of the Assets tab.
      * @param tabbedPane is the JTabbedPane that this content will be rendered in.
      * @author Shannon Tetley
      */
     public AssetsTab(JTabbedPane tabbedPane) {
+
         // Error catch to check that this is being called with a JTabbedPane as its argument.
-        // Consider weather that should happen here or in the method that calls it.
+        // Consider whether that should happen here or in the method that calls it.
 
         // Create a panel that goes into the Assets tab.
         assetPanel = new JPanel(new GridBagLayout());
@@ -50,19 +51,37 @@ public class AssetsTab extends JFrame {
         String logo1ImagePath = defaultImagePath;
         String logo2ImagePath = defaultImagePath;
 
+        // This method adds all the buttons et cetera, to the assets panel.
+        widgetAdder(constraints, entryImagePath, exitImagePath, logo1ImagePath, logo2ImagePath);
+
+        selectEntryImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
+        selectExitImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
+        logo1stImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
+        logo2ndImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
+
+    }
+
+    /**
+     * Helper method used for hiding repeated calls to the addToPanel and addImageLabel methods.
+     * @param constraints constraints for the grid bag layout.
+     * @param entryImagePath variable that contains the file path of the image being added.
+     * @param exitImagePath variable that contains the file path of the image being added.
+     * @param logo1ImagePath variable that contains the file path of the image being added.
+     * @param logo2ImagePath variable that contains the file path of the image being added.
+     */
+    private void widgetAdder(GridBagConstraints constraints, String entryImagePath, String exitImagePath, String logo1ImagePath, String logo2ImagePath) {
         // Add the elements defined above to the Asset panel that's inside the Assets tab.
-        addToPanel(assetPanel, selectEntryImage,constraints,0,0,2,1);
+        addToPanel(assetPanel, selectEntryImage, constraints,0,0,2,1);
         addImageLabel(assetPanel, entryImagePath, constraints,2,0,1,1);
 
-        addToPanel(assetPanel, selectExitImage,constraints,0,1,2,1);
+        addToPanel(assetPanel, selectExitImage, constraints,0,1,2,1);
         addImageLabel(assetPanel, exitImagePath, constraints,2,1,1,1);
 
-        addToPanel(assetPanel, logo1stImage,constraints,0,2,2,1);
+        addToPanel(assetPanel, logo1stImage, constraints,0,2,2,1);
         addImageLabel(assetPanel, logo1ImagePath, constraints,2,2,1,1);
 
-        addToPanel(assetPanel, logo2ndImage,constraints,0,3,2,1);
+        addToPanel(assetPanel, logo2ndImage, constraints,0,3,2,1);
         addImageLabel(assetPanel, logo2ImagePath, constraints,2,3,1,1);
-
     }
 
     /**
@@ -80,6 +99,9 @@ public class AssetsTab extends JFrame {
      */
     private void addImageLabel(JPanel jp, String imagePath, GridBagConstraints
             constraints, int x, int y, int w, int h) {
+
+        // Consider changing this class to return a JLabel instead of directly adding it to the panel.
+        // There is a risk of introducing null image errors outside this method, beware.
 
         // ImageIO.read() requires error catching, or it throws an error.
         try {
