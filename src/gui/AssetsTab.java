@@ -92,6 +92,7 @@ public class AssetsTab extends JFrame {
 
                 if ((cWidth <= maxWidth & cWidth >= minWidth) & (cHeight <= maxHeight & cHeight >= minHeight)) {
                     icon.setImage(c);
+                    assetPanel.repaint();
                 }
                 else {
                     JOptionPane.showMessageDialog(this,
