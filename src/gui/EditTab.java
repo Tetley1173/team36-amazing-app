@@ -91,22 +91,29 @@ public class EditTab extends JFrame{
             displayMaze.drawMaze(mazeEditPanel, maze);
             mazeEditPanel.repaint();
             mazeEditPanel.validate();
+
+            mazeInfoPanel.removeAll();
             displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            mazeInfoPanel.add(new JLabel("ROWS: " + maze.getRows()));
-            mazeInfoPanel.add(new JLabel("COLS: " + maze.getCols()));
+            displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
+            mazeInfoPanel.repaint();
+            mazeInfoPanel.revalidate();
 
         });
 
         // Button for blank maze
         BlankGenerate = new JButton("Blank");
         BlankGenerate.addActionListener(event -> {
+            mazeEditPanel.removeAll();
             maze = new Maze((int)rowDecision.getValue(),(int)colDecision.getValue());
             displayMaze.drawMaze(mazeEditPanel, maze);
             mazeEditPanel.repaint();
             mazeEditPanel.validate();
+
+            mazeInfoPanel.removeAll();
             displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            mazeInfoPanel.add(new JLabel("Number of ROWS: " + maze.getRows()));
-            mazeInfoPanel.add(new JLabel("Number of COLS: " + maze.getCols()));
+            displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
+            mazeInfoPanel.repaint();
+            mazeInfoPanel.revalidate();
         });
         // Button to erase the maze display
         EraseButton = new JButton("Erase");
@@ -121,13 +128,17 @@ public class EditTab extends JFrame{
 
         RefreshButton = new JButton("Refresh");
         RefreshButton.addActionListener(event -> {
+
             mazeEditPanel.removeAll();
             displayMaze.drawMaze(mazeEditPanel, maze);
             mazeEditPanel.repaint();
             mazeEditPanel.validate();
+
+            mazeInfoPanel.removeAll();
             displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            mazeInfoPanel.add(new JLabel("ROWS: " + maze.getRows()));
-            mazeInfoPanel.add(new JLabel("COLS: " + maze.getCols()));
+            displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
+            mazeInfoPanel.repaint();
+            mazeInfoPanel.revalidate();
         });
 
         // Toggle the optimum path (should be a colored line)

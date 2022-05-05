@@ -133,10 +133,11 @@ public class displayMaze{
     public void showOptimumPathReachingPercentage(JPanel pnl, Maze maze){}
     public static void showDeadEndPercentage(JPanel pnl, Maze maze){
         double deadEndPercentage = MazeGeneration.deadEndPercentage(maze);
-        pnl.removeAll();
-        pnl.repaint();
-        pnl.validate();
         pnl.add(new JLabel("Dead-end percentage: " + deadEndPercentage + "%"));
+    }
+    public static void showDimensionOfMaze(JPanel pnl, Maze maze) {
+        pnl.add(new JLabel("ROWS: " + maze.getRows()));
+        pnl.add(new JLabel("COLS: " + maze.getCols()));
     }
 
 }
