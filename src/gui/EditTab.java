@@ -1,14 +1,10 @@
 package gui;
 
-import components.CustomizedButton;
 import mazeFunctions.Maze;
 import mazeFunctions.MazeGeneration;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 
 public class EditTab extends JFrame{
     // CONSTANTS
@@ -67,7 +63,7 @@ public class EditTab extends JFrame{
 
         // Spinners for rows and cols inputs
         // rows
-        rowDecision = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+        rowDecision = new JSpinner(new SpinnerNumberModel(20, 2, 100, 1));
         rowDecision.setPreferredSize(new Dimension(70,20));
         rowDecision.setBackground(Color.LIGHT_GRAY);
         rowDecision.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -76,7 +72,7 @@ public class EditTab extends JFrame{
         ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setBackground(Color.GRAY);
         ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setForeground(Color.WHITE);
         // cols
-        colDecision = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+        colDecision = new JSpinner(new SpinnerNumberModel(20, 2, 100, 1));
         colDecision.setPreferredSize(new Dimension(70,20));
         colDecision.setBackground(Color.LIGHT_GRAY);
         colDecision.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -86,7 +82,7 @@ public class EditTab extends JFrame{
         ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setForeground(Color.WHITE);
 
         // Button for auto-gen maze
-        mazeGeneration = new CustomizedButton("Generate",20,0,70,20);
+        mazeGeneration = new JButton("Generate");
         mazeGeneration.addActionListener(event -> {
             // remove all the things in the maze panel
             mazeEditPanel.removeAll();
@@ -102,7 +98,7 @@ public class EditTab extends JFrame{
         });
 
         // Button for blank maze
-        BlankGenerate = new CustomizedButton("Blank",120,0,70,20);
+        BlankGenerate = new JButton("Blank");
         BlankGenerate.addActionListener(event -> {
             maze = new Maze((int)rowDecision.getValue(),(int)colDecision.getValue());
             displayMaze.drawMaze(mazeEditPanel, maze);
@@ -113,7 +109,7 @@ public class EditTab extends JFrame{
             mazeInfoPanel.add(new JLabel("Number of COLS: " + maze.getCols()));
         });
         // Button to erase the maze display
-        EraseButton = new CustomizedButton("Erase",20,120,70,20);
+        EraseButton = new JButton("Erase");
         EraseButton.addActionListener(event -> {
             mazeEditPanel.removeAll();
             mazeEditPanel.repaint();
@@ -123,7 +119,7 @@ public class EditTab extends JFrame{
             mazeInfoPanel.validate();
         });
 
-        RefreshButton = new CustomizedButton("Refresh", 120, 120, 70, 20);
+        RefreshButton = new JButton("Refresh");
         RefreshButton.addActionListener(event -> {
             mazeEditPanel.removeAll();
             displayMaze.drawMaze(mazeEditPanel, maze);
