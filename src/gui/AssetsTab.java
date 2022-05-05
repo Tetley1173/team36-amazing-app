@@ -16,18 +16,17 @@ public class AssetsTab extends JFrame {
     private final JPanel assetPanel;
     // Buttons
     private final JButton selectEntryImage,selectExitImage,logo1stImage,logo2ndImage;
-    private final String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
     private final GridBagConstraints constraints = new GridBagConstraints();
 
-    private JLabel entryLabel = new JLabel();
-    private JLabel exitLabel = new JLabel();
-    private JLabel logo1Label = new JLabel();
-    private JLabel logo2Label = new JLabel();
+    private final JLabel entryLabel = new JLabel();
+    private final JLabel exitLabel = new JLabel();
+    private final JLabel logo1Label = new JLabel();
+    private final JLabel logo2Label = new JLabel();
 
-    private ImageIcon entryIcon = new ImageIcon();
-    private ImageIcon exitIcon = new ImageIcon();
-    private ImageIcon logo1Icon = new ImageIcon();
-    private ImageIcon logo2Icon = new ImageIcon();
+    private final ImageIcon entryIcon = new ImageIcon();
+    private final ImageIcon exitIcon = new ImageIcon();
+    private final ImageIcon logo1Icon = new ImageIcon();
+    private final ImageIcon logo2Icon = new ImageIcon();
 
 
     /**
@@ -57,100 +56,102 @@ public class AssetsTab extends JFrame {
         logo1stImage = new JButton("Select Logo 1 Image");
         logo2ndImage = new JButton("Select Logo 2 Image");
 
-
-        String entryImagePath = defaultImagePath;
-        String exitImagePath = defaultImagePath;
-        String logo1ImagePath = defaultImagePath;
-        String logo2ImagePath = defaultImagePath;
-
         // This method adds all the buttons et cetera, to the assets panel.
-        widgetAdder(constraints, entryImagePath, exitImagePath, logo1ImagePath, logo2ImagePath);
+        widgetAdder(constraints);
 
-        String explorePath = "src/gui/imageAssets";
-
-        selectEntryImage.addActionListener( e -> imageExplorer(explorePath, entryImagePath, entryLabel, entryIcon) );
-        selectExitImage.addActionListener( e -> imageExplorer(explorePath, exitImagePath, exitLabel, exitIcon) );
-        logo1stImage.addActionListener( e -> imageExplorer(explorePath, logo1ImagePath, logo1Label, logo1Icon) );
-        logo2ndImage.addActionListener( e -> imageExplorer(explorePath, logo2ImagePath, logo2Label, logo2Icon) );
-
-//        selectExitImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
-//        logo1stImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
-//        logo2ndImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
+        selectEntryImage.addActionListener( e -> imageExplorer(entryIcon) );
+        selectExitImage.addActionListener( e -> imageExplorer(exitIcon) );
+        logo1stImage.addActionListener( e -> imageExplorer(logo1Icon) );
+        logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon) );
 
     }
 
-    private void imageExplorer(String path, Object imagePath, JLabel label, ImageIcon icon) {
-        // consider turning this variable into a singleton?
+    private void imageExplorer(ImageIcon icon) {
+        final int maxWidth = 200;
+        final int minWidth = 10;
+        final int maxHeight = 200;
+        final int minHeight = 10;
+
+        // consider turning this variable into a singleton? or use factory constructor.##############################
         FileDialog fd = new FileDialog(new JFrame(), "Select Image");
         fd.setMultipleMode(false);
+
         // This line doesn't work for some reason
         fd.setBackground(Color.darkGray);
+
         fd.setVisible(true);
-        fd.setFile(path);
         File[] f = fd.getFiles();
         if(f.length > 0){
             String aPath = fd.getFiles()[0].getAbsolutePath();
             System.out.println(aPath);
-//            imagePath = aPath;
-
-            BufferedImage c = null;
+            BufferedImage c;
             try {
                 c = ImageIO.read(new File(aPath));
-                icon.setImage(c);
+                int cWidth = c.getWidth();
+                int cHeight = c.getHeight();
+
+                if ((cWidth <= maxWidth & cWidth >= minWidth) & (cHeight <= maxHeight & cHeight >= minHeight)) {
+                    icon.setImage(c);
+                    assetPanel.repaint();
+                }
+                else {
+                    JOptionPane.showMessageDialog(this,
+                            "Invalid image size, please select an appropriate image file.",
+                            "Incorrect image size: Warning", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Invalid file selected, please select an appropriate image file.",
                         "Invalid image selection: Error", JOptionPane.ERROR_MESSAGE);
             }
-
-//            addImageLabel(assetPanel, label , icon,2,0,1,1);
         }
-
-        imagePath = defaultImagePath;
-
+        else {
+                JOptionPane.showMessageDialog(this,
+                        "Missing image file, please select an appropriate image file.",
+                        "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
      * Helper method used for hiding repeated calls to the addToPanel and addImageLabel methods.
+     *
      * @param constraints constraints for the grid bag layout.
-     * @param entryImagePath variable that contains the file path of the image being added.
-     * @param exitImagePath variable that contains the file path of the image being added.
-     * @param logo1ImagePath variable that contains the file path of the image being added.
-     * @param logo2ImagePath variable that contains the file path of the image being added.
      */
-    private void widgetAdder(GridBagConstraints constraints, String entryImagePath, String exitImagePath, String logo1ImagePath, String logo2ImagePath) {
+    private void widgetAdder(GridBagConstraints constraints) {
         // Add the elements defined above to the Asset panel that's inside the Assets tab.
         addToPanel(assetPanel, selectEntryImage, constraints,0,0,2,1);
-        addImageLabel(assetPanel, entryLabel, entryIcon,2,0,1,1);
+        addImageLabel(entryLabel, entryIcon,2,0,1,1);
 
         addToPanel(assetPanel, selectExitImage, constraints,0,1,2,1);
-        addImageLabel(assetPanel, exitLabel, exitIcon,2,1,1,1);
+        addImageLabel(exitLabel, exitIcon,2,1,1,1);
 
         addToPanel(assetPanel, logo1stImage, constraints,0,2,2,1);
-        addImageLabel(assetPanel, logo1Label, logo1Icon,2,2,1,1);
+        addImageLabel(logo1Label, logo1Icon,2,2,1,1);
 
         addToPanel(assetPanel, logo2ndImage, constraints,0,3,2,1);
-        addImageLabel(assetPanel, logo2Label, logo2Icon,2,3,1,1);
+        addImageLabel(logo2Label, logo2Icon,2,3,1,1);
     }
 
     /**
      * Method that loads an image then passes the object to the addToPanel
      * method to render it on the screen. This method will catch the IOException while loading the image.
      * If it does so the creation of an image label is cancelled and an error window will pop up.
-     * @param jp JPanel to add the image to.
+     *
      * @param label label that will contain the image icon.
-     * @param icon image icon that holds a loaded image.
-     * @param x the x grid position of the image.
-     * @param y the y grid position of the image.
-     * @param w number of grid positions the image occupies width wise.
-     * @param h number of grid positions the image occupies height wise.
+     * @param icon  image icon that holds a loaded image.
+     * @param x     the x grid position of the image.
+     * @param y     the y grid position of the image.
+     * @param w     number of grid positions the image occupies width wise.
+     * @param h     number of grid positions the image occupies height wise.
      * @author Shannon Tetley
      */
-    private void addImageLabel(JPanel jp, JLabel label, ImageIcon icon, int x, int y, int w, int h) {
+    private void addImageLabel(JLabel label, ImageIcon icon, int x, int y, int w, int h) {
 
         // ImageIO.read() requires error catching, or it throws an error.
         try {
+            String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
             BufferedImage c = ImageIO.read(new File(defaultImagePath));
             icon.setImage(c);
             label.setIcon(icon);
@@ -184,19 +185,5 @@ public class AssetsTab extends JFrame {
         constraints.gridheight = h;
         jp.add(c, constraints);
     }
-
-
-//    /**
-//     * Method that adds content to the Assets Tab.
-//     * @param p requires a JPanel object so that it knows where to render its content.
-//     * @deprecated This is Shannon's original method for rendering the Assets tab. It got replaced with the AssetsTab
-//     * method. Call the new method to render the Assets tab.
-//     */
-//    public static void assetContents(JPanel p) {
-//        p.add(new JButton("Select Entry Image"));
-//        p.add(new JButton("Select Exit Image"));
-//        p.add(new JButton("Select Logo 1 Image"));
-//        p.add(new JButton("Select Logo 2 Image"));
-//    }
 
 }
