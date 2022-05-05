@@ -19,15 +19,15 @@ public class AssetsTab extends JFrame {
     private final String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
     private final GridBagConstraints constraints = new GridBagConstraints();
 
-    private JLabel entryLabel = new JLabel();
-    private JLabel exitLabel = new JLabel();
-    private JLabel logo1Label = new JLabel();
-    private JLabel logo2Label = new JLabel();
+    private final JLabel entryLabel = new JLabel();
+    private final JLabel exitLabel = new JLabel();
+    private final JLabel logo1Label = new JLabel();
+    private final JLabel logo2Label = new JLabel();
 
-    private ImageIcon entryIcon = new ImageIcon();
-    private ImageIcon exitIcon = new ImageIcon();
-    private ImageIcon logo1Icon = new ImageIcon();
-    private ImageIcon logo2Icon = new ImageIcon();
+    private final ImageIcon entryIcon = new ImageIcon();
+    private final ImageIcon exitIcon = new ImageIcon();
+    private final ImageIcon logo1Icon = new ImageIcon();
+    private final ImageIcon logo2Icon = new ImageIcon();
 
 
     /**
@@ -73,25 +73,21 @@ public class AssetsTab extends JFrame {
         logo1stImage.addActionListener( e -> imageExplorer(explorePath, logo1ImagePath, logo1Label, logo1Icon) );
         logo2ndImage.addActionListener( e -> imageExplorer(explorePath, logo2ImagePath, logo2Label, logo2Icon) );
 
-//        selectExitImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
-//        logo1stImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
-//        logo2ndImage.addActionListener( e -> JOptionPane.showMessageDialog( assetPanel,"Button worked."));
-
     }
 
     private void imageExplorer(String path, Object imagePath, JLabel label, ImageIcon icon) {
         // consider turning this variable into a singleton?
         FileDialog fd = new FileDialog(new JFrame(), "Select Image");
         fd.setMultipleMode(false);
+
         // This line doesn't work for some reason
         fd.setBackground(Color.darkGray);
+
         fd.setVisible(true);
-        fd.setFile(path);
         File[] f = fd.getFiles();
         if(f.length > 0){
             String aPath = fd.getFiles()[0].getAbsolutePath();
             System.out.println(aPath);
-//            imagePath = aPath;
 
             BufferedImage c = null;
             try {
@@ -103,12 +99,12 @@ public class AssetsTab extends JFrame {
                         "Invalid file selected, please select an appropriate image file.",
                         "Invalid image selection: Error", JOptionPane.ERROR_MESSAGE);
             }
-
-//            addImageLabel(assetPanel, label , icon,2,0,1,1);
         }
-
-        imagePath = defaultImagePath;
-
+        else {
+                JOptionPane.showMessageDialog(this,
+                        "Missing image file, please select an appropriate image file.",
+                        "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -184,19 +180,5 @@ public class AssetsTab extends JFrame {
         constraints.gridheight = h;
         jp.add(c, constraints);
     }
-
-
-//    /**
-//     * Method that adds content to the Assets Tab.
-//     * @param p requires a JPanel object so that it knows where to render its content.
-//     * @deprecated This is Shannon's original method for rendering the Assets tab. It got replaced with the AssetsTab
-//     * method. Call the new method to render the Assets tab.
-//     */
-//    public static void assetContents(JPanel p) {
-//        p.add(new JButton("Select Entry Image"));
-//        p.add(new JButton("Select Exit Image"));
-//        p.add(new JButton("Select Logo 1 Image"));
-//        p.add(new JButton("Select Logo 2 Image"));
-//    }
 
 }
