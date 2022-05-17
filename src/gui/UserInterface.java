@@ -20,8 +20,8 @@ public class UserInterface extends JFrame implements ActionListener {
     private final ExportTab export;
 
     public UserInterface() {
-        setTitle("Amazing software");
-        setPreferredSize(new Dimension(1000, 800));
+        setTitle("Amazing Software");
+        setPreferredSize(new Dimension(1200, 900));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
