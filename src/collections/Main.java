@@ -1,6 +1,8 @@
 package collections;
 import gui.UserInterface;
 
+import javax.swing.*;
+
 public class Main {
 
     /**
@@ -8,12 +10,13 @@ public class Main {
      * @param args Accepts an array of strings that can be used to change startup settings for the app.
      * @author Shannon Tetley, (Everyone put your name here I'm sure we will all work on this one)
      */
-    public static void main (String[] args){
+    public static void main (String[] args) {
 
         // Start the user interface.
         //mainInterface();
         UserInterface frame = new UserInterface();
         frame.setVisible(true);
+
 
     }
 

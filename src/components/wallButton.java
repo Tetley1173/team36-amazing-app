@@ -13,7 +13,6 @@ public class wallButton extends JButton {
         this.wallIndex = wallIndex;
         this.setBackground(wallColor);
         this.setBorderPainted(false);
-
     }
 
     public int getRow() { return this.row; }

@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UserInterface extends JFrame implements ActionListener {
+    // CONSTANT
+    private final int PREFERRED_WINDOWS_WIDTH = 1280;
+    private final int PREFERRED_WINDOWS_HEIGHT = 900;
     // Menus
     private JMenuBar menuBar;
     private JMenu mainMenu;
@@ -21,7 +24,7 @@ public class UserInterface extends JFrame implements ActionListener {
 
     public UserInterface() {
         setTitle("Amazing Software");
-        setPreferredSize(new Dimension(1200, 900));
+        setPreferredSize(new Dimension(PREFERRED_WINDOWS_WIDTH, PREFERRED_WINDOWS_HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
