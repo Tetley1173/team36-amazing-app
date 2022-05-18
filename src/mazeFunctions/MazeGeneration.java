@@ -159,7 +159,6 @@ public class MazeGeneration {
                 cellStack.push(maze.getCell(currentRow, currentCol));
                 currentRow = nextNeighbour[0];
                 currentCol = nextNeighbour[1];
-                //currentCell = maze.getCell(currentRow, currentCol);
                 // Check the current location
                 //System.out.println("CurrentCell: " + nextNeighbour[0] + ", " + nextNeighbour[1]);
                 visitedCells++;
