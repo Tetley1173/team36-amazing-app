@@ -282,8 +282,9 @@ public class EditTab extends JFrame{
         });
 
         toggleEntryExit.addActionListener(event -> {
-            if (toggleEntryExit.isEnabled())  {
+            if (toggleEntryExit.isSelected())  {
                 displayMaze.showEntryExit(mazeEditPanel, maze);
+                System.out.println(toggleEntryExit.isEnabled());
             }
             else {
                 mazeEditPanel.removeAll();
