@@ -2,12 +2,9 @@ package mazeFunctions;
 
 import components.Cell;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class MazeGeneration {
-
     public static Maze genMaze(Maze maze){
     /*
     Pseudo Code:
@@ -162,7 +159,6 @@ public class MazeGeneration {
                 cellStack.push(maze.getCell(currentRow, currentCol));
                 currentRow = nextNeighbour[0];
                 currentCol = nextNeighbour[1];
-                currentCell = maze.getCell(currentRow, currentCol);
                 // Check the current location
                 //System.out.println("CurrentCell: " + nextNeighbour[0] + ", " + nextNeighbour[1]);
                 visitedCells++;
@@ -175,10 +171,21 @@ public class MazeGeneration {
         }
         return maze;
     }
-    public static ArrayList<Cell> setEntryExit (Maze maze, int exitRow, int exitCol) {
+    public static ArrayList<Cell> setEntryExit (Maze maze) {
         ArrayList<Cell> entryExit = new ArrayList<>();
         entryExit.add(maze.getCell(0, 0));
-        entryExit.add(maze.getCell(exitRow, exitCol));
+        int max = 0;
+        Cell maxCell = new Cell(maze.getRows() - 1, maze.getCols()-1);
+        for (int i = 0; i < maze.getRows(); i++)
+            for (int j = 0; j < maze.getCols(); j++) {
+//                System.out.println(maze.getCell(i, j).sumWall());
+                if ( maze.getCell(i, j).sumWall() == 3 && i + j > max) {
+//                    System.out.println("Found one");
+                    max = i + j;
+                    maxCell = maze.getCell(i, j);
+                }
+            }
+        entryExit.add(maxCell);
         return entryExit;
     }
     public static double deadEndPercentage(Maze maze) {

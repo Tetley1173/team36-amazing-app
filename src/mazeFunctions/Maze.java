@@ -2,12 +2,11 @@ package mazeFunctions;
 
 import components.Cell;
 
-import java.util.ArrayList;
 
-public class Maze {
+public abstract class Maze {
 
     private final int rows, cols;
-    private Cell[][] maze;
+    private final Cell[][] maze;
     private Cell entryCell, exitCell;
     public Maze(int rows, int cols) {
         this.rows = rows;
@@ -16,9 +15,8 @@ public class Maze {
         for (int row = 0; row < rows; row++)
             for (int col = 0; col < cols; col++)
                 maze[row][col] = new Cell(row, col);
-        ArrayList<Cell> entryExit = MazeGeneration.setEntryExit(this, rows - 1, cols - 1);
-        entryCell = entryExit.get(0);
-        exitCell = entryExit.get(1);
+        entryCell = maze[0][0];
+        exitCell = maze[rows - 1][cols - 1];
     }
 
 
@@ -33,4 +31,6 @@ public class Maze {
     public Cell getEntryCell() { return this.entryCell; }
     public Cell getExitCell() { return this.exitCell; }
 
+    public void setEntryCell() { entryCell = MazeGeneration.setEntryExit(this).get(0); }
+    public void setExitCell() { exitCell = MazeGeneration.setEntryExit(this).get(1); }
 }
