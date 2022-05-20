@@ -1,5 +1,11 @@
 package collections;
 import gui.UserInterface;
+import mazeFunctions.ImageAssetFile;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
@@ -13,6 +19,19 @@ public class Main {
         // Start the user interface.
         UserInterface frame = new UserInterface();
         frame.setVisible(true);
+
+        // Test code to see if the database works
+        BufferedImage c = null;
+        try {
+            c = ImageIO.read(new File("src/gui/imageAssets/DatabaseTest.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ImageAssetFile mockImageObject = new ImageAssetFile("databaseTester", c);
+
+        System.out.print("ImageAssetFile name:  " + mockImageObject.getName());
+        // next step is to make this image go into the asset tab then make it go into the database.
+        // then load it from the database and display in the assetsTab.
 
     }
 
