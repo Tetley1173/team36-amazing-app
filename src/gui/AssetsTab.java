@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static collections.Main.mockImageObject;
+
 /**
  * Defines what is rendered on the Assets Tab in the user interface.
  * @author Shannon Tetley
@@ -60,6 +62,8 @@ public class AssetsTab extends JFrame {
         widgetAdder(constraints);
 
         selectEntryImage.addActionListener( e -> imageExplorer(entryIcon) );
+        selectEntryImage.addActionListener( e -> dbImageTester());
+
         selectExitImage.addActionListener( e -> imageExplorer(exitIcon) );
         logo1stImage.addActionListener( e -> imageExplorer(logo1Icon) );
         logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon) );
@@ -112,6 +116,12 @@ public class AssetsTab extends JFrame {
                         "Missing image file, please select an appropriate image file.",
                         "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    // Test method for learning how to load images from the database and use them.
+    private void dbImageTester() {
+        logo2Icon.setImage(mockImageObject.getImageFile());
+        assetPanel.repaint();
     }
 
     /**

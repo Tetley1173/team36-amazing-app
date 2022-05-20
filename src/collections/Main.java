@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class Main {
 
+    public static ImageAssetFile mockImageObject;
+
     /**
      * Entry point for the program. The user interface is called from here.
      * @param args Accepts an array of strings that can be used to change startup settings for the app.
@@ -27,10 +29,10 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ImageAssetFile mockImageObject = new ImageAssetFile("databaseTester", c);
+        mockImageObject = new ImageAssetFile("databaseTester", c);
 
         System.out.print("ImageAssetFile name:  " + mockImageObject.getName());
-        // next step is to make this image go into the asset tab then make it go into the database.
+        // next step is to make this image go into the database.
         // then load it from the database and display in the assetsTab.
 
     }
