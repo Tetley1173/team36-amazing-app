@@ -1,8 +1,18 @@
 package mazeFunctions;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class ImageAssetFile {
+/**
+ * This class is used for storing images in the database and is necessary because multiple instances
+ * of the ImageAsset class can refer to a single instance of this class.
+ * @author Shannon Tetley
+ */
+public class ImageAssetFile implements Comparable<ImageAssetFile>, Serializable {
+
+    // Note that it is best practice implementing a serialVersionUID here.
+    // This is an example of what to do. It's not deemed necessary at this stage.
+    //private static final long serialVersionUID = -7092701502990374424L;
 
     // Set once asset is in the database.
     private String uniqueKey = null;
@@ -78,4 +88,22 @@ public class ImageAssetFile {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Compares this object with the specified object for order. Returns a
+     * negative integer, zero, or a positive integer as this object is less than,
+     * equal to, or greater than the specified object.
+     * Method copied from week 6 tutorial.
+     *
+     * @param other The other Person object to compare against.
+     * @return a negative integer, zero, or a positive integer as this object is
+     *         less than, equal to, or greater than the specified object.
+     * @throws ClassCastException if the specified object's type prevents it from
+     *            being compared to this object.
+     */
+    public int compareTo(ImageAssetFile other) {
+        return this.name.compareTo(other.name);
+    }
+
+
 }

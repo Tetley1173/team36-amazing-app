@@ -2,6 +2,10 @@ package mazeFunctions;
 
 import java.util.ArrayList;
 
+/**
+ * This class is for keeping track of the images used in the maze as logos etc.
+ * @author Shannon Tetley
+ */
 public class ImageAsset {
 
     // Set once asset is in the database.
