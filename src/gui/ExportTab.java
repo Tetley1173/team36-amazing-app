@@ -6,6 +6,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 /**
  * User Stories:
@@ -26,99 +27,71 @@ import java.awt.event.ActionListener;
 
 public class ExportTab extends JFrame{
     private final JPanel layOut;
+    private final GridBagConstraints c = new GridBagConstraints();
 
     // Title for tab
     private final TitledBorder titlelabel;
-
-    // Radio buttons -> options for export features
-        // Export with solution or without
-    private final JRadioButton solButton1, solButton2;
-
-        // Export pixel size
-    private final JRadioButton sizeButton1, sizeButton2;
-
-        // Export as what file format - NOT FINISHED
-    private final JRadioButton pdfButton, pngButton;
-
-    // Button for export
-    private final JButton exOnly,  // => exOnly: only export - does NOT save to database
-            exSave,         // => exSave: saves to database only
-            exSaveAs;      // => exSaveAs: saves to database and asks user where to save file
-        // Dialog Button for export
-    private final JDialog dialogWin;
+    private final JLabel header1;
+    // Buttons
+    private final JRadioButton solution1, solution2;
+    private final JRadioButton size1, size2;
+    private final JRadioButton file1, file2;
+    private final JButton quickSave, export;
+    // Dialog window
+    private JDialog dialogWin;
 
     public ExportTab(JTabbedPane tabbedPane) {
-        layOut = new JPanel(new GridLayout());
+        layOut = new JPanel(new GridBagLayout());
         tabbedPane.add("Export",layOut);
         titlelabel = BorderFactory.createTitledBorder("Export Configuration");
         layOut.setBorder(titlelabel);
 
-        /**
-         *  Buttons:
-         */
-        solButton1 = new JRadioButton("With Solution");
-        solButton2 = new JRadioButton("Without Solution");
-        ButtonGroup g1 = new ButtonGroup(); // Group
-        g1.add(solButton1);
-        g1.add(solButton2);
+        // Default settings
+        c.weightx = 1;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.NONE; // Don't fill components at all:
 
-        sizeButton1 = new JRadioButton("800x800px");
-        sizeButton2 = new JRadioButton("400x400px");
-        ButtonGroup g2 = new ButtonGroup(); // Group
-        g2.add(sizeButton1);
-        g2.add(sizeButton2);
+        header1 = new JLabel("Export with solution?");
+        solution1 = new JRadioButton("With Solution");
+        solution2 = new JRadioButton("Without Solution");
+        ButtonGroup g1 = new ButtonGroup(); // Add to group so only 1 radio button can be selected
+        g1.add(solution1);
+        g1.add(solution2);
+        size1 = new JRadioButton("800x800px");
+        size2 = new JRadioButton("400x400px");
+        ButtonGroup g2 = new ButtonGroup(); // Add to group so only 1 radio button can be selected
+        g2.add(size1);
+        g2.add(size2);
+        file1 = new JRadioButton("Export as PDF?");
+        file2 = new JRadioButton("Export as PNG?");
+        ButtonGroup g3 = new ButtonGroup(); // Add to group so only 1 radio button can be selected
+        g3.add(file1);
+        g3.add(file2);
+        quickSave = new JButton("Quick Save");
+        export = new JButton("Export");
+        // Call method
+        Adder(c);
+    }
 
-        pdfButton = new JRadioButton("Export as PDF?");
-        pngButton = new JRadioButton("Export as PNG?");
-        ButtonGroup g3 = new ButtonGroup(); // Group
-        g3.add(pdfButton);
-        g3.add(pngButton);
+    private void Adder(GridBagConstraints c) {
+        AddPanel(layOut, header1, c, 0, 0, 0, 1);
+        AddPanel(layOut, solution1, c, 0, 1, 0, 1);
+        AddPanel(layOut, solution2, c, 0, 2, 0,1 );
+        AddPanel(layOut, size1, c, 0, 3, 0,1 );
+        AddPanel(layOut, size2, c, 0, 4, 0,1 );
+        AddPanel(layOut, file1, c, 0, 5, 0,1 );
+        AddPanel(layOut, file2, c, 0, 6, 0,1 );
 
-        exOnly = new JButton("Export");
-        exSave = new JButton("Save to database?");
-        exSaveAs = new JButton("Export As/ Save to database");
-        exOnly.addActionListener(new ActionListener() {
-            @Override   // Open export dialog window
-            public void actionPerformed(ActionEvent e) {
-                dialogWin.setVisible(true);
-            }
-        });
+        AddPanel(layOut, quickSave, c, 0, 7, 1,1 );
+        AddPanel(layOut, export, c, 1, 7, 1,1 );
 
-        /**
-         *  This section for pop up window after pressing export:
-         */
-        JFrame f = new JFrame();
-        dialogWin = new JDialog(f, "Dialog Example", true);
-        dialogWin.setLayout(new GridLayout(3,1,0,50));
-        dialogWin.add(new JLabel("Export Successful"));
-        JButton dialogExit = new JButton("OK");
-        dialogExit.setPreferredSize(new Dimension(150, 35));
-        dialogWin.add(dialogExit);
-        dialogWin.setSize(300,300);
-        dialogExit.addActionListener(new ActionListener() {
-            @Override   // Close export dialog window
-            public void actionPerformed(ActionEvent e) {
-                dialogWin.setVisible(false);
-            }
-        });
-
-        /**
-         *  Grid layout:
-         */
-        JPanel gridPanel = new JPanel(new GridLayout(0,1));
-        gridPanel.add(new JLabel("Export with solution?"));
-        gridPanel.add(solButton1);
-        gridPanel.add(solButton2);
-        gridPanel.add(new JLabel("Export size:"));
-        gridPanel.add(sizeButton1);
-        gridPanel.add(sizeButton2);
-        gridPanel.add(new JLabel("Export file:"));
-        gridPanel.add(pdfButton);
-        gridPanel.add(pngButton);
-
-        gridPanel.add(exOnly);
-        gridPanel.add(exSave);
-        gridPanel.add(exSaveAs);
-        layOut.add(gridPanel, BorderLayout.WEST);
+    }
+    private void AddPanel(JPanel jp, Component com, GridBagConstraints c, int x,
+                          int y, int w, int h) {
+        c.gridx = x;
+        c.gridy = y;
+        c.gridwidth = w;
+        c.gridheight = h;
+        jp.add(com, c);
     }
 }
