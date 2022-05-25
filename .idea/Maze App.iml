@@ -24,5 +24,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="github.jdbc.bare.spring" level="project" />
   </component>
 </module>

@@ -94,7 +94,7 @@ public class AssetsTab extends JFrame {
                 int cWidth = c.getWidth();
                 int cHeight = c.getHeight();
 
-                if ((cWidth <= maxWidth & cWidth >= minWidth) & (cHeight <= maxHeight & cHeight >= minHeight)) {
+                if ((cWidth <= maxWidth && cWidth >= minWidth) && (cHeight <= maxHeight && cHeight >= minHeight)) {
                     icon.setImage(c);
                     assetPanel.repaint();
                 }
@@ -119,9 +119,28 @@ public class AssetsTab extends JFrame {
     }
 
     // Test method for learning how to load images from the database and use them.
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
     private void dbImageTester() {
         logo2Icon.setImage(mockImageObject.getImageFile());
         assetPanel.repaint();
+
+        /*
+        check/load database table
+        put selected image into logo object
+        put selected image into asset object
+        get connection instance
+        put image in database
+        load image from database
+        close connection instance?
+        put image into test JFrame
+         */
+
+
     }
 
     /**

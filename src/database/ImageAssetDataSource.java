@@ -1,14 +1,7 @@
 package database;
 
 import mazeFunctions.ImageAssetFile;
-import collections.HelperMethods;
-
-import javax.imageio.ImageIO;
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,7 +30,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
     private static final String COUNT_ROWS = "SELECT COUNT(*) FROM address";
 
-    private Connection connection;
+    private Connection connection; // make this final if it's safe to do so.
 
     private PreparedStatement addAsset;
 
@@ -50,6 +43,9 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
     private PreparedStatement rowCount;
 
+    /**
+     * Creates the image asset table if it doesn't exist.
+     */
     public ImageAssetDataSource() {
         connection = DBConnection.getInstance();
         try {
@@ -69,10 +65,10 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     /**
 
      */
-    public void addImageFile(ImageAssetFile p) {
+    public void addImageFile(ImageAssetFile asset) {
         try {
 
-            addAsset.setString(1, p.getName());
+            addAsset.setString(1, asset.getName());
 // Delete once the bufferedImageToBlob() method has been tested.###################################
 //            ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //            ImageIO.write(p.getImageFile(), "jpg", baos);
@@ -82,7 +78,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 //            Blob blob = new SerialBlob( bytes );
 
             // this puts the data into the query
-            addAsset.setBlob(2, bufferedImageToBlob(p.getImageFile(), "jpg"));
+            addAsset.setBlob(2, bufferedImageToBlob(asset.getImageFile(), "jpg"));
             addAsset.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
