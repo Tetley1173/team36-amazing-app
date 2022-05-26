@@ -32,13 +32,13 @@ public class EditTab extends JFrame{
     // Panels
     private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
     // Buttons - Left panels
-    private final JButton mazeGeneration, BlankGenerate, EraseButton, ScreenShot;
+    private final JButton mazeGeneration, BlankGenerate, EraseButton, exportMazeImage;
     private final JButton toggleOptimumPath, toggleEntryExit;
     private final JSpinner rowDecision, colDecision, logoRowDecision, logoColDecision;
     private final JCheckBox insertLogo;
 
     // Buttons - Right panels
-    private final JButton exportMazeImage;
+    private final JButton saveMazeImage;
 
 
     private boolean isEntryExitToggled = false;
@@ -63,7 +63,7 @@ public class EditTab extends JFrame{
         // Panel displaying info of the maze
         mazeInfoPanel = createInfoPanel();
         // Temporary Panel on the right, will be using it in the future
-        JPanel rightPanel = new JPanel();
+        JPanel rightPanel = new JPanel(new GridBagLayout());
         rightPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
         rightPanel.setPreferredSize(new Dimension(MAZE_SETUP_PANEL_WIDTH,MAZE_SETUP_PANEL_HEIGHT));
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
@@ -85,17 +85,19 @@ public class EditTab extends JFrame{
         // Toggle the Entry and Exit (Red - Entry, Green, Exit)
         toggleEntryExit= createButton("Show Entry/Exit", false, this::setToggleEntryExit);
         // Save the screenshot of the maze
-        ScreenShot = createButton("Screenshot",false, this::FolderExplorer);
+
 
         // number of rows and cols occupied by the logo
         logoRowDecision = createSpinner(logoRowsNumModel, spinnerDim, false);
         logoColDecision =  createSpinner(logoColsNumModel, spinnerDim, false);
         insertLogo = createCheckbox(this::putLogo);
 
-        LogoSetupPanelLayoutSetup();
-        InfoPanelLayoutSetup();
+        LogoSetupPanelLayoutSetup(logoSetupPanel);
+        InfoPanelLayoutSetup(mazeSetupPanel);
 
-        exportMazeImage = createButton("Save", false, this::popUpWindows);
+        saveMazeImage = createButton("Save", false, this::saveMaze);
+        exportMazeImage = createButton("Export as image",false, this::FolderExplorer);
+        rightPanelSetup(rightPanel);
 
 
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
@@ -103,7 +105,6 @@ public class EditTab extends JFrame{
         editTab.add(rightPanel, BorderLayout.EAST);
         setupAndInfoPanel.add(mazeSetupPanel, BorderLayout.NORTH);
 
-        rightPanel.add(exportMazeImage);
 
         JPanel pnl = new JPanel(new BorderLayout());
         pnl.setBackground(MAZE_SETUP_PANEL_COLOR);
@@ -117,13 +118,13 @@ public class EditTab extends JFrame{
         EraseButton.setEnabled(!EraseButton.isEnabled());
         toggleEntryExit.setEnabled(!toggleEntryExit.isEnabled());
         toggleOptimumPath.setEnabled(!toggleOptimumPath.isEnabled());
-        ScreenShot.setEnabled(!ScreenShot.isEnabled());
         mazeGeneration.setEnabled(!mazeGeneration.isEnabled());
         BlankGenerate.setEnabled(!BlankGenerate.isEnabled());
         rowDecision.setEnabled(!rowDecision.isEnabled());
         colDecision.setEnabled(!colDecision.isEnabled());
+        exportMazeImage.setEnabled(!exportMazeImage.isEnabled());
     }
-    private void InfoPanelLayoutSetup() {
+    private void InfoPanelLayoutSetup(JPanel mazeSetupPanel) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(2, 2, 2, 2);
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -158,10 +159,8 @@ public class EditTab extends JFrame{
         mazeSetupPanel.add(toggleOptimumPath, gbc);
         gbc.gridy = 5;
         mazeSetupPanel.add(toggleEntryExit, gbc);
-        gbc.gridy = 6; gbc.gridwidth = 2;
-        mazeSetupPanel.add(ScreenShot, gbc);
     }
-    private void LogoSetupPanelLayoutSetup() {
+    private void LogoSetupPanelLayoutSetup(JPanel logoSetupPanel) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(2, 2, 2, 2);
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -182,6 +181,18 @@ public class EditTab extends JFrame{
         logoSetupPanel.add(logoRowDecision, gbc);
         gbc.gridy = 2;
         logoSetupPanel.add(logoColDecision, gbc);
+    }
+    private void rightPanelSetup(JPanel rightPanel) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 2);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridwidth = 2; gbc.gridheight = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        rightPanel.add(saveMazeImage, gbc);
+        gbc.gridy = 1; gbc.weighty = 100;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        rightPanel.add(exportMazeImage, gbc);
     }
     private void FolderExplorer(ActionEvent event) {
         FileDialog folder = new FileDialog(new Frame(), "Save Image", FileDialog.SAVE);
@@ -267,7 +278,7 @@ public class EditTab extends JFrame{
     }
     private void displayMazeObject() {
         componentReset();
-        exportMazeImage.setEnabled(true);
+        saveMazeImage.setEnabled(true);
         insertLogo.setEnabled(false);
         logoRowDecision.setEnabled(false);
         logoColDecision.setEnabled(false);
@@ -301,7 +312,7 @@ public class EditTab extends JFrame{
         componentReset();
         isEntryExitToggled = false;
         toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
-        exportMazeImage.setEnabled(false);
+        saveMazeImage.setEnabled(false);
         insertLogo.setEnabled(true);
         insertLogo.setSelected(false);
         logoRowDecision.setEnabled(false);
@@ -332,7 +343,7 @@ public class EditTab extends JFrame{
         logoRowDecision.setEnabled(!logoRowDecision.isEnabled());
         logoColDecision.setEnabled(!logoColDecision.isEnabled());
     }
-    private void popUpWindows(ActionEvent event) {
+    private void saveMaze(ActionEvent event) {
         JFrame exportFrame = new JFrame();
         JPanel pnl = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

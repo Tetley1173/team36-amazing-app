@@ -4,7 +4,6 @@ import components.Cell;
 import gui.displayMaze;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -72,10 +71,10 @@ public abstract class Maze {
                 getCell(i, j).invertWall(1);
                 getCell(i, j).invertWall(2);
                 getCell(i, j).invertWall(3);
-                disableButton(i, j, 0);
-                disableButton(i, j, 1);
-                disableButton(i, j, 2);
-                disableButton(i, j, 3);
+                hideButton(i, j, 0);
+                hideButton(i, j, 1);
+                hideButton(i, j, 2);
+                hideButton(i, j, 3);
 
             }
         }
@@ -83,58 +82,72 @@ public abstract class Maze {
             getCell(row, j).invertWall(1);
             getCell(row, j).invertWall(2);
             getCell(row, j).invertWall(3);
-            disableButton(row, j, 1);
-            disableButton(row, j, 2);
-            disableButton(row, j, 3);
+            disableButton(row, j, 0);
+            hideButton(row, j, 1);
+            hideButton(row, j, 2);
+            hideButton(row, j, 3);
 
             getCell(row + logoHeight - 1, j).invertWall(0);
             getCell(row + logoHeight - 1, j).invertWall(1);
             getCell(row + logoHeight - 1, j).invertWall(3);
-            disableButton(row + logoHeight - 1, j, 1);
+            hideButton(row + logoHeight - 1, j, 0);
+            hideButton(row + logoHeight - 1, j, 1);
+            hideButton(row + logoHeight - 1, j, 3);
             disableButton(row + logoHeight - 1, j, 2);
-            disableButton(row + logoHeight - 1, j, 3);
 
         }
         for (int i = row + 1; i < row + logoHeight - 1; i++) {
             getCell(i, col).invertWall(0);
             getCell(i, col).invertWall(1);
             getCell(i, col).invertWall(2);
-            disableButton(i, col, 0);
-            disableButton(i, col, 1);
-            disableButton(i, col, 2);
+            hideButton(i, col, 0);
+            hideButton(i, col, 1);
+            hideButton(i, col, 2);
+            disableButton(i, col, 3);
 
             getCell(i, col + logoWidth - 1).invertWall(0);
             getCell(i, col + logoWidth - 1).invertWall(2);
             getCell(i, col + logoWidth - 1).invertWall(3);
-            disableButton(i, col + logoWidth - 1, 0);
-            disableButton(i, col + logoWidth - 1, 2);
-            disableButton(i, col + logoWidth - 1, 3);
+            hideButton(i, col + logoWidth - 1, 0);
+            hideButton(i, col + logoWidth - 1, 2);
+            hideButton(i, col + logoWidth - 1, 3);
+            disableButton(i, col + logoWidth - 1, 1);
         }
         getCell(row, col).invertWall(1);
         getCell(row, col).invertWall(2);
-        disableButton(row, col,1);
-        disableButton(row, col,2);
+        hideButton(row, col,1);
+        hideButton(row, col,2);
+        disableButton(row, col, 0);
+        disableButton(row, col, 3);
 
         getCell(row, col + logoWidth - 1).invertWall(2);
         getCell(row, col + logoWidth - 1).invertWall(3);
-        disableButton(row, col + logoWidth - 1,2);
-        disableButton(row, col + logoWidth - 1,3);
+        hideButton(row, col + logoWidth - 1,2);
+        hideButton(row, col + logoWidth - 1,3);
+        disableButton(row, col, 0);
+        disableButton(row, col, 1);
 
         getCell(row + logoHeight - 1, col).invertWall(0);
         getCell(row + logoHeight - 1, col).invertWall(1);
-        disableButton(row + logoHeight - 1, col,0);
-        disableButton(row + logoHeight - 1, col,1);
+        hideButton(row + logoHeight - 1, col,0);
+        hideButton(row + logoHeight - 1, col,1);
+        disableButton(row, col, 2);
+        disableButton(row, col, 3);
 
 
         getCell(row + logoHeight - 1, col + logoWidth - 1).invertWall(0);
         getCell(row + logoHeight - 1, col + logoWidth - 1).invertWall(3);
-        disableButton(row, col + logoWidth - 1,2);
-        disableButton(row, col + logoWidth - 1,3);
-
+        hideButton(row, col + logoWidth - 1,0);
+        hideButton(row, col + logoWidth - 1,3);
+        disableButton(row, col, 1);
+        disableButton(row, col, 2);
     }
     // Disable the wall buttons in the logo area
-    private void disableButton(int row, int col, int index) {
+    private void hideButton(int row, int col, int index) {
         displayMaze.wallButtons[row][col].getWallButton(index).setVisible(false);
+    }
+    private void disableButton(int row, int col, int index) {
+        displayMaze.wallButtons[row][col].getWallButton(index).setEnabled(false);
     }
 
     public void setHasLogo(boolean hasLogo) { this.hasLogo = hasLogo;}
