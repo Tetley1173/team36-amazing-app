@@ -38,8 +38,8 @@ public class displayMaze{
 //    private static ImageIcon defaultEntryIcon;
 //    private static ImageIcon defaultExitIcon;
 
-    public static Color bgColor = Color.DARK_GRAY;
-    public static Color hoverColor = Color.ORANGE;
+    public static Color bgColor = EditTab.MAZE_SETUP_PANEL_COLOR;
+    public static Color hoverColor = new Color(0x333A48);
     public static final int BUTTON_OFFSET = 5;
     private static final int OFFSET = 20;
     public static int CELL_WIDTH, CELL_HEIGHT;
@@ -160,12 +160,12 @@ public class displayMaze{
         ImageIcon defaultEntryIcon = new ImageIcon(DEFAULT_ENTRY_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
         ImageIcon defaultExitIcon = new ImageIcon(DEFAULT_EXIT_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
         JLabel entry = new JLabel(defaultEntryIcon);
-        entry.setBounds(maze.getEntryCell().getCol() * (CELL_WIDTH + BUTTON_OFFSET) + OFFSET_X * 5 / 4,
-                maze.getEntryCell().getRow() * CELL_HEIGHT *(CELL_HEIGHT + BUTTON_OFFSET) + OFFSET_Y * 5 / 4,
+        entry.setBounds(maze.getEntryCell().getCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                maze.getEntryCell().getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
                 CELL_WIDTH, CELL_HEIGHT);
         JLabel exit = new JLabel(defaultExitIcon);
-        exit.setBounds(maze.getExitCell().getCol() * (CELL_WIDTH + BUTTON_OFFSET) + OFFSET_X * 5 / 4,
-                maze.getExitCell().getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + OFFSET_Y* 5 / 4,
+        exit.setBounds(maze.getExitCell().getCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                maze.getExitCell().getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
                 CELL_WIDTH, CELL_HEIGHT);
         pnl.add(entry);
         pnl.add(exit);

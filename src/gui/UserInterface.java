@@ -28,7 +28,6 @@ public class UserInterface extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
-        guiMenuBar();
         setLayout(new BorderLayout(5, 5));
 
         tabbedPane = new JTabbedPane();
@@ -42,25 +41,6 @@ public class UserInterface extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void guiMenuBar() {
-        menuBar = new JMenuBar();
-        mainMenu = new JMenu("Menu");
-        mainMenu.add("New");
-        mainMenu.add("Load");
-        mainMenu.add("Exit");
-        editMenu = new JMenu("Edit");
-        editMenu.add("Copy");
-        editMenu.add("Cut");
-        editMenu.add("Paste");
-        exportMenu = new JMenu("Export");
-        exportMenu.add("Export the maze as png");
-        assetsMenu = new JMenu("Assets");
-        menuBar.add(mainMenu);
-        menuBar.add(editMenu);
-        menuBar.add(exportMenu);
-        menuBar.add(assetsMenu);
-        setJMenuBar(menuBar);
-    }
 
 
 

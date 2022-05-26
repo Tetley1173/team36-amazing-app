@@ -37,7 +37,7 @@ public class MazeGeneration {
             for (int col = 0; col < cols; col++)
                 if(maze.getWallSum(row, col) == 4) totalCells++;
 
-
+        maze.setReachableCells(totalCells);
         int currentRow = 0;
         int currentCol = 0;
         Cell currentCell;
@@ -202,5 +202,4 @@ public class MazeGeneration {
                     sumOfDeadEnd++;
         return 100.0 * sumOfDeadEnd/(rows*cols);
     }
-    private ArrayList<Cell> computeOptimumPath(Maze maze){ return new ArrayList<>();}
 }

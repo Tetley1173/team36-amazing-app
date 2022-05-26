@@ -4,11 +4,33 @@ import components.Cell;
 import gui.displayMaze;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 
 public abstract class Maze {
+    private String mazeName = null;
+    public void setMazeName(String mazeName) {
+        this.mazeName = mazeName;
+    }
+    public String getMazeName() { return mazeName; }
+    private String authorName = null;
+    public void setAuthor(String authorName) {
+        this.authorName = authorName;
+    }
+    public String getAuthor() { return authorName; }
+
+    private LocalDateTime createdDateTime = null;
+    public LocalDateTime getCreatedDateTime() { return createdDateTime; }
+    private LocalDateTime lastEditedDateTime = null;
+    public void setLastEditedDateTime(LocalDateTime lastEditedDateTime) {
+        this.lastEditedDateTime = lastEditedDateTime;
+    }
+    public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
+
     private final int rows, cols;
+    private int reachableCells = -1;
     private final Cell[][] maze;
     private Cell entryCell, exitCell;
 
@@ -28,6 +50,8 @@ public abstract class Maze {
                 maze[row][col] = new Cell(row, col);
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
+        createdDateTime = LocalDateTime.now();
+        lastEditedDateTime = createdDateTime;
     }
 
     public int chooseLocation(int rows, int cols, int logoHeight, int logoWidth) {
@@ -134,6 +158,10 @@ public abstract class Maze {
     // Get method
     public int getRows() { return rows; }
     public int getCols() { return cols; }
+    public void setReachableCells(int reachableCells) {
+        this.reachableCells = reachableCells;
+    }
+    public int getReachableCells() { return reachableCells; }
     public Cell getCell(int row, int col) { return maze[row][col]; }
     public int getWallSum(int row, int col) { return maze[row][col].sumWall(); }
     public Cell getEntryCell() { return entryCell; }

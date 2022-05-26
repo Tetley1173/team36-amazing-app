@@ -29,7 +29,7 @@ public class wallButtonCollection implements ActionListener {
         // Changes the color between the background and the wall color
         if (button.getBackground() == wallButton.wallColor) button.setBackground(displayMaze.bgColor);
         else if (button.getBackground() == displayMaze.bgColor) button.setBackground(wallButton.wallColor);
-        EditTab.maze.getCell(row, col).invertWall(wallIndex);
+        EditTab.getMaze().getCell(row, col).invertWall(wallIndex);
 //        Test if the wall state is updated after the actionPerformed
 //        System.out.println(EditTab.maze.getCell(row, col).sumWall());
     }

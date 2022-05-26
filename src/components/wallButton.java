@@ -1,10 +1,12 @@
 package components;
 
+import gui.EditTab;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class wallButton extends JButton {
-    public static final Color wallColor = new Color(125, 116, 0);
+    public static final Color wallColor = EditTab.BUTTON_COLOR;
     private final int wallIndex;
     private final int row, col;
     public wallButton(int row, int col, int wallIndex){

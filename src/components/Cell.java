@@ -3,9 +3,12 @@ package components;
 public class Cell {
     private final int row, col;
     private final int[] wall = {1, 1, 1, 1}; // the state of the wall (1 - ON, 0 - OFF)
+    private int distance; // step from the cell to the entry;
+    private Cell parent;
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
+        distance = -1;
     }
 
     // Invert the wall
@@ -23,5 +26,13 @@ public class Cell {
         return sum;
     }
     public int getWall(int wallIndex) { return wall[wallIndex]; }
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+    public int getDistance() { return distance; }
+    public void setParent(Cell parent) {
+        this.parent = parent;
+    }
+    public Cell getParent() { return parent; }
 
 }

@@ -3,6 +3,7 @@ package gui;
 import mazeFunctions.Maze;
 import mazeFunctions.MazeGeneration;
 import mazeFunctions.MazeWithoutImage;
+import mazeFunctions.mazeCollection;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,8 +21,8 @@ public class EditTab extends JFrame{
     public final static int LOGO_PANEL_WIDTH = 200;
     public final static int LOGO_SETUP_PANEL_HEIGHT = 100;
     private final static String IMAGE_OUTPUT_FORMAT = "png";
-    private final Color MAZE_SETUP_PANEL_COLOR = new Color(0x4B566C);
-    private final Color BUTTON_COLOR = new Color(0xABA9C3);
+    public final static Color MAZE_SETUP_PANEL_COLOR = new Color(0x4B566C);
+    public final static Color BUTTON_COLOR = new Color(0xABA9C3);
     private final SpinnerNumberModel rowsDecisionNumModel = new SpinnerNumberModel(20, 2, 100, 1);
     private final SpinnerNumberModel colsDecisionNumModel = new SpinnerNumberModel(20, 2, 100, 1);
     private final SpinnerNumberModel logoRowsNumModel = new SpinnerNumberModel(2, 2, 7, 1);
@@ -30,24 +31,29 @@ public class EditTab extends JFrame{
 
     // Panels
     private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
-    // Buttons
+    // Buttons - Left panels
     private final JButton mazeGeneration, BlankGenerate, EraseButton, ScreenShot;
     private final JButton toggleOptimumPath, toggleEntryExit;
     private final JSpinner rowDecision, colDecision, logoRowDecision, logoColDecision;
     private final JCheckBox insertLogo;
+
+    // Buttons - Right panels
+    private final JButton exportMazeImage;
 
 
     private boolean isEntryExitToggled = false;
     private boolean isSolutionToggled = false;
 
     // Maze
-    public static Maze maze;
+    private static Maze maze;
+    private static mazeCollection mazes;
 
     public EditTab() {
+        mazes = new mazeCollection();
         // create the edit tab
         editTab = new JPanel(new BorderLayout());
         // the maze drawing panel
-        mazeEditPanel = createMazeDrawPanel(Color.DARK_GRAY);
+        mazeEditPanel = createMazeDrawPanel(MAZE_SETUP_PANEL_COLOR);
         // the left panel in the edit tab
         setupAndInfoPanel = createButtonPanel(Color.DARK_GRAY);
         // the top side of the left panel
@@ -60,6 +66,7 @@ public class EditTab extends JFrame{
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
         rightPanel.setPreferredSize(new Dimension(MAZE_SETUP_PANEL_WIDTH,MAZE_SETUP_PANEL_HEIGHT));
+        rightPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
 
         // Spinners for rows and cols inputs
         // rows and cols
@@ -88,10 +95,15 @@ public class EditTab extends JFrame{
         LogoSetupPanelLayoutSetup();
         InfoPanelLayoutSetup();
 
+        exportMazeImage = createButton("Save", false, this::popUpWindows);
+
+
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
         editTab.add(setupAndInfoPanel, BorderLayout.WEST);
         editTab.add(rightPanel, BorderLayout.EAST);
         setupAndInfoPanel.add(mazeSetupPanel, BorderLayout.NORTH);
+
+        rightPanel.add(exportMazeImage);
 
         JPanel pnl = new JPanel(new BorderLayout());
         pnl.setBackground(MAZE_SETUP_PANEL_COLOR);
@@ -255,6 +267,7 @@ public class EditTab extends JFrame{
     }
     private void displayMazeObject() {
         componentReset();
+        exportMazeImage.setEnabled(true);
         insertLogo.setEnabled(false);
         logoRowDecision.setEnabled(false);
         logoColDecision.setEnabled(false);
@@ -264,11 +277,13 @@ public class EditTab extends JFrame{
         if(insertLogo.isSelected())displayMaze.showLogo(mazeEditPanel, maze);
         displayMaze.drawMaze(mazeEditPanel, maze);
         mazeEditPanel.repaint();
+        mazeEditPanel.revalidate();
 
         mazeInfoPanel.removeAll();
         displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
         displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
         mazeInfoPanel.repaint();
+        mazeInfoPanel.revalidate();
     }
 
     private void blankMazeGen(ActionEvent event) {
@@ -286,6 +301,7 @@ public class EditTab extends JFrame{
         componentReset();
         isEntryExitToggled = false;
         toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
+        exportMazeImage.setEnabled(false);
         insertLogo.setEnabled(true);
         insertLogo.setSelected(false);
         logoRowDecision.setEnabled(false);
@@ -296,10 +312,10 @@ public class EditTab extends JFrame{
         toggleOptimumPath.setSelected(false);
         mazeEditPanel.removeAll();
         mazeEditPanel.repaint();
-        mazeEditPanel.validate();
+        mazeEditPanel.revalidate();
         mazeInfoPanel.removeAll();
         mazeInfoPanel.repaint();
-        mazeInfoPanel.validate();
+        mazeInfoPanel.revalidate();
     }
     private void setToggleEntryExit(ActionEvent event) {
         isEntryExitToggled = !isEntryExitToggled;
@@ -315,6 +331,63 @@ public class EditTab extends JFrame{
     private void putLogo(ActionEvent event) {
         logoRowDecision.setEnabled(!logoRowDecision.isEnabled());
         logoColDecision.setEnabled(!logoColDecision.isEnabled());
+    }
+    private void popUpWindows(ActionEvent event) {
+        JFrame exportFrame = new JFrame();
+        JPanel pnl = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JTextField maze_name = new JTextField();
+        JTextField author = new JTextField();
+        maze_name.setPreferredSize(new Dimension(100, 20));
+        author.setPreferredSize(new Dimension(100, 20));
+
+        JButton confirm = new JButton("Confirm");
+
+        pnl.setMinimumSize(new Dimension(500, 500));
+
+        gbc.insets = new Insets(2, 2, 2, 2);
+        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridwidth = 1; gbc.gridheight = 1;
+        pnl.add(new JLabel("Maze name:"), gbc);
+        gbc.gridy = 1;
+        pnl.add(new JLabel("Author:"), gbc);
+
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 1;gbc.gridy = 0;
+        pnl.add(maze_name, gbc);
+        gbc.gridy = 1;
+        pnl.add(author, gbc);
+        gbc.gridwidth = 2;
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        pnl.add(confirm, gbc);
+
+        confirm.addActionListener(e -> {
+            String mazeName = maze_name.getText();
+            String authorName = author.getText();
+            if (mazeName.isBlank() || authorName.isBlank()) JOptionPane.showMessageDialog(this,
+                        "Please fill in the blank.");
+            else {
+                maze.setMazeName(mazeName);
+                maze.setAuthor(authorName);
+                mazes.addMaze(maze);
+                exportFrame.dispose();
+                JOptionPane.showMessageDialog(this,"Done");
+            }
+
+        });
+
+
+        exportFrame.setTitle("Save maze");
+        exportFrame.setPreferredSize(new Dimension(300, 300));
+        exportFrame.getContentPane().add(pnl);
+        exportFrame.setLocationRelativeTo(null);
+        exportFrame.pack();
+        exportFrame.setVisible(true);
+
     }
     private JButton createButton(String buttonName, boolean isEnable, ActionListener action) {
         JButton btn = new JButton(buttonName);
@@ -349,12 +422,14 @@ public class EditTab extends JFrame{
     private JPanel createMazeDrawPanel(Color bgColor) {
         JPanel mazeDraw = new JPanel();
         mazeDraw.setBackground(bgColor);
+        mazeDraw.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
         return mazeDraw;
     }
     // create the buttonPanel
     private JPanel createButtonPanel(Color bgColor) {
         JPanel buttonPnl = new JPanel(new BorderLayout());
         buttonPnl.setBackground(bgColor);
+        buttonPnl.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
         return buttonPnl;
     }
     private JPanel createSetupPanel() {
@@ -379,6 +454,7 @@ public class EditTab extends JFrame{
     }
 
     public JPanel getTab() { return editTab; }
-
+    public static Maze getMaze() { return maze; }
+    public static mazeCollection getMazes() { return mazes; }
 
 }
