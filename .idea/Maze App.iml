@@ -26,5 +26,6 @@
     </orderEntry>
     <orderEntry type="library" name="xerial.sqlite.jdbc" level="project" />
     <orderEntry type="library" name="xerial.sqlite.jdbc1" level="project" />
+    <orderEntry type="library" name="xerial.sqlite.jdbc2" level="project" />
   </component>
 </module>
