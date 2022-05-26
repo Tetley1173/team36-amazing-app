@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static collections.Main.mockImageObject;
+
 /**
  * Defines what is rendered on the Assets Tab in the user interface.
  * @author Shannon Tetley
@@ -60,6 +62,8 @@ public class AssetsTab extends JFrame {
         widgetAdder(constraints);
 
         selectEntryImage.addActionListener( e -> imageExplorer(entryIcon) );
+        selectEntryImage.addActionListener( e -> dbImageTester());
+
         selectExitImage.addActionListener( e -> imageExplorer(exitIcon) );
         logo1stImage.addActionListener( e -> imageExplorer(logo1Icon) );
         logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon) );
@@ -90,7 +94,7 @@ public class AssetsTab extends JFrame {
                 int cWidth = c.getWidth();
                 int cHeight = c.getHeight();
 
-                if ((cWidth <= maxWidth & cWidth >= minWidth) & (cHeight <= maxHeight & cHeight >= minHeight)) {
+                if ((cWidth <= maxWidth && cWidth >= minWidth) && (cHeight <= maxHeight && cHeight >= minHeight)) {
                     icon.setImage(c);
                     assetPanel.repaint();
                 }
@@ -112,6 +116,31 @@ public class AssetsTab extends JFrame {
                         "Missing image file, please select an appropriate image file.",
                         "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    // Test method for learning how to load images from the database and use them.
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    // Test method please delete when done ##########################################
+    private void dbImageTester() {
+        logo2Icon.setImage(mockImageObject.getImageFile());
+        assetPanel.repaint();
+
+        /*
+        check/load database table
+        put selected image into logo object
+        put selected image into asset object
+        get connection instance
+        put image in database
+        load image from database
+        close connection instance?
+        put image into test JFrame
+         */
+
+
     }
 
     /**
