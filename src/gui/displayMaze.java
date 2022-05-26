@@ -18,7 +18,7 @@ import java.math.MathContext;
 
 public class displayMaze{
     // Image constant
-    public static BufferedImage DEFAULT_ENTRY_IMAGE;
+    public static BufferedImage DEFAULT_ENTRY_IMAGE, DEFAULT_EXIT_IMAGE;
     static {
         try {
             DEFAULT_ENTRY_IMAGE = ImageIO.read(new File("src/mazeFunctions/ENTRY_EXIT_IMAGES/Entry_red_circle.png"));
@@ -26,7 +26,6 @@ public class displayMaze{
             throw new RuntimeException("No ENTRY IMAGE!!!");
         }
     }
-    public static BufferedImage DEFAULT_EXIT_IMAGE;
     static {
         try {
             DEFAULT_EXIT_IMAGE = ImageIO.read(new File("src/mazeFunctions/ENTRY_EXIT_IMAGES/EXIT_red_star.png"));
@@ -36,17 +35,23 @@ public class displayMaze{
     }
 
     // Images
-    private static ImageIcon defaultEntryIcon;
-    private static ImageIcon defaultExitIcon;
+//    private static ImageIcon defaultEntryIcon;
+//    private static ImageIcon defaultExitIcon;
 
     public static Color bgColor = Color.DARK_GRAY;
     public static Color hoverColor = Color.ORANGE;
-    private static final int BUTTON_OFFSET = 5;
+    public static final int BUTTON_OFFSET = 5;
     private static final int OFFSET = 20;
-    private static int WIDTH, HEIGHT;
-    private static int OFFSET_X, OFFSET_Y;
+    public static int CELL_WIDTH, CELL_HEIGHT;
+    public static int OFFSET_X, OFFSET_Y;
     public static wallButtonCollection[][] wallButtons;
 
+    public static void setCellSize(JPanel pnl, Maze maze) {
+        CELL_WIDTH = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
+        CELL_HEIGHT = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
+        OFFSET_X = (pnl.getHeight() - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
+        OFFSET_Y = (pnl.getHeight() - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
+    }
     public static void setWallButtons(Maze maze) {
         wallButtons = new wallButtonCollection[maze.getRows()][maze.getCols()];
         for (int row = 0; row < maze.getRows(); row++) {
@@ -56,13 +61,7 @@ public class displayMaze{
         }
     }
     public static void drawMaze(JPanel pnl, Maze maze) {
-        WIDTH = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getCols()) - 2*OFFSET)/maze.getCols());
-        HEIGHT = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getRows()) - 2*OFFSET)/maze.getRows());
-        OFFSET_X = (pnl.getHeight() - ( WIDTH + BUTTON_OFFSET ) * maze.getCols())/2;
-        OFFSET_Y = (pnl.getHeight() - ( HEIGHT + BUTTON_OFFSET ) * maze.getRows())/2;
-
         pnl.setLayout(null);
-        setWallButtons(maze);
         for (int row = 0; row < maze.getRows(); row++) {
             for (int col = 0; col < maze.getCols(); col++) {
                 int finalRow = row;
@@ -70,21 +69,21 @@ public class displayMaze{
                 if (row == 0){
                     if (maze.getCell(row, col).getWall(0) == 0) wallButtons[row][col].getWallButton(0).setBackground(bgColor);
                     pnl.add(wallButtons[row][col].getWallButton(0));
-                    wallButtons[row][col].getWallButton(0).setBounds((col * (WIDTH + BUTTON_OFFSET)) + BUTTON_OFFSET + OFFSET_X, OFFSET_Y, WIDTH, BUTTON_OFFSET);
+                    wallButtons[row][col].getWallButton(0).setBounds((col * (CELL_WIDTH + BUTTON_OFFSET)) + BUTTON_OFFSET + OFFSET_X, OFFSET_Y, CELL_WIDTH, BUTTON_OFFSET);
                 }
                 if (col == 0){
                     if (maze.getCell(row, col).getWall(3) == 0) wallButtons[row][col].getWallButton(3).setBackground(bgColor);
                     pnl.add(wallButtons[row][col].getWallButton(3));
-                    wallButtons[row][col].getWallButton(3).setBounds(OFFSET_X, (row * (HEIGHT + BUTTON_OFFSET)) + BUTTON_OFFSET + OFFSET_Y, BUTTON_OFFSET, HEIGHT);
+                    wallButtons[row][col].getWallButton(3).setBounds(OFFSET_X, (row * (CELL_HEIGHT + BUTTON_OFFSET)) + BUTTON_OFFSET + OFFSET_Y, BUTTON_OFFSET, CELL_HEIGHT);
                 }
                 if (maze.getCell(row, col).getWall(2) == 0) wallButtons[row][col].getWallButton(2).setBackground(bgColor);
                 if (maze.getCell(row, col).getWall(1) == 0) wallButtons[row][col].getWallButton(1).setBackground(bgColor);
 
                 pnl.add(wallButtons[row][col].getWallButton(2));
-                wallButtons[row][col].getWallButton(2).setBounds(col * (WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X, (row + 1) * (HEIGHT + BUTTON_OFFSET) + OFFSET_Y, WIDTH, BUTTON_OFFSET);
+                wallButtons[row][col].getWallButton(2).setBounds(col * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X, (row + 1) * (CELL_HEIGHT + BUTTON_OFFSET) + OFFSET_Y, CELL_WIDTH, BUTTON_OFFSET);
 
                 pnl.add(wallButtons[row][col].getWallButton(1));
-                wallButtons[row][col].getWallButton(1).setBounds((col + 1) * (WIDTH + BUTTON_OFFSET) + OFFSET_X, row * (HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y, BUTTON_OFFSET, HEIGHT);
+                wallButtons[row][col].getWallButton(1).setBounds((col + 1) * (CELL_WIDTH + BUTTON_OFFSET) + OFFSET_X, row * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y, BUTTON_OFFSET, CELL_HEIGHT);
 
                 maze.setEntryCell();
                 maze.setExitCell();
@@ -158,22 +157,30 @@ public class displayMaze{
         }
     }
     public static void showEntryExit(JPanel pnl, Maze maze) {
-        defaultEntryIcon = new ImageIcon(DEFAULT_ENTRY_IMAGE.getScaledInstance(WIDTH*3/4, HEIGHT*3/4, Image.SCALE_DEFAULT));
-        defaultExitIcon = new ImageIcon(DEFAULT_EXIT_IMAGE.getScaledInstance(WIDTH*3/4, HEIGHT*3/4, Image.SCALE_DEFAULT));
+        ImageIcon defaultEntryIcon = new ImageIcon(DEFAULT_ENTRY_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
+        ImageIcon defaultExitIcon = new ImageIcon(DEFAULT_EXIT_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
         JLabel entry = new JLabel(defaultEntryIcon);
-        entry.setBounds(maze.getEntryCell().getCol() * (WIDTH + BUTTON_OFFSET) + OFFSET_X*5/4,
-                        maze.getEntryCell().getRow() * HEIGHT*(HEIGHT + BUTTON_OFFSET) + OFFSET_Y*5/4,
-                     WIDTH, HEIGHT);
+        entry.setBounds(maze.getEntryCell().getCol() * (CELL_WIDTH + BUTTON_OFFSET) + OFFSET_X * 5 / 4,
+                maze.getEntryCell().getRow() * CELL_HEIGHT *(CELL_HEIGHT + BUTTON_OFFSET) + OFFSET_Y * 5 / 4,
+                CELL_WIDTH, CELL_HEIGHT);
         JLabel exit = new JLabel(defaultExitIcon);
-        exit.setBounds(maze.getExitCell().getCol() * (WIDTH + BUTTON_OFFSET) + OFFSET_X*5/4,
-                       maze.getExitCell().getRow() * (HEIGHT + BUTTON_OFFSET) + OFFSET_Y*5/4,
-                    WIDTH, HEIGHT);
+        exit.setBounds(maze.getExitCell().getCol() * (CELL_WIDTH + BUTTON_OFFSET) + OFFSET_X * 5 / 4,
+                maze.getExitCell().getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + OFFSET_Y* 5 / 4,
+                CELL_WIDTH, CELL_HEIGHT);
         pnl.add(entry);
         pnl.add(exit);
     }
-
     public void showOptimumPath(JPanel pnl, Maze maze){}
     public void showOptimumPathReachingPercentage(JPanel pnl, Maze maze){}
+    public static void showLogo(JPanel pnl, Maze maze) {
+        ImageIcon logo = maze.getLogo();
+        JLabel logoLabel = new JLabel(logo);
+        logoLabel.setBounds(maze.getLogoCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                maze.getLogoRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
+                maze.getLogoWidth() * (CELL_WIDTH + BUTTON_OFFSET) - BUTTON_OFFSET,
+                maze.getLogoHeight() * (CELL_HEIGHT + BUTTON_OFFSET) - BUTTON_OFFSET);
+        pnl.add(logoLabel);
+    }
     public static void showDeadEndPercentage(JPanel pnl, Maze maze){
         double deadEndPercentage = MazeGeneration.deadEndPercentage(maze);
         pnl.add(new JLabel("Dead-end percentage: " + (new BigDecimal(deadEndPercentage)).round(new MathContext(4)).doubleValue() + "%"));
