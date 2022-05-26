@@ -74,7 +74,7 @@ public class EditTab extends JFrame{
         EraseButton = createButton("Erase", false, this::eraseMaze);
 
         // Toggle the optimum path (should be a colored line)
-        toggleOptimumPath = createButton("Optimum Solution", false, this::setToggleOptimumPath);
+        toggleOptimumPath = createButton("Show Optimum Solution", false, this::setToggleOptimumPath);
         // Toggle the Entry and Exit (Red - Entry, Green, Exit)
         toggleEntryExit= createButton("Show Entry/Exit", false, this::setToggleEntryExit);
         // Save the screenshot of the maze
@@ -284,6 +284,8 @@ public class EditTab extends JFrame{
     }
     private void eraseMaze(ActionEvent event) {
         componentReset();
+        isEntryExitToggled = false;
+        toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
         insertLogo.setEnabled(true);
         insertLogo.setSelected(false);
         logoRowDecision.setEnabled(false);
