@@ -18,9 +18,9 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             "CREATE TABLE IF NOT EXISTS assetFiles ("
                     + "idx INTEGER PRIMARY KEY /*!40101 AUTO_INCREMENT */ NOT NULL UNIQUE," // from https://stackoverflow.com/a/41028314
                     + "name VARCHAR(30) NOT NULL UNIQUE,"
-                    + "imageFile BLOB(MAX),";
+                    + "imageFile BLOB);";
 
-    private static final String INSERT_ASSET = "INSERT INTO assetFiles (name, imageFile) VALUES (?, ?, ?, ?, ?);";
+    private static final String INSERT_ASSET = "INSERT INTO assetFiles (name, imageFile) VALUES (?, ?);";
 
     private static final String GET_NAMES = "SELECT name FROM assetFiles";
 
@@ -28,7 +28,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
     private static final String DELETE_ASSET = "DELETE FROM assetFiles WHERE name=?";
 
-    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM address";
+    private static final String COUNT_ROWS = "SELECT COUNT(*) FROM assetFiles";
 
     private Connection connection; // make this final if it's safe to do so.
 
@@ -78,7 +78,11 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 //            Blob blob = new SerialBlob( bytes );
 
             // this puts the data into the query
-            addAsset.setBlob(2, bufferedImageToBlob(asset.getImageFile(), "jpg"));
+
+            /**
+             * Use set byte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             */
+            addAsset.setBlob(2, bufferedImageToBlob(asset.getImageFile(), "jpg")); // use setByte
             addAsset.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();

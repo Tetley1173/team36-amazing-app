@@ -22,11 +22,12 @@ public class Main {
      */
     public static void main (String[] args){
 
+        // Create the image asset table.
+        ImageAssetDataSource assetsTable = new ImageAssetDataSource();
         // Start the user interface.
         UserInterface frame = new UserInterface();
         frame.setVisible(true);
-        // Create the image asset table.
-        ImageAssetDataSource assetsTable = new ImageAssetDataSource();
+
 
         // Test code to see if the database works
         BufferedImage c = null;
