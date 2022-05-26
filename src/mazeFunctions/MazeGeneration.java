@@ -32,7 +32,11 @@ public class MazeGeneration {
 
         int rows = maze.getRows();
         int cols = maze.getCols();
-        int totalCells = rows * cols;
+        int totalCells = 0;
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                if(maze.getWallSum(row, col) == 4) totalCells++;
+
 
         int currentRow = 0;
         int currentCol = 0;

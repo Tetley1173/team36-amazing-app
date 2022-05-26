@@ -7,303 +7,171 @@ import mazeFunctions.MazeWithoutImage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class EditTab extends JFrame{
+    // Constants
     public final static int MAZE_SETUP_PANEL_WIDTH = 200;
-    public final static int MAZE_SETUP_PANEL_HEIGHT = 200;
+    public final static int MAZE_SETUP_PANEL_HEIGHT = 240;
     public final static int LOGO_PANEL_WIDTH = 200;
     public final static int LOGO_SETUP_PANEL_HEIGHT = 100;
     private final static String IMAGE_OUTPUT_FORMAT = "png";
+    private final Color MAZE_SETUP_PANEL_COLOR = new Color(0x4B566C);
+    private final Color BUTTON_COLOR = new Color(0xABA9C3);
+    private final SpinnerNumberModel rowsDecisionNumModel = new SpinnerNumberModel(20, 2, 100, 1);
+    private final SpinnerNumberModel colsDecisionNumModel = new SpinnerNumberModel(20, 2, 100, 1);
+    private final SpinnerNumberModel logoRowsNumModel = new SpinnerNumberModel(2, 2, 7, 1);
+    private final SpinnerNumberModel logoColsNumModel = new SpinnerNumberModel(2, 2, 7, 1);
+    private final Dimension spinnerDim = new Dimension(70, 20);
 
-    // Panel
-    private final JPanel editTab;
-    private final JPanel mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
-
+    // Panels
+    private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
     // Buttons
-    private final JButton mazeGeneration;
-    private final JButton BlankGenerate;
-    private final JButton EraseButton;
-//    private final JButton RefreshButton;
-    private final JButton ScreenShot;
+    private final JButton mazeGeneration, BlankGenerate, EraseButton, ScreenShot;
+    private final JButton toggleOptimumPath, toggleEntryExit;
+    private final JSpinner rowDecision, colDecision, logoRowDecision, logoColDecision;
+    private final JCheckBox insertLogo;
 
-    // Text field
-    private final JSpinner rowDecision;
-    private final JSpinner colDecision;
-    private final JSpinner logoRows;
-    private final JSpinner logoCols;
 
-    // Toggle buttons
-    private final JRadioButton toggleOptimumPath;
-    private final JRadioButton toggleEntryExit;
-    private final JRadioButton insertLogo;
+    private boolean isEntryExitToggled = false;
+    private boolean isSolutionToggled = false;
 
-    // Maze grid
+    // Maze
     public static Maze maze;
 
-    public EditTab(JTabbedPane tabbedPane) {
+    public EditTab() {
         // create the edit tab
         editTab = new JPanel(new BorderLayout());
-        tabbedPane.add("Edit",editTab);
-
-        // the maze visualization panel in the edit tab
-        mazeEditPanel = new JPanel();
-        mazeEditPanel.setBackground(Color.DARK_GRAY);
-        mazeEditPanel.setPreferredSize(new Dimension(mazeEditPanel.getMaximumSize().height, mazeEditPanel.getMaximumSize().height));
-
-        // the button panel in the edit tab
-        setupAndInfoPanel = new JPanel(new BorderLayout());
-        setupAndInfoPanel.setBackground(Color.DARK_GRAY);
-
-        mazeSetupPanel = new JPanel(new GridBagLayout());
-        mazeSetupPanel.setPreferredSize(new Dimension(MAZE_SETUP_PANEL_WIDTH, MAZE_SETUP_PANEL_HEIGHT));
-        GridBagConstraints c = new GridBagConstraints();
-        mazeSetupPanel.setBackground(Color.GRAY);
-        mazeSetupPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
-
-        // Panel for the logo setup
-        logoSetupPanel = new JPanel(new GridBagLayout());
-        logoSetupPanel.setPreferredSize(new Dimension(LOGO_PANEL_WIDTH, LOGO_SETUP_PANEL_HEIGHT));
-        GridBagConstraints d = new GridBagConstraints();
-        logoSetupPanel.setBackground(Color.GRAY);
-        logoSetupPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
-
-        insertLogo = new JRadioButton("Insert logo");
-        insertLogo.setBackground(Color.GRAY);
-
-        // Spinners for rows and cols inputs
-        // number of rows occupied by the logo
-        logoRows = new JSpinner(new SpinnerNumberModel(1, 1,5, 1));
-        logoRows.setPreferredSize(new Dimension(70,20));
-        logoRows.setEnabled(false);
-        logoRows.setBackground(Color.LIGHT_GRAY);
-        logoRows.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        ((JSpinner.DefaultEditor) logoRows.getEditor()).getTextField().setEditable(false);
-        ((JSpinner.DefaultEditor) logoRows.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-        ((JSpinner.DefaultEditor) logoRows.getEditor()).getTextField().setBackground(Color.GRAY);
-        ((JSpinner.DefaultEditor) logoRows.getEditor()).getTextField().setForeground(Color.WHITE);
-        // number of cols occupied by the logo
-        logoCols = new JSpinner(new SpinnerNumberModel(1, 1, 5, 1));
-        logoCols.setPreferredSize(new Dimension(70,20));
-        logoCols.setEnabled(false);
-        logoCols.setBackground(Color.LIGHT_GRAY);
-        logoCols.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        ((JSpinner.DefaultEditor) logoCols.getEditor()).getTextField().setEditable(false);
-        ((JSpinner.DefaultEditor) logoCols.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-        ((JSpinner.DefaultEditor) logoCols.getEditor()).getTextField().setBackground(Color.GRAY);
-        ((JSpinner.DefaultEditor) logoCols.getEditor()).getTextField().setForeground(Color.WHITE);
-
-
-        d.anchor = GridBagConstraints.LINE_START;
-        d.weightx = 2; d.weighty = 0.5;
-        d.gridx = 1; d.gridy = 0; d.gridwidth = 2;
-        logoSetupPanel.add(insertLogo);
-        d.anchor = GridBagConstraints.LINE_END;
-        d.gridx = 0; d.gridy = 1; d.gridwidth = 1;
-        logoSetupPanel.add(new JLabel("ROWS:"), d);
-        d.gridy = 2;
-        logoSetupPanel.add(new JLabel("COLS:"), d);
-
-        d.anchor = GridBagConstraints.LINE_START;
-        d.gridx = 1; d.gridy = 1;
-        d.fill = GridBagConstraints.HORIZONTAL;
-        logoSetupPanel.add(logoRows, d);
-        d.gridy = 2;
-        d.fill = GridBagConstraints.HORIZONTAL;
-        logoSetupPanel.add(logoCols, d);
-
+        // the maze drawing panel
+        mazeEditPanel = createMazeDrawPanel(Color.DARK_GRAY);
+        // the left panel in the edit tab
+        setupAndInfoPanel = createButtonPanel(Color.DARK_GRAY);
+        // the top side of the left panel
+        mazeSetupPanel = createSetupPanel();
+        // logo setup panel
+        logoSetupPanel = createLogoSetupPanel();
         // Panel displaying info of the maze
-        mazeInfoPanel = new JPanel(new GridLayout(3, 1));
-        mazeInfoPanel.setBackground(Color.GRAY);
-        mazeInfoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,3));
-
-        // Temporary Panel, will be using it in the future
-        JPanel temp = new JPanel();
-        temp.setBackground(Color.BLACK);
-        temp.setPreferredSize(new Dimension(200,200));
+        mazeInfoPanel = createInfoPanel();
+        // Temporary Panel on the right, will be using it in the future
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
+        rightPanel.setPreferredSize(new Dimension(MAZE_SETUP_PANEL_WIDTH,MAZE_SETUP_PANEL_HEIGHT));
 
         // Spinners for rows and cols inputs
-        // rows
-        rowDecision = new JSpinner(new SpinnerNumberModel(20, 2, 100, 1));
-        rowDecision.setPreferredSize(new Dimension(70,20));
-        rowDecision.setBackground(Color.LIGHT_GRAY);
-        rowDecision.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setEditable(false);
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setBackground(Color.GRAY);
-        ((JSpinner.DefaultEditor) rowDecision.getEditor()).getTextField().setForeground(Color.WHITE);
-        // cols
-        colDecision = new JSpinner(new SpinnerNumberModel(20, 2, 100, 1));
-        colDecision.setPreferredSize(new Dimension(70,20));
-        colDecision.setBackground(Color.LIGHT_GRAY);
-        colDecision.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setEditable(false);
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setBackground(Color.GRAY);
-        ((JSpinner.DefaultEditor) colDecision.getEditor()).getTextField().setForeground(Color.WHITE);
+        // rows and cols
+        rowDecision = createSpinner(rowsDecisionNumModel, spinnerDim, true);
+        colDecision = createSpinner(colsDecisionNumModel, spinnerDim, true);
 
-        // Button for auto-gen maze
-        mazeGeneration = new JButton("Generate");
-
-        // Button for blank maze
-        BlankGenerate = new JButton("Blank");
-
+        // Button for auto-gen maze display
+        mazeGeneration = createButton("Generate", true, this::mazeGen);
+        // Button for blank maze display
+        BlankGenerate = createButton("Blank", true, this::blankMazeGen);
         // Button to erase the maze display
-        EraseButton = new JButton("Erase");
-        EraseButton.setEnabled(false);
-
-        // RefreshButton = new JButton("Refresh");
+        EraseButton = createButton("Erase", false, this::eraseMaze);
 
         // Toggle the optimum path (should be a colored line)
-        toggleOptimumPath = new JRadioButton("Optimum Solution");
-        toggleOptimumPath.setLocation(20,30);
-        toggleOptimumPath.setBackground(Color.GRAY);
-        toggleOptimumPath.setEnabled(false);
-
+        toggleOptimumPath = createButton("Optimum Solution", false, this::setToggleOptimumPath);
         // Toggle the Entry and Exit (Red - Entry, Green, Exit)
-        toggleEntryExit = new JRadioButton("Show Entry/Exit");
-        toggleEntryExit.setLocation(20,60);
-        toggleEntryExit.setBackground(Color.GRAY);
-        toggleEntryExit.setEnabled(false);
+        toggleEntryExit= createButton("Show Entry/Exit", false, this::setToggleEntryExit);
+        // Save the screenshot of the maze
+        ScreenShot = createButton("Screenshot",false, this::FolderExplorer);
 
-        ScreenShot = new JButton("Screen-Shot");
-        ScreenShot.setEnabled(false);
-        c.anchor = GridBagConstraints.LINE_END;
-        c.weightx = 3; c.weighty = 0.5;
-        c.gridx = 0; c.gridy = 0;
-        mazeSetupPanel.add(new JLabel("ROWS:"), c);
-        c.gridy = 1;
-        mazeSetupPanel.add(new JLabel("COLS:"), c);
+        // number of rows and cols occupied by the logo
+        logoRowDecision = createSpinner(logoRowsNumModel, spinnerDim, false);
+        logoColDecision =  createSpinner(logoColsNumModel, spinnerDim, false);
+        insertLogo = createCheckbox(this::putLogo);
 
-        c.anchor = GridBagConstraints.LINE_START;
-        c.gridx = 1; c.gridy = 0;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        mazeSetupPanel.add(rowDecision, c);
-        c.gridy = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        mazeSetupPanel.add(colDecision, c);
-
-        c.gridx = 0; c.gridy = 2; c.weightx = 2;
-        mazeSetupPanel.add(mazeGeneration, c);
-        c.gridx = 1;
-        mazeSetupPanel.add(BlankGenerate, c);
-
-        c.gridx = 0; c.gridy = 3; c.fill= GridBagConstraints.HORIZONTAL;
-        c.gridwidth = 2;
-        mazeSetupPanel.add(EraseButton, c);
-
-        c.gridx = 0; c.gridy = 4; c.gridwidth = 2;
-        mazeSetupPanel.add(toggleOptimumPath, c);
-        c.gridy = 5;
-        mazeSetupPanel.add(toggleEntryExit, c);
-
-        c.gridy = 6;
-        mazeSetupPanel.add(ScreenShot, c);
+        LogoSetupPanelLayoutSetup();
+        InfoPanelLayoutSetup();
 
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
         editTab.add(setupAndInfoPanel, BorderLayout.WEST);
-        editTab.add(temp, BorderLayout.EAST);
+        editTab.add(rightPanel, BorderLayout.EAST);
         setupAndInfoPanel.add(mazeSetupPanel, BorderLayout.NORTH);
 
         JPanel pnl = new JPanel(new BorderLayout());
-        pnl.setBackground(Color.GRAY);
+        pnl.setBackground(MAZE_SETUP_PANEL_COLOR);
         setupAndInfoPanel.add(pnl, BorderLayout.CENTER);
         pnl.add(logoSetupPanel, BorderLayout.NORTH);
 
-        setupAndInfoPanel.add(mazeInfoPanel, BorderLayout.SOUTH);
-
-        mazeGeneration.addActionListener(event -> {
-            EraseButton.setEnabled(true);
-            toggleEntryExit.setEnabled(true);
-            toggleOptimumPath.setEnabled(true);
-            ScreenShot.setEnabled(true);
-            mazeGeneration.setEnabled(false);
-            BlankGenerate.setEnabled(false);
-            rowDecision.setEnabled(false);
-            colDecision.setEnabled(false);
-            // remove all the things in the maze panel
-            mazeEditPanel.removeAll();
-            // Display the auto-gen maze
-            maze = MazeGeneration.genMaze(new MazeWithoutImage((int)rowDecision.getValue(),(int)colDecision.getValue()));
-            displayMaze.drawMaze(mazeEditPanel, maze);
-            mazeEditPanel.repaint();
-            mazeEditPanel.validate();
-
-            mazeInfoPanel.removeAll();
-            displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
-            mazeInfoPanel.repaint();
-            mazeInfoPanel.revalidate();
-
-        });
-
-        BlankGenerate.addActionListener(event -> {
-            EraseButton.setEnabled(true);
-            toggleEntryExit.setEnabled(true);
-            toggleOptimumPath.setEnabled(true);
-            ScreenShot.setEnabled(true);
-            mazeGeneration.setEnabled(false);
-            BlankGenerate.setEnabled(false);
-            rowDecision.setEnabled(false);
-            colDecision.setEnabled(false);
-
-            mazeEditPanel.removeAll();
-            maze = new MazeWithoutImage((int)rowDecision.getValue(),(int)colDecision.getValue());
-            displayMaze.drawMaze(mazeEditPanel, maze);
-            mazeEditPanel.repaint();
-            mazeEditPanel.validate();
-
-            mazeInfoPanel.removeAll();
-            displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-            displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
-            mazeInfoPanel.repaint();
-            mazeInfoPanel.revalidate();
-        });
-
-        EraseButton.addActionListener(event -> {
-            EraseButton.setEnabled(false);
-            toggleEntryExit.setEnabled(false);
-            toggleEntryExit.setSelected(false);
-            toggleOptimumPath.setEnabled(false);
-            toggleOptimumPath.setSelected(false);
-            ScreenShot.setEnabled(false);
-            mazeGeneration.setEnabled(true);
-            BlankGenerate.setEnabled(true);
-            rowDecision.setEnabled(true);
-            colDecision.setEnabled(true);
-
-            mazeEditPanel.removeAll();
-            mazeEditPanel.repaint();
-            mazeEditPanel.validate();
-            mazeInfoPanel.removeAll();
-            mazeInfoPanel.repaint();
-            mazeInfoPanel.validate();
-        });
-
-        toggleEntryExit.addActionListener(event -> {
-            if (toggleEntryExit.isSelected())  {
-                displayMaze.showEntryExit(mazeEditPanel, maze);
-                System.out.println(toggleEntryExit.isEnabled());
-            }
-            else {
-                mazeEditPanel.removeAll();
-                displayMaze.drawMaze(mazeEditPanel, maze);
-            }
-            mazeEditPanel.repaint();
-            mazeEditPanel.validate();
-        });
-
-        ScreenShot.addActionListener(event -> FolderExplorer());
-
-        insertLogo.addActionListener(event -> {
-            logoRows.setEnabled(!logoRows.isEnabled());
-            logoCols.setEnabled(!logoCols.isEnabled());
-        });
+        pnl.add(mazeInfoPanel, BorderLayout.SOUTH);
 
     }
+    private void componentReset() {
+        EraseButton.setEnabled(!EraseButton.isEnabled());
+        toggleEntryExit.setEnabled(!toggleEntryExit.isEnabled());
+        toggleOptimumPath.setEnabled(!toggleOptimumPath.isEnabled());
+        ScreenShot.setEnabled(!ScreenShot.isEnabled());
+        mazeGeneration.setEnabled(!mazeGeneration.isEnabled());
+        BlankGenerate.setEnabled(!BlankGenerate.isEnabled());
+        rowDecision.setEnabled(!rowDecision.isEnabled());
+        colDecision.setEnabled(!colDecision.isEnabled());
+    }
+    private void InfoPanelLayoutSetup() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 2);
+        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridwidth = 1; gbc.gridheight = 1;
+        gbc.gridx = 0; gbc.gridy = 0;
+        mazeSetupPanel.add(new JLabel("ROWS:"), gbc);
+        gbc.gridy = 1;
+        mazeSetupPanel.add(new JLabel("COLS:"), gbc);
 
-    private void FolderExplorer() {
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.gridx = 1; gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mazeSetupPanel.add(rowDecision, gbc);
+        gbc.gridy = 1;
+        mazeSetupPanel.add(colDecision, gbc);
+
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridwidth = 1; gbc.gridheight = 1;
+        mazeSetupPanel.add(mazeGeneration, gbc);
+        gbc.gridy = 3;
+        mazeSetupPanel.add(BlankGenerate, gbc);
+
+        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridwidth = 1; gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        mazeSetupPanel.add(EraseButton, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        gbc.gridwidth = 2; gbc.gridheight = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mazeSetupPanel.add(toggleOptimumPath, gbc);
+        gbc.gridy = 5;
+        mazeSetupPanel.add(toggleEntryExit, gbc);
+        gbc.gridy = 6; gbc.gridwidth = 2;
+        mazeSetupPanel.add(ScreenShot, gbc);
+    }
+    private void LogoSetupPanelLayoutSetup() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 2);
+        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridwidth = 1; gbc.gridheight = 1;
+        logoSetupPanel.add(new JLabel("Insert logo:"), gbc);
+        gbc.gridy = 1;
+        logoSetupPanel.add(new JLabel("ROWS:"), gbc);
+        gbc.gridy = 2;
+        logoSetupPanel.add(new JLabel("COLS:"), gbc);
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 1; gbc.gridy = 0;
+        logoSetupPanel.add(insertLogo, gbc);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.gridy = 1;
+        logoSetupPanel.add(logoRowDecision, gbc);
+        gbc.gridy = 2;
+        logoSetupPanel.add(logoColDecision, gbc);
+    }
+    private void FolderExplorer(ActionEvent event) {
         FileDialog folder = new FileDialog(new Frame(), "Save Image", FileDialog.SAVE);
         folder.setMultipleMode(false);
         folder.setVisible(true);
@@ -335,5 +203,183 @@ public class EditTab extends JFrame{
                     "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    private void mazeGen(ActionEvent event) {
+        try {
+            createMazeObject();
+            maze = MazeGeneration.genMaze(maze);
+            // Display the auto-gen maze
+            displayMazeObject();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    private void createMazeObject() throws Exception {
+        int rows = (int)rowDecision.getValue();
+        int cols = (int)colDecision.getValue();
+        if (insertLogo.isSelected()) {
+            int logoHeight = (int) logoRowDecision.getValue();
+            int logoWidth = (int) logoColDecision.getValue();
+            if (logoHeight >= rows - 1 || logoWidth >= cols - 1)
+                throw new Exception("The logo is too big.\n" + " Choose a smaller size of logo or a bigger size of maze");
+            // Choose Logo
+            // Now will be using the entry image for testing
+            BufferedImage companyLogo;
+            try {
+                companyLogo = ImageIO.read(new File("src/mazeFunctions/ENTRY_EXIT_IMAGES/Entry_red_circle.png"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            System.out.println("Has logo");
+            maze = new MazeWithoutImage(rows, cols);
+            displayMaze.setWallButtons(maze);
+            maze.setHasLogo(true);
+            maze.setLogoDimension(logoHeight, logoWidth);
+            int CELL_ID = maze.chooseLocation(rows, cols, logoHeight, logoWidth);
+            int logoRow = CELL_ID / rows;
+            int logoCol = CELL_ID % rows;
+            maze.setLogoLocation(logoRow, logoCol);
+            maze.spareLocation(logoRow, logoCol, logoHeight, logoWidth);
+            displayMaze.setCellSize(mazeEditPanel, maze);
+            maze.setLogo( new ImageIcon(companyLogo.getScaledInstance(
+                    (logoWidth * (displayMaze.CELL_WIDTH + displayMaze.BUTTON_OFFSET)) - displayMaze.BUTTON_OFFSET,
+                    (logoHeight * (displayMaze.CELL_HEIGHT + displayMaze.BUTTON_OFFSET)) - displayMaze.BUTTON_OFFSET,
+                    Image.SCALE_DEFAULT)));
+        }
+        else {
+            System.out.println("No logo");
+            maze = new MazeWithoutImage(rows, cols);
+            displayMaze.setCellSize(mazeEditPanel, maze);
+            displayMaze.setWallButtons(maze);
+        }
+    }
+    private void displayMazeObject() {
+        componentReset();
+        insertLogo.setEnabled(false);
+        logoRowDecision.setEnabled(false);
+        logoColDecision.setEnabled(false);
+        // remove all the things in the maze panel
+        mazeEditPanel.removeAll();
+
+        if(insertLogo.isSelected())displayMaze.showLogo(mazeEditPanel, maze);
+        displayMaze.drawMaze(mazeEditPanel, maze);
+        mazeEditPanel.repaint();
+
+        mazeInfoPanel.removeAll();
+        displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
+        displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
+        mazeInfoPanel.repaint();
+    }
+
+    private void blankMazeGen(ActionEvent event) {
+        try {
+            createMazeObject();
+            // Display the auto-gen maze
+            displayMazeObject();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    private void eraseMaze(ActionEvent event) {
+        componentReset();
+        insertLogo.setEnabled(true);
+        insertLogo.setSelected(false);
+        logoRowDecision.setEnabled(false);
+        logoRowDecision.setValue(2);
+        logoColDecision.setEnabled(false);
+        logoColDecision.setValue(2);
+        toggleEntryExit.setSelected(false);
+        toggleOptimumPath.setSelected(false);
+        mazeEditPanel.removeAll();
+        mazeEditPanel.repaint();
+        mazeEditPanel.validate();
+        mazeInfoPanel.removeAll();
+        mazeInfoPanel.repaint();
+        mazeInfoPanel.validate();
+    }
+    private void setToggleEntryExit(ActionEvent event) {
+        isEntryExitToggled = !isEntryExitToggled;
+        toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
+        mazeEditPanel.removeAll();
+        if (isEntryExitToggled) displayMaze.showEntryExit(mazeEditPanel, maze);
+        if(maze.getHasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
+        displayMaze.drawMaze(mazeEditPanel, maze);
+        mazeEditPanel.repaint();
+    }
+    private void setToggleOptimumPath(ActionEvent event) {
+    }
+    private void putLogo(ActionEvent event) {
+        logoRowDecision.setEnabled(!logoRowDecision.isEnabled());
+        logoColDecision.setEnabled(!logoColDecision.isEnabled());
+    }
+    private JButton createButton(String buttonName, boolean isEnable, ActionListener action) {
+        JButton btn = new JButton(buttonName);
+        btn.setBackground(BUTTON_COLOR);
+        btn.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        btn.setPreferredSize(new Dimension (80, 30));
+        btn.setEnabled(isEnable);
+        btn.addActionListener(action);
+        return btn;
+    }
+    private JSpinner createSpinner(SpinnerNumberModel numModel, Dimension dim, boolean isEnable) {
+        JSpinner spinner = new JSpinner(numModel);
+        spinner.setPreferredSize(dim);
+        spinner.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        spinner.setEnabled(isEnable);
+        ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setEditable(false);
+        ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
+        ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setBackground(MAZE_SETUP_PANEL_COLOR);
+        ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField().setForeground(Color.WHITE);
+        return spinner;
+    }
+    private JCheckBox createCheckbox(ActionListener action) {
+        JCheckBox checkbox = new JCheckBox();
+        checkbox.setBackground(MAZE_SETUP_PANEL_COLOR);
+        checkbox.setBorder(BorderFactory.createEmptyBorder());
+        checkbox.setHorizontalAlignment(SwingConstants.CENTER);
+        checkbox.setVerticalAlignment(SwingConstants.CENTER);
+        checkbox.addActionListener(action);
+        return checkbox;
+    }
+    // create the maze drawing panel
+    private JPanel createMazeDrawPanel(Color bgColor) {
+        JPanel mazeDraw = new JPanel();
+        mazeDraw.setBackground(bgColor);
+        return mazeDraw;
+    }
+    // create the buttonPanel
+    private JPanel createButtonPanel(Color bgColor) {
+        JPanel buttonPnl = new JPanel(new BorderLayout());
+        buttonPnl.setBackground(bgColor);
+        return buttonPnl;
+    }
+    private JPanel createSetupPanel() {
+        JPanel setupPanel = new JPanel(new GridBagLayout());
+        setupPanel.setPreferredSize(new Dimension(MAZE_SETUP_PANEL_WIDTH, MAZE_SETUP_PANEL_HEIGHT));
+        setupPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
+        setupPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
+        return setupPanel;
+    }
+    private JPanel createLogoSetupPanel() {
+        JPanel logoSetupPanel = new JPanel(new GridBagLayout());
+        logoSetupPanel.setPreferredSize(new Dimension(LOGO_PANEL_WIDTH, LOGO_SETUP_PANEL_HEIGHT));
+        logoSetupPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
+        logoSetupPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
+        return logoSetupPanel;
+    }
+    private JPanel createInfoPanel() {
+        JPanel infoPanel =  new JPanel(new GridLayout(3, 1));
+        infoPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
+        infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,3));
+        return infoPanel;
+    }
+
+    public JPanel getTab() { return editTab; }
+
 
 }
