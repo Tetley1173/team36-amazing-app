@@ -232,8 +232,6 @@ public class EditTab extends JFrame{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            System.out.println("Has logo");
             maze = new MazeWithoutImage(rows, cols);
             displayMaze.setWallButtons(maze);
             maze.setHasLogo(true);
@@ -250,7 +248,6 @@ public class EditTab extends JFrame{
                     Image.SCALE_DEFAULT)));
         }
         else {
-            System.out.println("No logo");
             maze = new MazeWithoutImage(rows, cols);
             displayMaze.setCellSize(mazeEditPanel, maze);
             displayMaze.setWallButtons(maze);

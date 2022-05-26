@@ -121,8 +121,8 @@ public abstract class Maze {
         this.logoHeight = logoHeight;
         this.logoWidth = logoWidth;
     }
-    public int getLogoHeight() {return logoHeight; }
-    public int getLogoWidth() {return logoWidth; }
+    public int getLogoHeight() { return logoHeight; }
+    public int getLogoWidth() { return logoWidth; }
     public void setLogoLocation(int row, int col) {
         logoRow = row;
         logoCol = col;
