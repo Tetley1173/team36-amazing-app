@@ -32,7 +32,7 @@ public class EditTab extends JFrame{
     // Panels
     private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
     // Buttons - Left panels
-    private final JButton mazeGeneration, BlankGenerate, EraseButton, exportMazeImage;
+    private final JButton mazeGeneration, BlankGenerate, discardButton, exportMazeImage;
     private final JButton toggleOptimumPath, toggleEntryExit;
     private final JSpinner rowDecision, colDecision, logoRowDecision, logoColDecision;
     private final JCheckBox insertLogo;
@@ -78,7 +78,7 @@ public class EditTab extends JFrame{
         // Button for blank maze display
         BlankGenerate = createButton("Blank", true, this::blankMazeGen);
         // Button to erase the maze display
-        EraseButton = createButton("Erase", false, this::eraseMaze);
+        discardButton = createButton("Discard", false, this::discardMaze);
 
         // Toggle the optimum path (should be a colored line)
         toggleOptimumPath = createButton("Show Optimum Solution", false, this::setToggleOptimumPath);
@@ -115,7 +115,7 @@ public class EditTab extends JFrame{
 
     }
     private void componentReset() {
-        EraseButton.setEnabled(!EraseButton.isEnabled());
+        discardButton.setEnabled(!discardButton.isEnabled());
         toggleEntryExit.setEnabled(!toggleEntryExit.isEnabled());
         toggleOptimumPath.setEnabled(!toggleOptimumPath.isEnabled());
         mazeGeneration.setEnabled(!mazeGeneration.isEnabled());
@@ -151,7 +151,7 @@ public class EditTab extends JFrame{
         gbc.gridx = 1; gbc.gridy = 2;
         gbc.gridwidth = 1; gbc.gridheight = 2;
         gbc.fill = GridBagConstraints.BOTH;
-        mazeSetupPanel.add(EraseButton, gbc);
+        mazeSetupPanel.add(discardButton, gbc);
 
         gbc.gridx = 0; gbc.gridy = 4;
         gbc.gridwidth = 2; gbc.gridheight = 1;
@@ -308,7 +308,7 @@ public class EditTab extends JFrame{
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
-    private void eraseMaze(ActionEvent event) {
+    private void discardMaze(ActionEvent event) {
         componentReset();
         isEntryExitToggled = false;
         toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");

@@ -37,6 +37,9 @@ public class MazeGeneration {
             for (int col = 0; col < cols; col++)
                 if(maze.getWallSum(row, col) == 4) totalCells++;
 
+        int[] dx = new int[]{0, 1, 0, -1};
+        int[] dy = new int[]{-1, 0, 1, 0};
+
         maze.setReachableCells(totalCells);
         int currentRow = 0;
         int currentCol = 0;
@@ -47,8 +50,23 @@ public class MazeGeneration {
         int visitedCells = 1;
 
         while (visitedCells < totalCells) {
-            // Find no of neighbour cell which has 4 intact walls
+            // Find number of neighbour cell which has 4 intact walls
             ArrayList<int[]> neighbourCellList = new ArrayList<>();
+
+//            for (int i = 0; i < 3; i++) {
+//                int nextRow = currentRow + dy[i];
+//                int nextCol = currentCol + dx[i];
+//                if (nextRow >= 0 && nextCol >= 0 && nextRow < 20 && nextCol < 20) {
+//                    if (maze.getWallSum(nextRow, nextCol) == 4) {
+//                        neighbourCellList.add(new int[]{nextRow, nextCol});
+//                    }
+//                }
+//            }
+//            for (int[] temp: neighbourCellList) {
+//                System.out.println(temp[0] + ", " + temp[1]);
+//            }
+//            System.out.println("\n");
+
             if (currentRow == 0) {
                 if (maze.getWallSum(currentRow + 1, currentCol) == 4) {
                     neighbourCellList.add(new int[]{ currentRow + 1 , currentCol });
@@ -142,8 +160,9 @@ public class MazeGeneration {
             // Randomly choose 1 neighbourCell
             int[] nextNeighbour;
             if (noOfCells >= 1) {
-                if (noOfCells == 1) nextNeighbour = neighbourCellList.get(0);
-                else nextNeighbour = neighbourCellList.get(rand.nextInt(noOfCells));
+//                if (noOfCells == 1) nextNeighbour = neighbourCellList.get(0);
+//                else
+                    nextNeighbour = neighbourCellList.get(rand.nextInt(noOfCells));
                 if (nextNeighbour[0] < currentRow) {
                     maze.invertWall(currentRow, currentCol, 0);
                     maze.invertWall(nextNeighbour[0], nextNeighbour[1], 2);
