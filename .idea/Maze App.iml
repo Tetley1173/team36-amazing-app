@@ -25,5 +25,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="github.jdbc.bare.spring" level="project" />
+    <orderEntry type="library" name="xerial.sqlite.jdbc" level="project" />
   </component>
 </module>
