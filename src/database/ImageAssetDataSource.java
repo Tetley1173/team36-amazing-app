@@ -1,13 +1,14 @@
 package database;
 
 import mazeFunctions.ImageAssetFile;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static collections.HelperMethods.blobToBufferedImage;
-import static collections.HelperMethods.bufferedImageToBlob;
+import static collections.HelperMethods.*;
 
 /**
  * Class for retrieving data from the XML file holding the address list.
@@ -82,7 +83,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             /**
              * Use set byte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              */
-            addAsset.setBlob(2, bufferedImageToBlob(asset.getImageFile(), "jpg")); // use setByte
+            addAsset.setBytes(2,bufferedImageToByte(asset.getImageFile(), "jpg")); // use setByte
             addAsset.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -111,7 +112,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     }
 
     /**
-     *
+     * Probably need to change getBlob to getBytes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     public ImageAssetFile getImageFile(String name) {
 
@@ -122,7 +123,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             rs = getAsset.executeQuery();
             rs.next();
             a.setName(rs.getString("name"));
-            a.setImageFile(blobToBufferedImage(rs.getBlob("name")));
+            a.setImageFile(bytesToBufferedImage(rs.getBytes("name")));
         } catch (SQLException ex) {
             ex.printStackTrace(); // Improve error handling behavior ############################################
         } catch (IOException e) {

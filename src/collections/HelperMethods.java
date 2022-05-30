@@ -3,6 +3,7 @@ package collections;
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +45,30 @@ public class HelperMethods {
         // Not sure if this input stream needs to be closed. Investigate this as a stretch goal. ####################
 
         return ImageIO.read(in);
+    }
+
+    /**
+     *
+     * @param bi
+     * @param imageType
+     * @return
+     * @throws IOException
+     */
+    public static byte[] bufferedImageToByte(BufferedImage bi, String imageType) throws IOException {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bi, imageType, baos);
+        byte[] bytes = baos.toByteArray();
+
+        baos.close();
+        return bytes;
+    }
+
+    public static BufferedImage bytesToBufferedImage(byte[] hasTeeth) throws IOException {
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(hasTeeth);
+
+        return ImageIO.read(bis);
     }
 
 }

@@ -22,13 +22,6 @@ public class DBConnection {
      */
     private DBConnection() {
 
-        /**
-         * This error throws when trying to connect to the database. java.sql.SQLException: No suitable driver found for jdbc:sqlite:maze.db/
-         * I'm not sure if it's because I have the wrong database library installed or if it's because I need to set up the database
-         * externally from the program. Once the database connection is established the main method should automatically put an image
-         * into it then test pulling it back out. It will indicate this with a console message.
-         */
-
         Properties props = new Properties();
         FileInputStream in = null;
         try {
