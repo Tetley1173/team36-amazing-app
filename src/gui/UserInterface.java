@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UserInterface extends JFrame implements ActionListener {
+    // CONSTANT
+    private final int PREFERRED_WINDOWS_WIDTH = 1280;
+    private final int PREFERRED_WINDOWS_HEIGHT = 900;
     // Menus
     private JMenuBar menuBar;
     private JMenu mainMenu;
@@ -15,22 +18,21 @@ public class UserInterface extends JFrame implements ActionListener {
     // Tabbed Panels
     private final JTabbedPane tabbedPane;
     // Tabs
-    private final EditTab edit;
+//    private final EditTab edit;
     private final AssetsTab asset;
     private final ExportTab export;
 
     public UserInterface() {
         setTitle("Amazing Software");
-        setPreferredSize(new Dimension(1200, 900));
+        setPreferredSize(new Dimension(PREFERRED_WINDOWS_WIDTH, PREFERRED_WINDOWS_HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
-        guiMenuBar();
         setLayout(new BorderLayout(5, 5));
 
         tabbedPane = new JTabbedPane();
         asset = new AssetsTab(tabbedPane);
-        edit = new EditTab(tabbedPane);
+        tabbedPane.add("Edit", (new EditTab()).getTab());
         export = new ExportTab(tabbedPane);
         getContentPane().add(tabbedPane);
 
@@ -39,25 +41,6 @@ public class UserInterface extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void guiMenuBar() {
-        menuBar = new JMenuBar();
-        mainMenu = new JMenu("Menu");
-        mainMenu.add("New");
-        mainMenu.add("Load");
-        mainMenu.add("Exit");
-        editMenu = new JMenu("Edit");
-        editMenu.add("Copy");
-        editMenu.add("Cut");
-        editMenu.add("Paste");
-        exportMenu = new JMenu("Export");
-        exportMenu.add("Export the maze as png");
-        assetsMenu = new JMenu("Assets");
-        menuBar.add(mainMenu);
-        menuBar.add(editMenu);
-        menuBar.add(exportMenu);
-        menuBar.add(assetsMenu);
-        setJMenuBar(menuBar);
-    }
 
 
 

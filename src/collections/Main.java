@@ -23,6 +23,7 @@ public class Main {
         // Create the image asset table.
         ImageAssetDataSource assetsTable = new ImageAssetDataSource();
         // Start the user interface.
+        //mainInterface();
         UserInterface frame = new UserInterface();
         frame.setVisible(true);
 

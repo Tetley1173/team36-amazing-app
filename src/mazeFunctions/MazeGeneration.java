@@ -2,12 +2,9 @@ package mazeFunctions;
 
 import components.Cell;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class MazeGeneration {
-
     public static Maze genMaze(Maze maze){
     /*
     Pseudo Code:
@@ -35,8 +32,15 @@ public class MazeGeneration {
 
         int rows = maze.getRows();
         int cols = maze.getCols();
-        int totalCells = rows * cols;
+        int totalCells = 0;
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                if(maze.getWallSum(row, col) == 4) totalCells++;
 
+        int[] dx = new int[]{0, 1, 0, -1};
+        int[] dy = new int[]{-1, 0, 1, 0};
+
+        maze.setReachableCells(totalCells);
         int currentRow = 0;
         int currentCol = 0;
         Cell currentCell;
@@ -46,8 +50,23 @@ public class MazeGeneration {
         int visitedCells = 1;
 
         while (visitedCells < totalCells) {
-            // Find no of neighbour cell which has 4 intact walls
+            // Find number of neighbour cell which has 4 intact walls
             ArrayList<int[]> neighbourCellList = new ArrayList<>();
+
+//            for (int i = 0; i < 3; i++) {
+//                int nextRow = currentRow + dy[i];
+//                int nextCol = currentCol + dx[i];
+//                if (nextRow >= 0 && nextCol >= 0 && nextRow < 20 && nextCol < 20) {
+//                    if (maze.getWallSum(nextRow, nextCol) == 4) {
+//                        neighbourCellList.add(new int[]{nextRow, nextCol});
+//                    }
+//                }
+//            }
+//            for (int[] temp: neighbourCellList) {
+//                System.out.println(temp[0] + ", " + temp[1]);
+//            }
+//            System.out.println("\n");
+
             if (currentRow == 0) {
                 if (maze.getWallSum(currentRow + 1, currentCol) == 4) {
                     neighbourCellList.add(new int[]{ currentRow + 1 , currentCol });
@@ -141,8 +160,9 @@ public class MazeGeneration {
             // Randomly choose 1 neighbourCell
             int[] nextNeighbour;
             if (noOfCells >= 1) {
-                if (noOfCells == 1) nextNeighbour = neighbourCellList.get(0);
-                else nextNeighbour = neighbourCellList.get(rand.nextInt(noOfCells));
+//                if (noOfCells == 1) nextNeighbour = neighbourCellList.get(0);
+//                else
+                    nextNeighbour = neighbourCellList.get(rand.nextInt(noOfCells));
                 if (nextNeighbour[0] < currentRow) {
                     maze.invertWall(currentRow, currentCol, 0);
                     maze.invertWall(nextNeighbour[0], nextNeighbour[1], 2);
@@ -162,7 +182,6 @@ public class MazeGeneration {
                 cellStack.push(maze.getCell(currentRow, currentCol));
                 currentRow = nextNeighbour[0];
                 currentCol = nextNeighbour[1];
-                currentCell = maze.getCell(currentRow, currentCol);
                 // Check the current location
                 //System.out.println("CurrentCell: " + nextNeighbour[0] + ", " + nextNeighbour[1]);
                 visitedCells++;
@@ -175,10 +194,21 @@ public class MazeGeneration {
         }
         return maze;
     }
-    public static ArrayList<Cell> setEntryExit (Maze maze, int exitRow, int exitCol) {
+    public static ArrayList<Cell> setEntryExit (Maze maze) {
         ArrayList<Cell> entryExit = new ArrayList<>();
         entryExit.add(maze.getCell(0, 0));
-        entryExit.add(maze.getCell(exitRow, exitCol));
+        int max = 0;
+        Cell maxCell = new Cell(maze.getRows() - 1, maze.getCols()-1);
+        for (int i = 0; i < maze.getRows(); i++)
+            for (int j = 0; j < maze.getCols(); j++) {
+//                System.out.println(maze.getCell(i, j).sumWall());
+                if ( maze.getCell(i, j).sumWall() == 3 && i + j > max) {
+//                    System.out.println("Found one");
+                    max = i + j;
+                    maxCell = maze.getCell(i, j);
+                }
+            }
+        entryExit.add(maxCell);
         return entryExit;
     }
     public static double deadEndPercentage(Maze maze) {
@@ -191,5 +221,4 @@ public class MazeGeneration {
                     sumOfDeadEnd++;
         return 100.0 * sumOfDeadEnd/(rows*cols);
     }
-    private ArrayList<Cell> computeOptimumPath(Maze maze){ return new ArrayList<>();}
 }
