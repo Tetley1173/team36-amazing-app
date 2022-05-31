@@ -6,7 +6,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
+// Used for testing, delete when done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+import static collections.HelperMethods.getExtension;
 import static collections.Main.loadedMockImageFile;
 import static collections.Main.mockImageObject;
 
@@ -71,52 +74,81 @@ public class AssetsTab extends JFrame {
 
     }
 
-    private void imageExplorer(ImageIcon icon) {
-        final int maxWidth = 200;
-        final int minWidth = 10;
-        final int maxHeight = 200;
-        final int minHeight = 10;
+    /**
+     * This method opens a file explorer for the user and handles its behavior.
+     * It requires an image icon, so it knows where to put the image in the interface.
+     * @param icon is the ImageIcon that a scaled version of the selected image will be put into.
+     * @return BufferedImage c which is the image selected by the user. Returns null if an error is thrown.
+     */
+    private BufferedImage imageExplorer(ImageIcon icon) {
+        final int maxWidth = 220;
+//        final int minWidth = 10;
+        final int maxHeight = 220;
+//        final int minHeight = 10;
 
-        // consider turning this variable into a singleton? or use factory constructor.##############################
         FileDialog fd = new FileDialog(new JFrame(), "Select Image");
+        // Set a filter
+        fd.setFile("*.png"); // Note that this causes a minor error in the interface, please document this. ############
         fd.setMultipleMode(false);
-
-        // This line doesn't work for some reason
-        fd.setBackground(Color.darkGray);
 
         fd.setVisible(true);
         File[] f = fd.getFiles();
+        // Check the file got loaded/exists. File length of 0 implies that no file was loaded.
         if(f.length > 0){
             String aPath = fd.getFiles()[0].getAbsolutePath();
-            System.out.println(aPath);
+//            System.out.println(aPath);
             BufferedImage c;
             try {
                 c = ImageIO.read(new File(aPath));
-                int cWidth = c.getWidth();
-                int cHeight = c.getHeight();
+                // Once used for checking the size of the image.
+//                int cWidth = c.getWidth();
+//                int cHeight = c.getHeight();
 
-                if ((cWidth <= maxWidth && cWidth >= minWidth) && (cHeight <= maxHeight && cHeight >= minHeight)) {
-                    icon.setImage(c);
+                // Check that the file selected is a png.
+                if (Objects.equals(getExtension(aPath), "png")) {
+                    // Change image to a 220x220 size
+                    Image scaleImage = c.getScaledInstance(maxWidth, maxHeight,  java.awt.Image.SCALE_SMOOTH);
+
+                    icon.setImage(scaleImage);
                     assetPanel.repaint();
+                    // Return the image, so it can be stored in the database and as an asset object.
+                    return c;
                 }
                 else {
                     JOptionPane.showMessageDialog(this,
-                            "Invalid image size, please select an appropriate image file.",
-                            "Incorrect image size: Warning", JOptionPane.WARNING_MESSAGE);
-                    return;
+                            "Invalid image type, please select a png image.",
+                            "Incorrect image type: Warning", JOptionPane.WARNING_MESSAGE);
+                    return null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Invalid file selected, please select an appropriate image file.",
                         "Invalid image selection: Error", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
         }
         else {
                 JOptionPane.showMessageDialog(this,
-                        "Missing image file, please select an appropriate image file.",
+                        "Missing image file, please select an appropriate png image file.",
                         "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
+                return null;
         }
+
+    }
+
+    // This method allows the user to select an image with the imageExplorer method. It then puts the returned image into
+    // the database and an asset object.
+    private void userSelectsImage(ImageIcon preview, String assetType) {
+
+        BufferedImage asset = imageExplorer(preview);
+
+        if (asset != null) {
+            // set make a volatile(for now) ImageAsset
+            // associate it with a ImageAssetFile that gets put into the database
+            // once an asset table is made, make the image asset persistent.
+        }
+
     }
 
     // Test method for learning how to load images from the database and use them.

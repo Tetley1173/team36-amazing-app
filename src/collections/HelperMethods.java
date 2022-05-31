@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class HelperMethods {
 
@@ -69,6 +70,17 @@ public class HelperMethods {
         ByteArrayInputStream bis = new ByteArrayInputStream(hasTeeth);
 
         return ImageIO.read(bis);
+    }
+
+    // Returns the file extension of the string passed to it.
+    public static String getExtension(String fileName) {
+
+        String extension = Optional.of(fileName)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(fileName.lastIndexOf(".") + 1))
+                .orElse("");
+
+        return extension;
     }
 
 }

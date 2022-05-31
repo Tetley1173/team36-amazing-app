@@ -11,7 +11,10 @@ import java.util.TreeSet;
 import static collections.HelperMethods.*;
 
 /**
- * Class for retrieving data from the XML file holding the address list.
+ * This class creates the assetFiles table that contains the images for the maze. It contains methods for loading, saving and deleting
+ * data from the database. Note that this was copied from the week 6 tutorial and adapted to be compatible with this project.
+ *
+ * @author Shannon Tetley
  */
 public class ImageAssetDataSource implements AssetsDataInterface {
 
@@ -31,11 +34,10 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
     private static final String COUNT_ROWS = "SELECT COUNT(*) FROM assetFiles";
 
-    private Connection connection; // make this final if it's safe to do so.
+    private final Connection connection;
 
     private PreparedStatement addAsset;
 
-    // Not sure if this will be used yet delete(or not) once investigated#####################################
     private PreparedStatement getNameList;
 
     private PreparedStatement getAsset;
@@ -46,6 +48,8 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
     /**
      * Creates the image asset table if it doesn't exist.
+     *
+     * @author Shannon Tetley
      */
     public ImageAssetDataSource() {
         connection = DBConnection.getInstance();
@@ -64,16 +68,19 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     }
 
     /**
-
+     * Adds an image file and its name to the database.
+     *
+     * @param asset a ImageAssetFile object containing an image to be added to the database.
+     * @author Shannon Tetley
      */
     public void addImageFile(ImageAssetFile asset) {
         try {
 
             addAsset.setString(1, asset.getName());
 
-            /**
-             * Change this so it checks for unique names.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-             */
+            //
+            //Change this so it checks for unique names.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //
             addAsset.setBytes(2,bufferedImageToByte(asset.getImageFile(), "jpg")); // use setByte
             addAsset.execute();
         } catch (SQLException ex) {
@@ -84,26 +91,11 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     }
 
     /**
+     * Retrieves an image file from the database. It is returned as an ImageAssetFile object that is ready to be copied
+     * into an awaiting ImageAssetFile object.
      *
-     */
-    public Set<String> setImageFile() {
-        Set<String> names = new TreeSet<String>();
-        ResultSet rs = null;
-
-        try {
-            rs = getNameList.executeQuery();
-            while (rs.next()) {
-                names.add(rs.getString("name"));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return names;
-    }
-
-    /**
-     * Probably need to change getBlob to getBytes!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     * @param name The name(string) to search for.
+     * @return ImageAssetFile
      */
     public ImageAssetFile getImageFile(String name) {
 
@@ -124,7 +116,9 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     }
 
     /**
-     * Copied and unchanged from the week 6 tutorial.
+     * Copied and unchanged from the week 6 tutorial. Returns the size of the imageAsset table.
+     *
+     * @return an integer representing the number of rows in the imageAsset table.
      */
     public int getSize() {
         ResultSet rs = null;
@@ -142,7 +136,8 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     }
 
     /**
-     * Unchanged from the week 6 tutorial.
+     * Unchanged from the week 6 tutorial. Deletes a row from the imageAsset table.
+     * Warning: This method is untested as of 31/05/2022.
      */
     public void deleteAsset(String name) {
         try {

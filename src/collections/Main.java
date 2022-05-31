@@ -2,10 +2,8 @@ package collections;
 import gui.UserInterface;
 import mazeFunctions.ImageAssetFile;
 import database.ImageAssetDataSource;
-import database.AssetsDataInterface;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +16,7 @@ public class Main {
     /**
      * Entry point for the program. The user interface is called from here.
      * @param args Accepts an array of strings that can be used to change startup settings for the app.
-     * @author Shannon Tetley, (Everyone put your name here I'm sure we will all work on this one)
+     * @author Shannon Tetley, Dilshan Perera, Eric, Gorgia
      */
     public static void main (String[] args){
 
