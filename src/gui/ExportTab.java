@@ -4,9 +4,6 @@ import javax.swing.*;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 /**
  * User Stories:
@@ -35,10 +32,7 @@ public class ExportTab extends JFrame{
     // Buttons
     private final JRadioButton solution1, solution2;
     private final JRadioButton size1, size2;
-    private final JRadioButton file1, file2;
     private final JButton quickSave, export;
-    // Dialog window
-    private JDialog dialogWin;
 
     public ExportTab(JTabbedPane tabbedPane) {
         layOut = new JPanel(new GridBagLayout());
@@ -62,11 +56,6 @@ public class ExportTab extends JFrame{
         ButtonGroup g2 = new ButtonGroup(); // Add to group so only 1 radio button can be selected
         g2.add(size1);
         g2.add(size2);
-        file1 = new JRadioButton("Export as PDF?");
-        file2 = new JRadioButton("Export as PNG?");
-        ButtonGroup g3 = new ButtonGroup(); // Add to group so only 1 radio button can be selected
-        g3.add(file1);
-        g3.add(file2);
         quickSave = new JButton("Quick Save");
         export = new JButton("Export");
         // Call method
@@ -79,11 +68,9 @@ public class ExportTab extends JFrame{
         AddPanel(layOut, solution2, c, 0, 2, 0,1 );
         AddPanel(layOut, size1, c, 0, 3, 0,1 );
         AddPanel(layOut, size2, c, 0, 4, 0,1 );
-        AddPanel(layOut, file1, c, 0, 5, 0,1 );
-        AddPanel(layOut, file2, c, 0, 6, 0,1 );
 
-        AddPanel(layOut, quickSave, c, 0, 7, 1,1 );
-        AddPanel(layOut, export, c, 1, 7, 1,1 );
+        AddPanel(layOut, quickSave, c, 0, 5, 1,1 );
+        AddPanel(layOut, export, c, 1, 5, 1,1 );
 
     }
     private void AddPanel(JPanel jp, Component com, GridBagConstraints c, int x,
