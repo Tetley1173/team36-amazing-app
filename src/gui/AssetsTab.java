@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static collections.Main.loadedMockImageFile;
 import static collections.Main.mockImageObject;
 
 /**
@@ -126,7 +127,10 @@ public class AssetsTab extends JFrame {
     // Test method please delete when done ##########################################
     // Test method please delete when done ##########################################
     private void dbImageTester() {
-        logo2Icon.setImage(mockImageObject.getImageFile());
+//        logo2Icon.setImage(mockImageObject.getImageFile());
+//        assetPanel.repaint();
+
+        logo1Icon.setImage(loadedMockImageFile.getImageFile());
         assetPanel.repaint();
 
         /*

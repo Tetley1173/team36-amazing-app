@@ -70,18 +70,9 @@ public class ImageAssetDataSource implements AssetsDataInterface {
         try {
 
             addAsset.setString(1, asset.getName());
-// Delete once the bufferedImageToBlob() method has been tested.###################################
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            ImageIO.write(p.getImageFile(), "jpg", baos);
-//            byte[] bytes = baos.toByteArray();
-//
-//
-//            Blob blob = new SerialBlob( bytes );
-
-            // this puts the data into the query
 
             /**
-             * Use set byte!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             * Change this so it checks for unique names.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              */
             addAsset.setBytes(2,bufferedImageToByte(asset.getImageFile(), "jpg")); // use setByte
             addAsset.execute();
@@ -123,7 +114,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             rs = getAsset.executeQuery();
             rs.next();
             a.setName(rs.getString("name"));
-            a.setImageFile(bytesToBufferedImage(rs.getBytes("name")));
+            a.setImageFile(bytesToBufferedImage(rs.getBytes("imageFile")));
         } catch (SQLException ex) {
             ex.printStackTrace(); // Improve error handling behavior ############################################
         } catch (IOException e) {
