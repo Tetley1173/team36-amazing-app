@@ -4,7 +4,8 @@ public class Cell {
     private final int row, col;
     private final int[] wall = {1, 1, 1, 1}; // the state of the wall (1 - ON, 0 - OFF)
     private int distance; // step from the cell to the entry;
-    private Cell parent;
+    private Cell parent = null;
+    private boolean isVisited = false;
     public Cell(int row, int col) {
         this.row = row;
         this.col = col;
@@ -34,5 +35,8 @@ public class Cell {
         this.parent = parent;
     }
     public Cell getParent() { return parent; }
-
+    public void setVisited(boolean isVisited) {
+        this.isVisited = isVisited;
+    }
+    public boolean getVisited() { return isVisited; }
 }

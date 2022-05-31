@@ -1,9 +1,7 @@
 package gui;
 
-import mazeFunctions.Maze;
-import mazeFunctions.MazeGeneration;
-import mazeFunctions.MazeWithoutImage;
-import mazeFunctions.mazeCollection;
+import components.Cell;
+import mazeFunctions.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class EditTab extends JFrame{
     // Constants
@@ -338,6 +337,14 @@ public class EditTab extends JFrame{
         mazeEditPanel.repaint();
     }
     private void setToggleOptimumPath(ActionEvent event) {
+        isSolutionToggled = !isSolutionToggled;
+        toggleOptimumPath.setText(isSolutionToggled? "Hide Optimal Solution":"Show Optimal Solution");
+        MazeSolution mazeSolution = new MazeSolution(maze);
+        ArrayList<Cell> op = mazeSolution.getOptimalPath();
+//        for (Cell c: op) {
+//            System.out.println(c.getRow() + ", " + c.getRow());
+//        }
+
     }
     private void putLogo(ActionEvent event) {
         logoRowDecision.setEnabled(!logoRowDecision.isEnabled());
