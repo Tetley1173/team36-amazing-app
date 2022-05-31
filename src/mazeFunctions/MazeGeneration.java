@@ -37,9 +37,6 @@ public class MazeGeneration {
             for (int col = 0; col < cols; col++)
                 if(maze.getWallSum(row, col) == 4) totalCells++;
 
-        int[] dx = new int[]{0, 1, 0, -1};
-        int[] dy = new int[]{-1, 0, 1, 0};
-
         maze.setReachableCells(totalCells);
         int currentRow = 0;
         int currentCol = 0;
