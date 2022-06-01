@@ -1,5 +1,6 @@
 package mazeFunctions;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 public class ImageAsset {
 
     // Set once asset is in the database.
-    private String uniqueKey = null;
+    private String uniqueKey;
     // A reference to an image in the ImageAssetFile table.
-    private ImageAssetFile imageFile = null;
-    private String name = "set this with the constructor";
-    // 1 of 4 possible asset types.
-    private String assetType = "set this in the constructor";
+    private ImageAssetFile imageFile;
+    private String name;
+    // 1 of 4 possible asset types. entry, exit, logo1, and logo2.
+    private String assetType;
     // List of mazes this asset is used with.
     private ArrayList<String> mazeAssociation = new ArrayList<>();
 
@@ -53,12 +54,33 @@ public class ImageAsset {
     /**
      * @param n set the name of the image object.
      */
-    public void setName(String n) { this.uniqueKey = n; }
+    public void setName(String n) { this.name = n; }
     /**
      * @return the name of the image object.
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @param f set the name of the image object.
+     */
+    public void setImageFile(ImageAssetFile f) { this.imageFile = f; }
+    /**
+     * @return the name of the image object.
+     */
+    public ImageAssetFile getImageFile() {
+        return imageFile;
+    }
+
+    /**
+     * Extracts the BufferedImage object held by the ImageAssetFile associated with this object.
+     * @return BufferedImage that this object represents.
+     */
+    public BufferedImage getAsset() {
+        ImageAssetFile temp = new ImageAssetFile();
+        temp = this.getImageFile();
+        return temp.getImageFile();
     }
 
     /**

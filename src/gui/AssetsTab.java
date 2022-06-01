@@ -1,5 +1,8 @@
 package gui;
 
+import mazeFunctions.ImageAsset;
+import mazeFunctions.ImageAssetFile;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +13,10 @@ import java.util.Objects;
 
 // Used for testing, delete when done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 import static collections.HelperMethods.getExtension;
-import static collections.Main.loadedMockImageFile;
-import static collections.Main.mockImageObject;
+import static collections.Main.*;
+
+// Stretch goal: Make a title for the assets tab so the user knows why they are selecting images.
+
 
 /**
  * Defines what is rendered on the Assets Tab in the user interface.
@@ -34,6 +39,11 @@ public class AssetsTab extends JFrame {
     private final ImageIcon logo1Icon = new ImageIcon();
     private final ImageIcon logo2Icon = new ImageIcon();
 
+    private ImageAsset entry = new ImageAsset("entry", "entry", null);
+    private ImageAsset exit = new ImageAsset("exit", "exit", null);
+    private ImageAsset logo1 = new ImageAsset("logo1", "logo1", null);
+    private ImageAsset logo2 = new ImageAsset("logo2", "logo2", null);
+
 
     /**
      * Constructor that defines the contents of the Assets tab.
@@ -41,7 +51,6 @@ public class AssetsTab extends JFrame {
      * @author Shannon Tetley
      */
     public AssetsTab(JTabbedPane tabbedPane) {
-
         // Error catch to check that this is being called with a JTabbedPane as its argument.
         // Consider whether that should happen here or in the method that calls it.
 
@@ -105,7 +114,7 @@ public class AssetsTab extends JFrame {
 //                int cHeight = c.getHeight();
 
                 // Check that the file selected is a png.
-                if (Objects.equals(getExtension(aPath), "png")) {
+                if (Objects.equals(getExtension(aPath), "png") || Objects.equals(getExtension(aPath), "PNG")) {
                     // Change image to a 220x220 size
                     Image scaleImage = c.getScaledInstance(maxWidth, maxHeight,  java.awt.Image.SCALE_SMOOTH);
 
@@ -139,16 +148,23 @@ public class AssetsTab extends JFrame {
 
     // This method allows the user to select an image with the imageExplorer method. It then puts the returned image into
     // the database and an asset object.
-    private void userSelectsImage(ImageIcon preview, String assetType) {
-
-        BufferedImage asset = imageExplorer(preview);
+    private void userSelectsImage(ImageAsset asset, BufferedImage image) {
 
         if (asset != null) {
-            // set make a volatile(for now) ImageAsset
-            // associate it with a ImageAssetFile that gets put into the database
+            ImageAssetFile imageFile = new ImageAssetFile();
+            imageFile.setName(asset.getName());
+            imageFile.setImageFile(image); // put the image arg into the image file object.
+            asset.setImageFile(imageFile); // associate the image file object with the asset object.
+
+            // Add the asset file to the database
+            // Add a check here to prevent entry of existing image file into database.!!!!!!!!!!!!!!!!
+            assetsTable.addImageFile(imageFile);
+            // Add the image to the interface. (This is done in the explorer method)
+            // Set the new image to the image that goes into the maze. Talk to Eric about this.
+
             // once an asset table is made, make the image asset persistent.
         }
-
+        // Else do nothing, it's possible to be passed a null asset if the user picks non.
     }
 
     // Test method for learning how to load images from the database and use them.

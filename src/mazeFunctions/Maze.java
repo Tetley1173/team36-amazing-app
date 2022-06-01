@@ -39,6 +39,38 @@ public abstract class Maze {
     private int logoHeight = -1;
     private int logoWidth = -1;
 
+    /*
+    Fields added by Shannon to facilitate import of assets.
+     */
+    private boolean hasEntry = false;   // Indicates if an image has been allocated to the entry.
+    private ImageAsset entryAsset;     // ImageAsset object that defines what image is used for the entry.
+    private ImageIcon entryIcon = null; // The ImageIcon that the asset will be displayed in.
+    private int entryRow, entryCol;
+    private int entryHeight = -1;
+    private int entryWidth = -1;
+    // Note to Shannon most of these fields should be fields of the ImageAsset class instead.
+
+    private boolean hasExit = false;
+    private ImageAsset entry1Asset;
+    private ImageIcon exitIcon = null;
+    private int exitRow, exitCol;
+    private int exitHeight = -1;
+    private int exitWidth = -1;
+
+    private boolean hasLogo1 = false;
+    private ImageAsset logo1Asset;
+    private ImageIcon logo1Icon = null;
+    private int logo1Row, logo1Col;
+    private int logo1Height = -1;
+    private int logo1Width = -1;
+
+    private boolean hasLogo2 = false;
+    private ImageAsset logo2Asset;
+    private ImageIcon logo2Icon = null;
+    private int logo2Row, logo2Col;
+    private int logo2Height = -1;
+    private int logo2Width = -1;
+
 
     public Maze(int rows, int cols) {
         this.rows = rows;

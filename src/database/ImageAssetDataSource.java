@@ -81,7 +81,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             //
             //Change this so it checks for unique names.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //
-            addAsset.setBytes(2,bufferedImageToByte(asset.getImageFile(), "jpg")); // use setByte
+            addAsset.setBytes(2,bufferedImageToByte(asset.getImageFile(), "png"));
             addAsset.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
