@@ -3,7 +3,12 @@ package mazeFunctions;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
-
+/**
+ * This class creates the quickSaveFiles table that contains the images for the maze. It contains methods for loading, saving and deleting
+ * data from the database. Note that this was copied from the week 6 tutorial and adapted to be compatible with this project.
+ *
+ * @author Dilshan Perera & Georgia Meszaros simon
+ */
 public class QuickSaveFile implements Comparable<QuickSaveFile>, Serializable {
 
     private String mazeName;

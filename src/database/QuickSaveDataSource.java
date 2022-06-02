@@ -3,6 +3,7 @@ package database;
 import mazeFunctions.ImageAssetFile;
 import mazeFunctions.Maze;
 import mazeFunctions.MazeWithoutImage;
+import mazeFunctions.QuickSaveFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,10 +14,9 @@ import java.util.TreeSet;
 import static collections.HelperMethods.*;
 
 /**
- * This class creates the quickSaveFiles table that contains the images for the maze. It contains methods for loading, saving and deleting
- * data from the database. Note that this was copied from the week 6 tutorial and adapted to be compatible with this project.
- *
- * @author Dilshan Perera & Georgia Meszaros simon
+ * This class is used for storing images in the database and is necessary because multiple instances
+ * of the ImageAsset class can refer to a single instance of this class.
+ * @author Dilshan Perera Georgia Meszaros simon
  */
 
 public class QuickSaveDataSource implements QuickSaveInterface {
@@ -65,27 +65,33 @@ public class QuickSaveDataSource implements QuickSaveInterface {
         }
     }
 
-/*
-    public void AddQuickSave(MazeWithoutImage image){
 
-        MazeWithoutImage.setString(1,image.getName());
-        //MazeWithoutImage.setBytes(2,bufferedImageToByte(image.(), "png"));
-        Maze.excute();
-
+    public void AddQuickSave(QuickSaveFile image){
+    try{
+        addQuickSave.setString(1,image.getMazeName());
+        addQuickSave.setBytes(2,bufferedImageToByte(image.getMazeImage(), "png"));
+        addQuickSave.execute();
+        }
+    catch (SQLException ex) {
+        ex.printStackTrace();
+        }
+    catch (IOException e) {
+        e.printStackTrace(); // Improve this behavior###########################################
+        }
     }
-*/
 
-/*
-    public ImageAssetFile getImageFile(String name) {
 
-        ImageAssetFile a = new ImageAssetFile();
+
+    public QuickSaveFile getMazeImage(String name) {
+
+        QuickSaveFile a = new QuickSaveFile();
         ResultSet rs = null;
         try {
-            getAsset.setString(1, name);
-            rs = getAsset.executeQuery();
+            getQuickSave.setString(1, name);
+            rs = getQuickSave.executeQuery();
             rs.next();
-            a.setName(rs.getString("name"));
-            a.setImageFile(bytesToBufferedImage(rs.getBytes("imageFile")));
+            a.setMazeName(rs.getString("name"));
+            a.setMazeImage(bytesToBufferedImage(rs.getBytes("imageFile")));
         } catch (SQLException ex) {
             ex.printStackTrace(); // Improve error handling behavior ############################################
         } catch (IOException e) {
@@ -93,7 +99,7 @@ public class QuickSaveDataSource implements QuickSaveInterface {
         }
         return a;
     }
-*/
+
 
     /**
      * Returns the size of the imageAsset table.
