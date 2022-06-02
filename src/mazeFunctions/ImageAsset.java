@@ -73,7 +73,7 @@ public class ImageAsset {
      */
     public void setImageFile(ImageAssetFile f) { this.imageFile = f; }
     /**
-     * @return the name of the image object.
+     * @return the ImageAssetFile of the image object.
      */
     public ImageAssetFile getImageFile() {
         return imageFile;

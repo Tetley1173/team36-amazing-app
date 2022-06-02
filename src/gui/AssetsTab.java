@@ -39,10 +39,13 @@ public class AssetsTab extends JFrame {
     private final ImageIcon logo1Icon = new ImageIcon();
     private final ImageIcon logo2Icon = new ImageIcon();
 
-    public static ImageAsset entry = new ImageAsset("entry", "entry", null);
-    public static ImageAsset exit = new ImageAsset("exit", "exit", null);
-    public static ImageAsset logo1 = new ImageAsset("logo1", "logo1", null);
-    public static ImageAsset logo2 = new ImageAsset("logo2", "logo2", null);
+    public static ImageAssetFile noSelectionImage = new ImageAssetFile();
+    public static ImageAsset entry = new ImageAsset("entry", "entry", noSelectionImage);
+    public static ImageAsset exit = new ImageAsset("exit", "exit", noSelectionImage);
+    public static ImageAsset logo1 = new ImageAsset("logo1", "logo1", noSelectionImage);
+    public static ImageAsset logo2 = new ImageAsset("logo2", "logo2", noSelectionImage);
+
+
 
 
     /**
@@ -53,6 +56,17 @@ public class AssetsTab extends JFrame {
     public AssetsTab(JTabbedPane tabbedPane) {
         // Error catch to check that this is being called with a JTabbedPane as its argument.
         // Consider whether that should happen here or in the method that calls it.
+
+        // Set up the default image.
+        noSelectionImage.setName("default");
+        String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
+        BufferedImage c = null;
+        try {
+            c = ImageIO.read(new File(defaultImagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        noSelectionImage.setImageFile(c);
 
         // Create a panel that goes into the Assets tab.
         assetPanel = new JPanel(new GridBagLayout());
@@ -203,16 +217,16 @@ public class AssetsTab extends JFrame {
     private void widgetAdder(GridBagConstraints constraints) {
         // Add the elements defined above to the Asset panel that's inside the Assets tab.
         addToPanel(assetPanel, selectEntryImage, constraints,0,0,2,1);
-        addImageLabel(entryLabel, entryIcon,2,0,1,1);
+        addImageLabel(entryLabel, entryIcon, entry,2,0,1,1);
 
         addToPanel(assetPanel, selectExitImage, constraints,0,1,2,1);
-        addImageLabel(exitLabel, exitIcon,2,1,1,1);
+        addImageLabel(exitLabel, exitIcon, exit,2,1,1,1);
 
         addToPanel(assetPanel, logo1stImage, constraints,0,2,2,1);
-        addImageLabel(logo1Label, logo1Icon,2,2,1,1);
+        addImageLabel(logo1Label, logo1Icon, logo1,2,2,1,1);
 
         addToPanel(assetPanel, logo2ndImage, constraints,0,3,2,1);
-        addImageLabel(logo2Label, logo2Icon,2,3,1,1);
+        addImageLabel(logo2Label, logo2Icon, logo2,2,3,1,1);
     }
 
     /**
@@ -228,7 +242,7 @@ public class AssetsTab extends JFrame {
      * @param h     number of grid positions the image occupies height wise.
      * @author Shannon Tetley
      */
-    private void addImageLabel(JLabel label, ImageIcon icon, int x, int y, int w, int h) {
+    private void addImageLabel(JLabel label, ImageIcon icon, ImageAsset asset, int x, int y, int w, int h) {
 
         // ImageIO.read() requires error catching, or it throws an error.
         try {
@@ -236,6 +250,8 @@ public class AssetsTab extends JFrame {
             BufferedImage c = ImageIO.read(new File(defaultImagePath));
             icon.setImage(c);
             label.setIcon(icon);
+            // Set the asset class
+            asset.getImageFile().setImageFile(c);
             addToPanel(assetPanel, label,constraints,x,y,w,h);
         } catch (IOException e) {
             e.printStackTrace();
