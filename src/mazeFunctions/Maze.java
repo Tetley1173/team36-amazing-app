@@ -182,6 +182,9 @@ public abstract class Maze {
         displayMaze.wallButtons[row][col].getWallButton(index).setEnabled(false);
     }
 
+    /*
+    Logo Methods ###########################################################################
+     */
     public void setHasLogo(boolean hasLogo) { this.hasLogo = hasLogo;}
     public boolean getHasLogo() { return hasLogo;}
     public void setLogo(ImageIcon logo) { this.logo = logo; }
@@ -198,6 +201,10 @@ public abstract class Maze {
     }
     public int getLogoRow() { return logoRow; }
     public int getLogoCol() { return logoCol; }
+    /*
+    End of Logo Methods ########################################################################
+     */
+
 
     public void invertWall(int row, int col, int index) { maze[row][col].invertWall(index);}
     // Get method
