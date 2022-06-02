@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class wallButtonCollection implements ActionListener {
+    private boolean isBoundary = false;
     private final wallButton[] wallButtons = new wallButton[4];
     public wallButtonCollection(int row, int col) {
         wallButtons[0] = new wallButton(row, col, 0);

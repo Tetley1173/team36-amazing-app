@@ -10,22 +10,57 @@ import java.util.Random;
 
 public abstract class Maze {
     private String mazeName = null;
+
+    /***
+     *
+     * @param mazeName name of the current maze
+     */
     public void setMazeName(String mazeName) {
         this.mazeName = mazeName;
     }
+
+    /***
+     *
+     * @return the name of the current maze
+     */
     public String getMazeName() { return mazeName; }
     private String authorName = null;
+
+    /***
+     *
+     * @param authorName the author name
+     */
     public void setAuthor(String authorName) {
         this.authorName = authorName;
     }
+
+    /***
+     *
+     * @return the author name of the current maze
+     */
     public String getAuthor() { return authorName; }
 
     private LocalDateTime createdDateTime = null;
+
+    /***
+     *
+     * @return the created datetime of the current maze
+     */
     public LocalDateTime getCreatedDateTime() { return createdDateTime; }
     private LocalDateTime lastEditedDateTime = null;
+
+    /***
+     *
+     * @param lastEditedDateTime the last edited datetime of the current maze
+     */
     public void setLastEditedDateTime(LocalDateTime lastEditedDateTime) {
         this.lastEditedDateTime = lastEditedDateTime;
     }
+
+    /***
+     *
+     * @return the last edited datetime of the current maze
+     */
     public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
 
     private final int rows, cols;
@@ -38,40 +73,52 @@ public abstract class Maze {
     private int logoRow, logoCol;
     private int logoHeight = -1;
     private int logoWidth = -1;
-
     /*
-    Fields added by Shannon to facilitate import of assets.
+    ImageAsset fields for all logos, entry and exit
      */
-    private boolean hasEntry = false;   // Indicates if an image has been allocated to the entry.
-    private ImageAsset entryAsset;     // ImageAsset object that defines what image is used for the entry.
-    private ImageIcon entryIcon = null; // The ImageIcon that the asset will be displayed in.
-    private int entryRow, entryCol;
-    private int entryHeight = -1;
-    private int entryWidth = -1;
-    // Note to Shannon most of these fields should be fields of the ImageAsset class instead.
 
-    private boolean hasExit = false;
-    private ImageAsset entry1Asset;
-    private ImageIcon exitIcon = null;
-    private int exitRow, exitCol;
-    private int exitHeight = -1;
-    private int exitWidth = -1;
+    private ImageAsset logo1 = null;
+    private ImageAsset logo2 = null;
+    private ImageAsset entryIcon = null;
+    private ImageAsset exitIcon = null;
 
-    private boolean hasLogo1 = false;
-    private ImageAsset logo1Asset;
-    private ImageIcon logo1Icon = null;
-    private int logo1Row, logo1Col;
-    private int logo1Height = -1;
-    private int logo1Width = -1;
+//    /*
+//    Fields added by Shannon to facilitate import of assets.
+//     */
+//    private boolean hasEntry = false;   // Indicates if an image has been allocated to the entry.
+//    private ImageAsset entryAsset;     // ImageAsset object that defines what image is used for the entry.
+//    private ImageIcon entryIcon = null; // The ImageIcon that the asset will be displayed in.
+//    private int entryRow, entryCol;
+//    private int entryHeight = -1;
+//    private int entryWidth = -1;
+//    // Note to Shannon most of these fields should be fields of the ImageAsset class instead.
+//
+//    private boolean hasExit = false;
+//    private ImageAsset entry1Asset;
+//    private ImageIcon exitIcon = null;
+//    private int exitRow, exitCol;
+//    private int exitHeight = -1;
+//    private int exitWidth = -1;
+//
+//    private boolean hasLogo1 = false;
+//    private ImageAsset logo1Asset;
+//    private ImageIcon logo1Icon = null;
+//    private int logo1Row, logo1Col;
+//    private int logo1Height = -1;
+//    private int logo1Width = -1;
+//
+//    private boolean hasLogo2 = false;
+//    private ImageAsset logo2Asset;
+//    private ImageIcon logo2Icon = null;
+//    private int logo2Row, logo2Col;
+//    private int logo2Height = -1;
+//    private int logo2Width = -1;
 
-    private boolean hasLogo2 = false;
-    private ImageAsset logo2Asset;
-    private ImageIcon logo2Icon = null;
-    private int logo2Row, logo2Col;
-    private int logo2Height = -1;
-    private int logo2Width = -1;
-
-
+    /***
+     * Constructor of a maze object
+     * @param rows the number of rows (height) of the maze
+     * @param cols the number of columns (width) of the maze
+     */
     public Maze(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
@@ -85,6 +132,14 @@ public abstract class Maze {
         lastEditedDateTime = createdDateTime;
     }
 
+    /***
+     *
+     * @param rows the number of rows (height) of the maze
+     * @param cols the number of columns (width) of the maze
+     * @param logoHeight the number of rows occupied by the logo (height)
+     * @param logoWidth the number of columns occupied by the logo (width)
+     * @return
+     */
     public int chooseLocation(int rows, int cols, int logoHeight, int logoWidth) {
         Random random = new Random();
         while(true) {

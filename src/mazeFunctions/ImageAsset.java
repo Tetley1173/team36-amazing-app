@@ -11,11 +11,11 @@ import java.util.ArrayList;
 public class ImageAsset {
 
 //    private boolean hasEntry = false;   // Indicates if an image has been allocated to the entry.
-//    private ImageAsset entryAsset;     // ImageAsset object that defines what image is used for the entry.
-//    private ImageIcon entryIcon = null; // The ImageIcon that the asset will be displayed in.
-//    private int entryRow, entryCol;
-//    private int entryHeight = -1;
-//    private int entryWidth = -1;
+//    private ImageAsset Asset;     // ImageAsset object that defines what image is used for the entry.
+//    private ImageIcon Icon = null; // The ImageIcon that the asset will be displayed in.
+//    private int Row, Col;
+//    private int Height = -1;
+//    private int Width = -1;
 
     // Set once asset is in the database.
     private String uniqueKey;
