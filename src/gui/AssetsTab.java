@@ -1,5 +1,8 @@
 package gui;
 
+import mazeFunctions.ImageAsset;
+import mazeFunctions.ImageAssetFile;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +13,10 @@ import java.util.Objects;
 
 // Used for testing, delete when done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 import static collections.HelperMethods.getExtension;
-import static collections.Main.loadedMockImageFile;
-import static collections.Main.mockImageObject;
+import static collections.Main.*;
+
+// Stretch goal: Make a title for the assets tab so the user knows why they are selecting images.
+
 
 /**
  * Defines what is rendered on the Assets Tab in the user interface.
@@ -34,6 +39,14 @@ public class AssetsTab extends JFrame {
     private final ImageIcon logo1Icon = new ImageIcon();
     private final ImageIcon logo2Icon = new ImageIcon();
 
+    public static ImageAssetFile noSelectionImage = new ImageAssetFile();
+    public static ImageAsset entry = new ImageAsset("entry", "entry", noSelectionImage);
+    public static ImageAsset exit = new ImageAsset("exit", "exit", noSelectionImage);
+    public static ImageAsset logo1 = new ImageAsset("logo1", "logo1", noSelectionImage);
+    public static ImageAsset logo2 = new ImageAsset("logo2", "logo2", noSelectionImage);
+
+
+
 
     /**
      * Constructor that defines the contents of the Assets tab.
@@ -41,9 +54,19 @@ public class AssetsTab extends JFrame {
      * @author Shannon Tetley
      */
     public AssetsTab(JTabbedPane tabbedPane) {
-
         // Error catch to check that this is being called with a JTabbedPane as its argument.
         // Consider whether that should happen here or in the method that calls it.
+
+        // Set up the default image.
+        noSelectionImage.setName("default");
+        String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
+        BufferedImage c = null;
+        try {
+            c = ImageIO.read(new File(defaultImagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        noSelectionImage.setImageFile(c);
 
         // Create a panel that goes into the Assets tab.
         assetPanel = new JPanel(new GridBagLayout());
@@ -105,7 +128,7 @@ public class AssetsTab extends JFrame {
 //                int cHeight = c.getHeight();
 
                 // Check that the file selected is a png.
-                if (Objects.equals(getExtension(aPath), "png")) {
+                if (Objects.equals(getExtension(aPath), "png") || Objects.equals(getExtension(aPath), "PNG")) {
                     // Change image to a 220x220 size
                     Image scaleImage = c.getScaledInstance(maxWidth, maxHeight,  java.awt.Image.SCALE_SMOOTH);
 
@@ -139,16 +162,23 @@ public class AssetsTab extends JFrame {
 
     // This method allows the user to select an image with the imageExplorer method. It then puts the returned image into
     // the database and an asset object.
-    private void userSelectsImage(ImageIcon preview, String assetType) {
-
-        BufferedImage asset = imageExplorer(preview);
+    private void userSelectsImage(ImageAsset asset, BufferedImage image) {
 
         if (asset != null) {
-            // set make a volatile(for now) ImageAsset
-            // associate it with a ImageAssetFile that gets put into the database
+            ImageAssetFile imageFile = new ImageAssetFile();
+            imageFile.setName(asset.getName());
+            imageFile.setImageFile(image); // put the image arg into the image file object.
+            asset.setImageFile(imageFile); // associate the image file object with the asset object.
+
+            // Add the asset file to the database
+            // Add a check here to prevent entry of existing image file into database.!!!!!!!!!!!!!!!!
+            assetsTable.addImageFile(imageFile);
+            // Add the image to the interface. (This is done in the explorer method)
+            // Set the new image to the image that goes into the maze. Talk to Eric about this.
+
             // once an asset table is made, make the image asset persistent.
         }
-
+        // Else do nothing, it's possible to be passed a null asset if the user picks non.
     }
 
     // Test method for learning how to load images from the database and use them.
@@ -187,16 +217,16 @@ public class AssetsTab extends JFrame {
     private void widgetAdder(GridBagConstraints constraints) {
         // Add the elements defined above to the Asset panel that's inside the Assets tab.
         addToPanel(assetPanel, selectEntryImage, constraints,0,0,2,1);
-        addImageLabel(entryLabel, entryIcon,2,0,1,1);
+        addImageLabel(entryLabel, entryIcon, entry,2,0,1,1);
 
         addToPanel(assetPanel, selectExitImage, constraints,0,1,2,1);
-        addImageLabel(exitLabel, exitIcon,2,1,1,1);
+        addImageLabel(exitLabel, exitIcon, exit,2,1,1,1);
 
         addToPanel(assetPanel, logo1stImage, constraints,0,2,2,1);
-        addImageLabel(logo1Label, logo1Icon,2,2,1,1);
+        addImageLabel(logo1Label, logo1Icon, logo1,2,2,1,1);
 
         addToPanel(assetPanel, logo2ndImage, constraints,0,3,2,1);
-        addImageLabel(logo2Label, logo2Icon,2,3,1,1);
+        addImageLabel(logo2Label, logo2Icon, logo2,2,3,1,1);
     }
 
     /**
@@ -212,7 +242,7 @@ public class AssetsTab extends JFrame {
      * @param h     number of grid positions the image occupies height wise.
      * @author Shannon Tetley
      */
-    private void addImageLabel(JLabel label, ImageIcon icon, int x, int y, int w, int h) {
+    private void addImageLabel(JLabel label, ImageIcon icon, ImageAsset asset, int x, int y, int w, int h) {
 
         // ImageIO.read() requires error catching, or it throws an error.
         try {
@@ -220,6 +250,8 @@ public class AssetsTab extends JFrame {
             BufferedImage c = ImageIO.read(new File(defaultImagePath));
             icon.setImage(c);
             label.setIcon(icon);
+            // Set the asset class
+            asset.getImageFile().setImageFile(c);
             addToPanel(assetPanel, label,constraints,x,y,w,h);
         } catch (IOException e) {
             e.printStackTrace();
@@ -249,6 +281,54 @@ public class AssetsTab extends JFrame {
         constraints.gridwidth = w;
         constraints.gridheight = h;
         jp.add(c, constraints);
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param e set the name of the image object.
+     */
+    public static void setEntry(ImageAsset e) { entry = e; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getEntry() {
+        return entry;
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param x set the name of the image object.
+     */
+    public static void setExit(ImageAsset x) { exit = x; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getExit() {
+        return exit;
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param l set the name of the image object.
+     */
+    public static void setLogo1(ImageAsset l) { logo1 = l; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getLogo1() {
+        return logo1;
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param l set the name of the image object.
+     */
+    public static void setLogo2(ImageAsset l) { logo2 = l; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getLogo2() {
+        return logo2;
     }
 
 }

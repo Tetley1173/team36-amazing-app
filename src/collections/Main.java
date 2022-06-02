@@ -10,8 +10,11 @@ import java.io.IOException;
 
 public class Main {
 
+    // Delete these two once testing is done!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public static ImageAssetFile mockImageObject;
     public static ImageAssetFile loadedMockImageFile;
+    // Create the image asset table.
+    public static ImageAssetDataSource assetsTable = new ImageAssetDataSource();
 
     /**
      * Entry point for the program. The user interface is called from here.
@@ -20,8 +23,7 @@ public class Main {
      */
     public static void main (String[] args){
 
-        // Create the image asset table.
-        ImageAssetDataSource assetsTable = new ImageAssetDataSource();
+
         // Start the user interface.
         //mainInterface();
         UserInterface frame = new UserInterface();

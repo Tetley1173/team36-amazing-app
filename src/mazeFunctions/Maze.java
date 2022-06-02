@@ -7,25 +7,63 @@ import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import static gui.AssetsTab.getLogo1;
+import static gui.AssetsTab.getLogo2;
+
 
 public abstract class Maze {
     private String mazeName = null;
+
+    /***
+     *
+     * @param mazeName name of the current maze
+     */
     public void setMazeName(String mazeName) {
         this.mazeName = mazeName;
     }
+
+    /***
+     *
+     * @return the name of the current maze
+     */
     public String getMazeName() { return mazeName; }
     private String authorName = null;
+
+    /***
+     *
+     * @param authorName the author name
+     */
     public void setAuthor(String authorName) {
         this.authorName = authorName;
     }
+
+    /***
+     *
+     * @return the author name of the current maze
+     */
     public String getAuthor() { return authorName; }
 
     private LocalDateTime createdDateTime = null;
+
+    /***
+     *
+     * @return the created datetime of the current maze
+     */
     public LocalDateTime getCreatedDateTime() { return createdDateTime; }
     private LocalDateTime lastEditedDateTime = null;
+
+    /***
+     *
+     * @param lastEditedDateTime the last edited datetime of the current maze
+     */
     public void setLastEditedDateTime(LocalDateTime lastEditedDateTime) {
         this.lastEditedDateTime = lastEditedDateTime;
     }
+
+    /***
+     *
+     * @return the last edited datetime of the current maze
+     */
     public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
 
     private final int rows, cols;
@@ -34,12 +72,57 @@ public abstract class Maze {
     private Cell entryCell, exitCell;
 
     private boolean hasLogo = false;
-    private ImageIcon logo = null;
+    private ImageIcon logoIcon1 = null;
     private int logoRow, logoCol;
     private int logoHeight = -1;
     private int logoWidth = -1;
+    private ImageIcon logoIcon2 = null;
+    /*
+    ImageAsset fields for all logos, entry and exit
+     */
 
+//    private ImageAsset logo1;
+//    private ImageAsset logo2;
+//    private ImageAsset entryIcon = null;
+//    private ImageAsset exitIcon = null;
 
+//    /*
+//    Fields added by Shannon to facilitate import of assets.
+//     */
+//    private boolean hasEntry = false;   // Indicates if an image has been allocated to the entry.
+//    private ImageAsset entryAsset;     // ImageAsset object that defines what image is used for the entry.
+//    private ImageIcon entryIcon = null; // The ImageIcon that the asset will be displayed in.
+//    private int entryRow, entryCol;
+//    private int entryHeight = -1;
+//    private int entryWidth = -1;
+//    // Note to Shannon most of these fields should be fields of the ImageAsset class instead.
+//
+//    private boolean hasExit = false;
+//    private ImageAsset entry1Asset;
+//    private ImageIcon exitIcon = null;
+//    private int exitRow, exitCol;
+//    private int exitHeight = -1;
+//    private int exitWidth = -1;
+//
+//    private boolean hasLogo1 = false;
+//    private ImageAsset logo1Asset;
+//    private ImageIcon logo1Icon = null;
+//    private int logo1Row, logo1Col;
+//    private int logo1Height = -1;
+//    private int logo1Width = -1;
+//
+//    private boolean hasLogo2 = false;
+//    private ImageAsset logo2Asset;
+//    private ImageIcon logo2Icon = null;
+//    private int logo2Row, logo2Col;
+//    private int logo2Height = -1;
+//    private int logo2Width = -1;
+
+    /***
+     * Constructor of a maze object
+     * @param rows the number of rows (height) of the maze
+     * @param cols the number of columns (width) of the maze
+     */
     public Maze(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
@@ -49,10 +132,22 @@ public abstract class Maze {
                 maze[row][col] = new Cell(row, col);
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
+
+        logoIcon1.setImage(getLogo1().getAsset());
+        logoIcon2.setImage(getLogo2().getAsset());
+
         createdDateTime = LocalDateTime.now();
         lastEditedDateTime = createdDateTime;
     }
 
+    /***
+     * Randomly choose a location for the logo
+     * @param rows the number of rows (height) of the maze
+     * @param cols the number of columns (width) of the maze
+     * @param logoHeight the number of rows occupied by the logo (height)
+     * @param logoWidth the number of columns occupied by the logo (width)
+     * @return the decided position for the logo
+     */
     public int chooseLocation(int rows, int cols, int logoHeight, int logoWidth) {
         Random random = new Random();
         while(true) {
@@ -64,6 +159,15 @@ public abstract class Maze {
         }
     }
     // Spare the area for logo
+
+    /***
+     * Spare the space for the logo. The location would be the top-left corner of the logo.
+     *
+     * @param row the starting y-coordinate of the logo
+     * @param col the starting x-coordinate of the logo
+     * @param logoHeight the number of rows occupied by the logo (height)
+     * @param logoWidth the number of columns occupied by the logo (width)
+     */
     public void spareLocation(int row, int col, int logoHeight, int logoWidth) {
         for (int i = row + 1; i < row + logoHeight - 1; i++) {
             for (int j = col + 1; j < col + logoWidth - 1; j++) {
@@ -150,22 +254,29 @@ public abstract class Maze {
         displayMaze.wallButtons[row][col].getWallButton(index).setEnabled(false);
     }
 
+    /*
+    Logo Methods ###########################################################################
+     */
     public void setHasLogo(boolean hasLogo) { this.hasLogo = hasLogo;}
     public boolean getHasLogo() { return hasLogo;}
-    public void setLogo(ImageIcon logo) { this.logo = logo; }
-    public ImageIcon getLogo() { return logo; }
-    public void setLogoDimension(int logoHeight, int logoWidth) {
+    public void setLogoIcon1(ImageIcon logoIcon1) { this.logoIcon1 = logoIcon1; }
+    public ImageIcon getLogoIcon1() { return logoIcon1; }
+    public void setLogoDimension(int logoHeight, int logoWidth) { // can be removed
         this.logoHeight = logoHeight;
         this.logoWidth = logoWidth;
     }
-    public int getLogoHeight() { return logoHeight; }
-    public int getLogoWidth() { return logoWidth; }
-    public void setLogoLocation(int row, int col) {
+    public int getLogoHeight() { return logoHeight; }// can be removed
+    public int getLogoWidth() { return logoWidth; }// can be removed
+    public void setLogoLocation(int row, int col) {// can be removed
         logoRow = row;
         logoCol = col;
     }
     public int getLogoRow() { return logoRow; }
     public int getLogoCol() { return logoCol; }
+    /*
+    End of Logo Methods ########################################################################
+     */
+
 
     public void invertWall(int row, int col, int index) { maze[row][col].invertWall(index);}
     // Get method

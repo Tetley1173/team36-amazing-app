@@ -6,7 +6,6 @@ import java.util.*;
 
 public class MazeSolution {
     private final Queue<Cell> queue =new LinkedList<>();
-//    private final List<Map.Entry<Cell, Cell>> queue2 = new ArrayList<>();
     ArrayList<Cell> optimalPath = new ArrayList<>();
     private Cell currentCell, goal;
 

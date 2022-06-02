@@ -1,5 +1,7 @@
 package mazeFunctions;
 
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -9,14 +11,19 @@ import java.util.ArrayList;
 public class ImageAsset {
 
     // Set once asset is in the database.
-    private String uniqueKey = null;
+    private String uniqueKey;
     // A reference to an image in the ImageAssetFile table.
-    private ImageAssetFile imageFile = null;
-    private String name = "set this with the constructor";
-    // 1 of 4 possible asset types.
-    private String assetType = "set this in the constructor";
+    private ImageAssetFile imageFile;
+    private String name;
+    // 1 of 4 possible asset types. entry, exit, logo1, and logo2.
+    private String assetType;
     // List of mazes this asset is used with.
     private ArrayList<String> mazeAssociation = new ArrayList<>();
+
+    // Maze related variables.
+    private int row, col;
+    private int height = -1;
+    private int width = -1;
 
     // Add methods to check if the file is in the database already then load that one instead.
     // Constructor
@@ -53,12 +60,33 @@ public class ImageAsset {
     /**
      * @param n set the name of the image object.
      */
-    public void setName(String n) { this.uniqueKey = n; }
+    public void setName(String n) { this.name = n; }
     /**
      * @return the name of the image object.
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @param f set the name of the image object.
+     */
+    public void setImageFile(ImageAssetFile f) { this.imageFile = f; }
+    /**
+     * @return the ImageAssetFile of the image object.
+     */
+    public ImageAssetFile getImageFile() {
+        return imageFile;
+    }
+
+    /**
+     * Extracts the BufferedImage object held by the ImageAssetFile associated with this object.
+     * @return BufferedImage that this object represents.
+     */
+    public BufferedImage getAsset() {
+//        ImageAssetFile temp = new ImageAssetFile();
+//        temp = this.getImageFile();
+        return imageFile.getImageFile();
     }
 
     /**
@@ -85,6 +113,51 @@ public class ImageAsset {
      */
     public ArrayList<String> listMazeAssociation() { return this.mazeAssociation; }
 
-    // Make add to database method
+    /**
+     * @param r set the name of the image object.
+     */
+    public void setRow(int r) { this.row = r; }
+    /**
+     * @return the name of the image object.
+     */
+    public int getRow() {
+        return row;
+    }
+
+    /**
+     * @param c set the name of the image object.
+     */
+    public void setCol(int c) { this.col = c; }
+    /**
+     * @return the name of the image object.
+     */
+    public int getCol() {
+        return col;
+    }
+
+    /**
+     *
+     * @param h set the name of the image object.
+     */
+    public void setHeight(int h) { this.height = h; }
+    /**
+     * @return the name of the image object.
+     */
+    public int getHeight() {
+        return height;
+    }
+
+    /**
+     * @param w set the name of the image object.
+     */
+    public void setWidth(int w) { this.width = w; }
+    /**
+     * @return the name of the image object.
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    // Stretch gaol make add to database method
 
 }
