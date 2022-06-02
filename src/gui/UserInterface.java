@@ -9,12 +9,6 @@ public class UserInterface extends JFrame implements ActionListener {
     // CONSTANT
     private final int PREFERRED_WINDOWS_WIDTH = 1280;
     private final int PREFERRED_WINDOWS_HEIGHT = 900;
-    // Menus
-    private JMenuBar menuBar;
-    private JMenu mainMenu;
-    private JMenu editMenu;
-    private JMenu exportMenu;
-    private JMenu assetsMenu;
     // Tabbed Panels
     private final JTabbedPane tabbedPane;
     // Tabs
