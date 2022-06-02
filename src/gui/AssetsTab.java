@@ -39,10 +39,10 @@ public class AssetsTab extends JFrame {
     private final ImageIcon logo1Icon = new ImageIcon();
     private final ImageIcon logo2Icon = new ImageIcon();
 
-    private ImageAsset entry = new ImageAsset("entry", "entry", null);
-    private ImageAsset exit = new ImageAsset("exit", "exit", null);
-    private ImageAsset logo1 = new ImageAsset("logo1", "logo1", null);
-    private ImageAsset logo2 = new ImageAsset("logo2", "logo2", null);
+    public static ImageAsset entry = new ImageAsset("entry", "entry", null);
+    public static ImageAsset exit = new ImageAsset("exit", "exit", null);
+    public static ImageAsset logo1 = new ImageAsset("logo1", "logo1", null);
+    public static ImageAsset logo2 = new ImageAsset("logo2", "logo2", null);
 
 
     /**
@@ -265,6 +265,54 @@ public class AssetsTab extends JFrame {
         constraints.gridwidth = w;
         constraints.gridheight = h;
         jp.add(c, constraints);
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param e set the name of the image object.
+     */
+    public static void setEntry(ImageAsset e) { entry = e; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getEntry() {
+        return entry;
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param x set the name of the image object.
+     */
+    public static void setExit(ImageAsset x) { exit = x; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getExit() {
+        return exit;
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param l set the name of the image object.
+     */
+    public static void setLogo1(ImageAsset l) { logo1 = l; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getLogo1() {
+        return logo1;
+    }
+
+    /**
+     * Used for loading assets from the database.
+     * @param l set the name of the image object.
+     */
+    public static void setLogo2(ImageAsset l) { logo2 = l; }
+    /**
+     * @return the name of the image object.
+     */
+    public static ImageAsset getLogo2() {
+        return logo2;
     }
 
 }
