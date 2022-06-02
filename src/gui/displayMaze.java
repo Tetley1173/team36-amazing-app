@@ -173,7 +173,7 @@ public class displayMaze{
     public void showOptimumPath(JPanel pnl, Maze maze){}
     public void showOptimumPathReachingPercentage(JPanel pnl, Maze maze){}
     public static void showLogo(JPanel pnl, Maze maze) {
-        ImageIcon logo = maze.getLogo();
+        ImageIcon logo = maze.getLogoIcon1();
         JLabel logoLabel = new JLabel(logo);
         logoLabel.setBounds(maze.getLogoCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
                 maze.getLogoRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,

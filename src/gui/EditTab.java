@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+
 public class EditTab extends JFrame{
     // Constants
     public final static int MAZE_SETUP_PANEL_WIDTH = 200;
@@ -264,7 +266,7 @@ public class EditTab extends JFrame{
             maze.setLogoLocation(logoRow, logoCol);
             maze.spareLocation(logoRow, logoCol, logoHeight, logoWidth);
             displayMaze.setCellSize(mazeEditPanel, maze);
-            maze.setLogo( new ImageIcon(companyLogo.getScaledInstance(
+            maze.setLogoIcon1( new ImageIcon(companyLogo.getScaledInstance(
                     (logoWidth * (displayMaze.CELL_WIDTH + displayMaze.BUTTON_OFFSET)) - displayMaze.BUTTON_OFFSET,
                     (logoHeight * (displayMaze.CELL_HEIGHT + displayMaze.BUTTON_OFFSET)) - displayMaze.BUTTON_OFFSET,
                     Image.SCALE_DEFAULT)));

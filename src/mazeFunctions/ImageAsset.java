@@ -84,9 +84,9 @@ public class ImageAsset {
      * @return BufferedImage that this object represents.
      */
     public BufferedImage getAsset() {
-        ImageAssetFile temp = new ImageAssetFile();
-        temp = this.getImageFile();
-        return temp.getImageFile();
+//        ImageAssetFile temp = new ImageAssetFile();
+//        temp = this.getImageFile();
+        return imageFile.getImageFile();
     }
 
     /**
