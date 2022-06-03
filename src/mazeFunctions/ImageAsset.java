@@ -80,6 +80,12 @@ public class ImageAsset {
     }
 
     /**
+     * Set the asset that the ImageAssetFile will hold.
+     *
+     * @param b BufferedImage to save in this object.
+     */
+    public  void setAsset(BufferedImage b) { imageFile.setImageFile(b); }
+    /**
      * Extracts the BufferedImage object held by the ImageAssetFile associated with this object.
      * @return BufferedImage that this object represents.
      */

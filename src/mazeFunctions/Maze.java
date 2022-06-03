@@ -14,6 +14,19 @@ import static gui.AssetsTab.getLogo2;
 public abstract class Maze {
     private String mazeName = null;
 
+    private final int rows, cols;
+    private int reachableCells = -1;
+    private final Cell[][] maze;
+    private Cell entryCell, exitCell;
+
+    private boolean hasLogo = false;
+    private ImageIcon logoIcon1 = null;
+
+    private int logoRow, logoCol;
+    private int logoHeight = -1;
+    private int logoWidth = -1;
+    private ImageIcon logoIcon2 = null;
+
     /***
      *
      * @param mazeName name of the current maze
@@ -66,17 +79,7 @@ public abstract class Maze {
      */
     public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
 
-    private final int rows, cols;
-    private int reachableCells = -1;
-    private final Cell[][] maze;
-    private Cell entryCell, exitCell;
 
-    private boolean hasLogo = false;
-    private ImageIcon logoIcon1 = null;
-    private int logoRow, logoCol;
-    private int logoHeight = -1;
-    private int logoWidth = -1;
-    private ImageIcon logoIcon2 = null;
     /*
     ImageAsset fields for all logos, entry and exit
      */

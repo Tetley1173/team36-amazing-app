@@ -88,12 +88,12 @@ public class AssetsTab extends JFrame {
         // This method adds all the buttons et cetera, to the assets panel.
         widgetAdder(constraints);
 
-        selectEntryImage.addActionListener( e -> imageExplorer(entryIcon) );
+        selectEntryImage.addActionListener( e -> imageExplorer(entryIcon, entry) );
         selectEntryImage.addActionListener( e -> dbImageTester());
 
-        selectExitImage.addActionListener( e -> imageExplorer(exitIcon) );
-        logo1stImage.addActionListener( e -> imageExplorer(logo1Icon) );
-        logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon) );
+        selectExitImage.addActionListener( e -> imageExplorer(exitIcon, exit) );
+        logo1stImage.addActionListener( e -> imageExplorer(logo1Icon, logo1) );
+        logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon, logo2) );
 
     }
 
@@ -103,7 +103,7 @@ public class AssetsTab extends JFrame {
      * @param icon is the ImageIcon that a scaled version of the selected image will be put into.
      * @return BufferedImage c which is the image selected by the user. Returns null if an error is thrown.
      */
-    private BufferedImage imageExplorer(ImageIcon icon) {
+    private void imageExplorer(ImageIcon icon,  ImageAsset asset) {
         final int maxWidth = 220;
 //        final int minWidth = 10;
         final int maxHeight = 220;
@@ -134,28 +134,25 @@ public class AssetsTab extends JFrame {
 
                     icon.setImage(scaleImage);
                     assetPanel.repaint();
-                    // Return the image, so it can be stored in the database and as an asset object.
-                    return c;
+                    userSelectsImage(asset, c);
                 }
                 else {
                     JOptionPane.showMessageDialog(this,
                             "Invalid image type, please select a png image.",
                             "Incorrect image type: Warning", JOptionPane.WARNING_MESSAGE);
-                    return null;
+                    return;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Invalid file selected, please select an appropriate image file.",
                         "Invalid image selection: Error", JOptionPane.ERROR_MESSAGE);
-                return null;
             }
         }
         else {
                 JOptionPane.showMessageDialog(this,
                         "Missing image file, please select an appropriate png image file.",
                         "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
-                return null;
         }
 
     }
@@ -165,14 +162,11 @@ public class AssetsTab extends JFrame {
     private void userSelectsImage(ImageAsset asset, BufferedImage image) {
 
         if (asset != null) {
-            ImageAssetFile imageFile = new ImageAssetFile();
-            imageFile.setName(asset.getName());
-            imageFile.setImageFile(image); // put the image arg into the image file object.
-            asset.setImageFile(imageFile); // associate the image file object with the asset object.
+            asset.setAsset(image); // put the image arg into the image file object.
 
             // Add the asset file to the database
             // Add a check here to prevent entry of existing image file into database.!!!!!!!!!!!!!!!!
-            assetsTable.addImageFile(imageFile);
+            assetsTable.addImageFile(asset.getImageFile());
             // Add the image to the interface. (This is done in the explorer method)
             // Set the new image to the image that goes into the maze. Talk to Eric about this.
 
@@ -230,12 +224,11 @@ public class AssetsTab extends JFrame {
     }
 
     /**
-     * Method that loads an image then passes the object to the addToPanel
-     * method to render it on the screen. This method will catch the IOException while loading the image.
-     * If it does so the creation of an image label is cancelled and an error window will pop up.
+     * Sets up the preview images and loads the default images (assuming they haven't been changed from their default value).
      *
      * @param label label that will contain the image icon.
      * @param icon  image icon that holds a loaded image.
+     * @param asset the image asset object that will populate the image icon.
      * @param x     the x grid position of the image.
      * @param y     the y grid position of the image.
      * @param w     number of grid positions the image occupies width wise.
@@ -243,22 +236,9 @@ public class AssetsTab extends JFrame {
      * @author Shannon Tetley
      */
     private void addImageLabel(JLabel label, ImageIcon icon, ImageAsset asset, int x, int y, int w, int h) {
-
-        // ImageIO.read() requires error catching, or it throws an error.
-        try {
-            String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
-            BufferedImage c = ImageIO.read(new File(defaultImagePath));
-            icon.setImage(c);
-            label.setIcon(icon);
-            // Set the asset class
-            asset.getImageFile().setImageFile(c);
-            addToPanel(assetPanel, label,constraints,x,y,w,h);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Incorrect file path used to load image in the Assets tab. The affected image label will not be rendered.",
-                    "Null asset image: Error", JOptionPane.ERROR_MESSAGE);
-        }
+        icon.setImage(asset.getAsset());
+        label.setIcon(icon);
+        addToPanel(assetPanel, label,constraints,x,y,w,h);
     }
 
     /**
