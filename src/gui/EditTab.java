@@ -210,7 +210,7 @@ public class EditTab extends JFrame{
             String aPath = folder.getFile();
             System.out.println(aPath);
             try {
-                BufferedImage img = new BufferedImage(mazeEditPanel.getHeight(), mazeEditPanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+                BufferedImage img = new BufferedImage(mazeEditPanel.getWidth(), mazeEditPanel.getHeight(), BufferedImage.TYPE_INT_RGB);
                 mazeEditPanel.paint(img.getGraphics());
                 ImageIO.write(img, IMAGE_OUTPUT_FORMAT, new File(folder.getDirectory(), folder.getFile() + "." + IMAGE_OUTPUT_FORMAT));
                 JOptionPane.showMessageDialog(this,

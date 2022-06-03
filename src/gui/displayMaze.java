@@ -77,9 +77,9 @@ public class displayMaze{
     public static wallButtonCollection[][] wallButtons;
 
     public static void setCellSize(JPanel pnl, Maze maze) {
-        CELL_WIDTH = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
+        CELL_WIDTH = (int) Math.floor((pnl.getWidth() - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
         CELL_HEIGHT = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
-        OFFSET_X = (pnl.getHeight() - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
+        OFFSET_X = (pnl.getWidth() - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (pnl.getHeight() - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
         if (EditTab.hasMaze()) {
             pnl.addComponentListener(new ComponentAdapter() {
@@ -204,9 +204,9 @@ public class displayMaze{
     public static void resizeMaze(JPanel pnl, Maze maze) {
         int w = pnl.getWidth();
         int h = pnl.getHeight();
-        CELL_WIDTH = (int) Math.floor((h - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
+        CELL_WIDTH = (int) Math.floor((w - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
         CELL_HEIGHT = (int) Math.floor((h - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
-        OFFSET_X = (h - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
+        OFFSET_X = (w - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (h - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
         pnl.setBounds(0, 0, w, h);
         pnl.repaint();
