@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +32,7 @@ public class EditTab extends JFrame{
 
     // Panels
     private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
-    private JPanel temp = new JPanel();
+
     // Buttons - Left panels
     private final JButton mazeGeneration, BlankGenerate, discardButton, exportMazeImage;
     private final JButton toggleOptimumPath, toggleEntryExit;
@@ -45,11 +43,17 @@ public class EditTab extends JFrame{
     private final JButton saveMazeImage;
 
 
-    private boolean isEntryExitToggled = false;
-    private boolean isSolutionToggled = false;
+    private static boolean isEntryExitToggled = false;
+    public static boolean isEntryExitToggled() { return isEntryExitToggled; }
+    private static boolean isSolutionToggled = false;
+    public static boolean isSolutionToggled() { return isSolutionToggled; }
+    private static boolean hasMaze = false;
+    public static boolean hasMaze() { return hasMaze;}
 
     // Maze
     private static Maze maze;
+    private static ArrayList<Cell> optimalPath;
+    public static ArrayList<Cell> getOptimalPath() { return optimalPath; }
     private static mazeCollection mazes;
 
     public EditTab() {
@@ -232,6 +236,7 @@ public class EditTab extends JFrame{
     }
     private void mazeGen(ActionEvent event) {
         try {
+            hasMaze = true;
             createMazeObject();
             maze = MazeGeneration.genMaze(maze);
             // Display the auto-gen maze
@@ -303,6 +308,7 @@ public class EditTab extends JFrame{
 
     private void blankMazeGen(ActionEvent event) {
         try {
+            hasMaze = true;
             createMazeObject();
             // Display the auto-gen maze
             displayMazeObject();
@@ -314,6 +320,7 @@ public class EditTab extends JFrame{
     }
     private void discardMaze(ActionEvent event) {
         componentReset();
+        hasMaze = false;
         isSolutionToggled = false;
         toggleOptimumPath.setText("Show Optimal Solution");
         isEntryExitToggled = false;
@@ -339,18 +346,23 @@ public class EditTab extends JFrame{
         toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
         mazeEditPanel.removeAll();
         if (isEntryExitToggled) displayMaze.showEntryExit(mazeEditPanel, maze);
-        if(maze.getHasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
+        if (isSolutionToggled) displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
+        if(maze.hasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
         displayMaze.drawMaze(mazeEditPanel, maze);
         mazeEditPanel.repaint();
+        mazeEditPanel.revalidate();
     }
     private void setToggleOptimumPath(ActionEvent event) {
         isSolutionToggled = !isSolutionToggled;
+        mazeEditPanel.removeAll();
         MazeSolution mazeSolution;
         if (isSolutionToggled) {
             mazeSolution = new MazeSolution(maze);
             if (mazeSolution.isHasSolution()) {
                 toggleOptimumPath.setText("Hide Optimal Solution");
-                ArrayList<Cell> op = mazeSolution.getOptimalPath();
+                optimalPath = mazeSolution.getOptimalPath();
+                displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
+
                 System.out.println("Solvable");
                 System.out.println("Reach percentage: " + mazeSolution.getPathPercentage() + "%");
             }
@@ -361,8 +373,12 @@ public class EditTab extends JFrame{
         }
         else {
             toggleOptimumPath.setText("Show Optimal Solution");
-            System.out.println("Hide solution");
         }
+        displayMaze.drawMaze(mazeEditPanel, maze);
+        if(maze.hasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
+        if (isEntryExitToggled) displayMaze.showEntryExit(mazeEditPanel, maze);
+        mazeEditPanel.revalidate();
+        mazeEditPanel.repaint();
 
 
     }
@@ -491,6 +507,7 @@ public class EditTab extends JFrame{
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,3));
         return infoPanel;
     }
+
 
     public JPanel getTab() { return editTab; }
     public static Maze getMaze() { return maze; }

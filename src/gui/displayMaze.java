@@ -1,9 +1,11 @@
 package gui;
 
+import components.Cell;
 import components.wallButton;
 import components.wallButtonCollection;
 import mazeFunctions.Maze;
 import mazeFunctions.MazeGeneration;
+import mazeFunctions.MazeSolution;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 
 public class displayMaze{
     // Image constant
@@ -35,10 +38,35 @@ public class displayMaze{
             throw new RuntimeException("No EXIT IMAGE!!!");
         }
     }
-
-    // Images
-//    private static ImageIcon defaultEntryIcon;
-//    private static ImageIcon defaultExitIcon;
+    public static BufferedImage UP, DOWN, LEFT, RIGHT;
+    static {
+        try {
+            UP = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/up.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("No ENTRY IMAGE!!!");
+        }
+    }
+    static {
+        try {
+            DOWN = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/down.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("No ENTRY IMAGE!!!");
+        }
+    }
+    static {
+        try {
+            LEFT = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/left.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("No ENTRY IMAGE!!!");
+        }
+    }
+    static {
+        try {
+            RIGHT = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/right.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("No ENTRY IMAGE!!!");
+        }
+    }
 
     public static Color bgColor = EditTab.MAZE_SETUP_PANEL_COLOR;
     public static Color hoverColor = new Color(0x333A48);
@@ -53,13 +81,21 @@ public class displayMaze{
         CELL_HEIGHT = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
         OFFSET_X = (pnl.getHeight() - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (pnl.getHeight() - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
-        pnl.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                displayMaze.resizeMaze(pnl, maze);
-                displayMaze.drawMaze(pnl, maze);
-            }
-        });
+        if (EditTab.hasMaze()) {
+            pnl.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    pnl.removeAll();
+                    displayMaze.resizeMaze(pnl, EditTab.getMaze());
+                    displayMaze.drawMaze(pnl, EditTab.getMaze());
+                    if (EditTab.isEntryExitToggled()) showEntryExit(pnl, EditTab.getMaze());
+                    if (EditTab.isSolutionToggled()) showOptimumPath(pnl, EditTab.getMaze(), EditTab.getOptimalPath());
+                    if (EditTab.getMaze().hasLogo()) showLogo(pnl, EditTab.getMaze());
+                    pnl.repaint();
+                    pnl.revalidate();
+                }
+            });
+        }
 
     }
     public static void setWallButtons(Maze maze) {
@@ -172,7 +208,6 @@ public class displayMaze{
         CELL_HEIGHT = (int) Math.floor((h - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
         OFFSET_X = (h - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (h - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
-        System.out.println(w);
         pnl.setBounds(0, 0, w, h);
         pnl.repaint();
         pnl.revalidate();
@@ -192,7 +227,57 @@ public class displayMaze{
         pnl.add(entry);
         pnl.add(exit);
     }
-    public void showOptimumPath(JPanel pnl, Maze maze){}
+    public static void showOptimumPath(JPanel pnl, Maze maze, ArrayList<Cell> optimalPath){
+        ImageIcon upIcon = new ImageIcon(UP.getScaledInstance(CELL_WIDTH / 2, CELL_HEIGHT / 2, Image.SCALE_DEFAULT));
+        ImageIcon downIcon = new ImageIcon(DOWN.getScaledInstance(CELL_WIDTH / 2, CELL_HEIGHT / 2, Image.SCALE_DEFAULT));
+        ImageIcon leftIcon = new ImageIcon(LEFT.getScaledInstance(CELL_WIDTH / 2, CELL_HEIGHT / 2, Image.SCALE_DEFAULT));
+        ImageIcon rightIcon = new ImageIcon(RIGHT.getScaledInstance(CELL_WIDTH / 2, CELL_HEIGHT / 2, Image.SCALE_DEFAULT));
+        Cell previous = null;
+        for (Cell c: optimalPath) {
+            JLabel path;
+
+            if (c.equals(maze.getEntryCell()) || c.equals(maze.getExitCell())) {
+                previous = c;
+                continue;
+            }
+
+            if (c.getRow() == previous.getRow()) {
+                if (c.getCol() > previous.getCol()) {
+                    path = new JLabel(leftIcon);
+                    path.setBounds(c.getCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                            c.getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
+                            CELL_WIDTH, CELL_HEIGHT);
+                    pnl.add(path);
+                }
+                else {
+                    path = new JLabel(rightIcon);
+                    path.setBounds(c.getCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                            c.getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
+                            CELL_WIDTH, CELL_HEIGHT);
+                    pnl.add(path);
+                }
+            }
+            else {
+                if (c.getRow() > previous.getRow()) {
+                    path = new JLabel(upIcon);
+                    path.setBounds(c.getCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                            c.getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
+                            CELL_WIDTH, CELL_HEIGHT);
+                    pnl.add(path);
+                }
+                else {
+                    path = new JLabel(downIcon);
+                    path.setBounds(c.getCol() * (CELL_WIDTH + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_X,
+                            c.getRow() * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y,
+                            CELL_WIDTH, CELL_HEIGHT);
+                    pnl.add(path);
+                }
+            }
+            previous = c;
+        }
+        pnl.repaint();
+        pnl.revalidate();
+    }
     public void showOptimumPathReachingPercentage(JPanel pnl, Maze maze){}
     public static void showLogo(JPanel pnl, Maze maze) {
         ImageIcon logo = maze.getLogoIcon1();
@@ -202,6 +287,8 @@ public class displayMaze{
                 maze.getLogoWidth() * (CELL_WIDTH + BUTTON_OFFSET) - BUTTON_OFFSET,
                 maze.getLogoHeight() * (CELL_HEIGHT + BUTTON_OFFSET) - BUTTON_OFFSET);
         pnl.add(logoLabel);
+        pnl.repaint();
+        pnl.revalidate();
     }
     public static void showDeadEndPercentage(JPanel pnl, Maze maze){
         double deadEndPercentage = MazeGeneration.deadEndPercentage(maze);

@@ -7,9 +7,6 @@ import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import static gui.AssetsTab.getLogo1;
-import static gui.AssetsTab.getLogo2;
-
 
 public abstract class Maze {
     private String mazeName = null;
@@ -260,8 +257,8 @@ public abstract class Maze {
     /*
     Logo Methods ###########################################################################
      */
-    public void setHasLogo(boolean hasLogo) { this.hasLogo = hasLogo;}
-    public boolean getHasLogo() { return hasLogo;}
+    public void setHasLogo(boolean hasLogo) { this.hasLogo = hasLogo; }
+    public boolean hasLogo() { return hasLogo; }
     public void setLogoIcon1(ImageIcon logoIcon1) { this.logoIcon1 = logoIcon1; }
     public ImageIcon getLogoIcon1() { return logoIcon1; }
     public void setLogoDimension(int logoHeight, int logoWidth) { // can be removed

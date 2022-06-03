@@ -22,7 +22,6 @@ public class MazeSolution {
         currentCell.setVisited(true);
         queue.offer(currentCell);
         while(currentCell != maze.getExitCell()) {
-//            System.out.println(queue.element().getRow() + ", " + queue.element().getCol());
 
             try {
                 currentCell = queue.poll();
