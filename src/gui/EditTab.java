@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,14 +26,15 @@ public class EditTab extends JFrame{
     private final static String IMAGE_OUTPUT_FORMAT = "png";
     public final static Color MAZE_SETUP_PANEL_COLOR = new Color(0x4B566C);
     public final static Color BUTTON_COLOR = new Color(0xABA9C3);
-    private final SpinnerNumberModel rowsDecisionNumModel = new SpinnerNumberModel(20, 2, 100, 1);
-    private final SpinnerNumberModel colsDecisionNumModel = new SpinnerNumberModel(20, 2, 100, 1);
+    private final SpinnerNumberModel rowsDecisionNumModel = new SpinnerNumberModel(10, 2, 100, 1);
+    private final SpinnerNumberModel colsDecisionNumModel = new SpinnerNumberModel(10, 2, 100, 1);
     private final SpinnerNumberModel logoRowsNumModel = new SpinnerNumberModel(2, 2, 7, 1);
     private final SpinnerNumberModel logoColsNumModel = new SpinnerNumberModel(2, 2, 7, 1);
     private final Dimension spinnerDim = new Dimension(70, 20);
 
     // Panels
     private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
+    private JPanel temp = new JPanel();
     // Buttons - Left panels
     private final JButton mazeGeneration, BlankGenerate, discardButton, exportMazeImage;
     private final JButton toggleOptimumPath, toggleEntryExit;
@@ -99,6 +102,15 @@ public class EditTab extends JFrame{
         saveMazeImage = createButton("Save", false, this::saveMaze);
         exportMazeImage = createButton("Export as image",false, this::FolderExplorer);
         rightPanelSetup(rightPanel);
+
+        if (maze != null){
+            mazeEditPanel.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    displayMaze.resizeMaze(mazeEditPanel, maze);
+                }
+            });
+        }
 
 
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
@@ -311,8 +323,10 @@ public class EditTab extends JFrame{
     }
     private void discardMaze(ActionEvent event) {
         componentReset();
+        isSolutionToggled = false;
+        toggleOptimumPath.setText("Show Optimal Solution");
         isEntryExitToggled = false;
-        toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
+        toggleEntryExit.setText("Show Entry and Exit");
         saveMazeImage.setEnabled(false);
         insertLogo.setEnabled(true);
         insertLogo.setSelected(false);
@@ -340,12 +354,25 @@ public class EditTab extends JFrame{
     }
     private void setToggleOptimumPath(ActionEvent event) {
         isSolutionToggled = !isSolutionToggled;
-        toggleOptimumPath.setText(isSolutionToggled? "Hide Optimal Solution":"Show Optimal Solution");
-        MazeSolution mazeSolution = new MazeSolution(maze);
-        ArrayList<Cell> op = mazeSolution.getOptimalPath();
-//        for (Cell c: op) {
-//            System.out.println(c.getRow() + ", " + c.getRow());
-//        }
+        MazeSolution mazeSolution;
+        if (isSolutionToggled) {
+            mazeSolution = new MazeSolution(maze);
+            if (mazeSolution.isHasSolution()) {
+                toggleOptimumPath.setText("Hide Optimal Solution");
+                ArrayList<Cell> op = mazeSolution.getOptimalPath();
+                System.out.println("Solvable");
+                System.out.println("Reach percentage: " + mazeSolution.getPathPercentage() + "%");
+            }
+            else {
+                System.out.println("Not solvable");
+                isSolutionToggled = false;
+            }
+        }
+        else {
+            toggleOptimumPath.setText("Show Optimal Solution");
+            System.out.println("Hide solution");
+        }
+
 
     }
     private void putLogo(ActionEvent event) {
@@ -409,6 +436,7 @@ public class EditTab extends JFrame{
         exportFrame.setVisible(true);
 
     }
+
     private JButton createButton(String buttonName, boolean isEnable, ActionListener action) {
         JButton btn = new JButton(buttonName);
         btn.setBackground(BUTTON_COLOR);

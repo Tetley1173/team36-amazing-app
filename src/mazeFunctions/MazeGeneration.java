@@ -37,10 +37,13 @@ public class MazeGeneration {
             for (int col = 0; col < cols; col++)
                 if(maze.getWallSum(row, col) == 4) totalCells++;
 
-        maze.setReachableCells(totalCells);
+
         int currentRow = 0;
         int currentCol = 0;
-        Cell currentCell;
+
+        // Set the (0, 0) cell as default entry
+        Cell currentCell = maze.getCell(currentRow, currentCol);
+        maze.setEntryCell(currentCell);
 
         // print the starting point of the algorithm
         //System.out.println("Starting cell: " + currentRow + ", "+currentCol);
@@ -189,25 +192,21 @@ public class MazeGeneration {
                 currentCol = currentCell.getCol();
             }
         }
-        return maze;
-    }
-    public static ArrayList<Cell> setEntryExit (Maze maze) {
-        ArrayList<Cell> entryExit = new ArrayList<>();
-        entryExit.add(maze.getCell(0, 0));
+        // Set the exitCell - the most far dead end from the entry (Using Manhattan distance)
         int max = 0;
         Cell maxCell = new Cell(maze.getRows() - 1, maze.getCols()-1);
         for (int i = 0; i < maze.getRows(); i++)
             for (int j = 0; j < maze.getCols(); j++) {
-//                System.out.println(maze.getCell(i, j).sumWall());
                 if ( maze.getCell(i, j).sumWall() == 3 && i + j > max) {
-//                    System.out.println("Found one");
                     max = i + j;
                     maxCell = maze.getCell(i, j);
                 }
             }
-        entryExit.add(maxCell);
-        return entryExit;
+        maze.setExitCell(maxCell);
+
+        return maze;
     }
+
     public static double deadEndPercentage(Maze maze) {
         int sumOfDeadEnd = 0;
         int rows = maze.getRows();

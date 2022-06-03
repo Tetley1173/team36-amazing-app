@@ -38,5 +38,5 @@ public class Cell {
     public void setVisited(boolean isVisited) {
         this.isVisited = isVisited;
     }
-    public boolean getVisited() { return isVisited; }
+    public boolean isVisited() { return isVisited; }
 }

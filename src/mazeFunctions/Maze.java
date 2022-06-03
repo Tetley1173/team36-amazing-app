@@ -285,15 +285,12 @@ public abstract class Maze {
     // Get method
     public int getRows() { return rows; }
     public int getCols() { return cols; }
-    public void setReachableCells(int reachableCells) {
-        this.reachableCells = reachableCells;
-    }
-    public int getReachableCells() { return reachableCells; }
+
     public Cell getCell(int row, int col) { return maze[row][col]; }
     public int getWallSum(int row, int col) { return maze[row][col].sumWall(); }
     public Cell getEntryCell() { return entryCell; }
     public Cell getExitCell() { return exitCell; }
 
-    public void setEntryCell() { entryCell = MazeGeneration.setEntryExit(this).get(0); }
-    public void setExitCell() { exitCell = MazeGeneration.setEntryExit(this).get(1); }
+    public void setEntryCell(Cell entryCell) { this.entryCell = entryCell; }
+    public void setExitCell(Cell exitCell) { this.exitCell = exitCell; }
 }
