@@ -103,15 +103,6 @@ public class EditTab extends JFrame{
         exportMazeImage = createButton("Export as image",false, this::FolderExplorer);
         rightPanelSetup(rightPanel);
 
-        if (maze != null){
-            mazeEditPanel.addComponentListener(new ComponentAdapter() {
-                @Override
-                public void componentResized(ComponentEvent e) {
-                    displayMaze.resizeMaze(mazeEditPanel, maze);
-                }
-            });
-        }
-
 
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
         editTab.add(setupAndInfoPanel, BorderLayout.WEST);

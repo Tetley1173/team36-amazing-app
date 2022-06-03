@@ -53,6 +53,13 @@ public class displayMaze{
         CELL_HEIGHT = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
         OFFSET_X = (pnl.getHeight() - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (pnl.getHeight() - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
+        pnl.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                displayMaze.resizeMaze(pnl, maze);
+                displayMaze.drawMaze(pnl, maze);
+            }
+        });
 
     }
     public static void setWallButtons(Maze maze) {
@@ -165,6 +172,7 @@ public class displayMaze{
         CELL_HEIGHT = (int) Math.floor((h - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
         OFFSET_X = (h - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (h - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
+        System.out.println(w);
         pnl.setBounds(0, 0, w, h);
         pnl.repaint();
         pnl.revalidate();
