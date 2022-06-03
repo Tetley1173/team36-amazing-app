@@ -67,7 +67,6 @@ public abstract class Maze {
     public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
 
     private final int rows, cols;
-    private int reachableCells = -1;
     private final Cell[][] maze;
     private Cell entryCell, exitCell;
 
@@ -133,8 +132,8 @@ public abstract class Maze {
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
 
-        logoIcon1.setImage(getLogo1().getAsset());
-        logoIcon2.setImage(getLogo2().getAsset());
+//        logoIcon1.setImage(getLogo1().getAsset());
+//        logoIcon2.setImage(getLogo2().getAsset());
 
         createdDateTime = LocalDateTime.now();
         lastEditedDateTime = createdDateTime;
@@ -282,15 +281,12 @@ public abstract class Maze {
     // Get method
     public int getRows() { return rows; }
     public int getCols() { return cols; }
-    public void setReachableCells(int reachableCells) {
-        this.reachableCells = reachableCells;
-    }
-    public int getReachableCells() { return reachableCells; }
+
     public Cell getCell(int row, int col) { return maze[row][col]; }
     public int getWallSum(int row, int col) { return maze[row][col].sumWall(); }
     public Cell getEntryCell() { return entryCell; }
     public Cell getExitCell() { return exitCell; }
 
-    public void setEntryCell() { entryCell = MazeGeneration.setEntryExit(this).get(0); }
-    public void setExitCell() { exitCell = MazeGeneration.setEntryExit(this).get(1); }
+    public void setEntryCell(Cell entryCell) { this.entryCell = entryCell; }
+    public void setExitCell(Cell exitCell) { this.exitCell = exitCell; }
 }

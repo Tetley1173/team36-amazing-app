@@ -8,6 +8,8 @@ import mazeFunctions.MazeGeneration;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -51,6 +53,7 @@ public class displayMaze{
         CELL_HEIGHT = (int) Math.floor((pnl.getHeight() - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
         OFFSET_X = (pnl.getHeight() - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
         OFFSET_Y = (pnl.getHeight() - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
+
     }
     public static void setWallButtons(Maze maze) {
         wallButtons = new wallButtonCollection[maze.getRows()][maze.getCols()];
@@ -84,9 +87,6 @@ public class displayMaze{
 
                 pnl.add(wallButtons[row][col].getWallButton(1));
                 wallButtons[row][col].getWallButton(1).setBounds((col + 1) * (CELL_WIDTH + BUTTON_OFFSET) + OFFSET_X, row * (CELL_HEIGHT + BUTTON_OFFSET) + BUTTON_OFFSET + OFFSET_Y, BUTTON_OFFSET, CELL_HEIGHT);
-
-                maze.setEntryCell();
-                maze.setExitCell();
 
                 wallButtons[row][col].getWallButton(0).addMouseListener(new MouseAdapter() {
                     Color color = wallButtons[finalRow][finalCol].getWallButton(0).getBackground();
@@ -155,7 +155,21 @@ public class displayMaze{
 
             }
         }
+
     }
+
+    public static void resizeMaze(JPanel pnl, Maze maze) {
+        int w = pnl.getWidth();
+        int h = pnl.getHeight();
+        CELL_WIDTH = (int) Math.floor((h - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
+        CELL_HEIGHT = (int) Math.floor((h - (BUTTON_OFFSET * maze.getRows()) - 2.0 * OFFSET) / maze.getRows());
+        OFFSET_X = (h - ( CELL_WIDTH + BUTTON_OFFSET ) * maze.getCols()) / 2;
+        OFFSET_Y = (h - ( CELL_HEIGHT + BUTTON_OFFSET ) * maze.getRows()) / 2;
+        pnl.setBounds(0, 0, w, h);
+        pnl.repaint();
+        pnl.revalidate();
+    }
+
     public static void showEntryExit(JPanel pnl, Maze maze) {
         ImageIcon defaultEntryIcon = new ImageIcon(DEFAULT_ENTRY_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
         ImageIcon defaultExitIcon = new ImageIcon(DEFAULT_EXIT_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
