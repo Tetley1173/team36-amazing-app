@@ -20,12 +20,12 @@ public abstract class Maze {
     private Cell entryCell, exitCell;
 
     private boolean hasLogo = false;
-    private ImageIcon logoIcon1 = null;
+    private ImageIcon logoIcon1;
 
     private int logoRow, logoCol;
     private int logoHeight = -1;
     private int logoWidth = -1;
-    private ImageIcon logoIcon2 = null;
+    private ImageIcon logoIcon2;
 
     /***
      *
@@ -136,8 +136,8 @@ public abstract class Maze {
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
 
-        logoIcon1.setImage(getLogo1().getAsset());
-        logoIcon2.setImage(getLogo2().getAsset());
+//        logoIcon1.setImage(getLogo1().getAsset());
+//        logoIcon2.setImage(getLogo2().getAsset());
 
         createdDateTime = LocalDateTime.now();
         lastEditedDateTime = createdDateTime;

@@ -17,7 +17,7 @@ public class ImageAssetFile implements Comparable<ImageAssetFile>, Serializable 
     // Set once asset is in the database.
     private String uniqueKey = null;
     // A reference to an image in the ImageAssetFile table.
-    private BufferedImage imageFile = null;
+    private BufferedImage imageFile;
     private String name = "set this with the constructor";
 
     /**
