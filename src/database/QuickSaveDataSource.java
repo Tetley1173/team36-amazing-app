@@ -19,7 +19,7 @@ import static collections.HelperMethods.*;
  * @author Dilshan Perera Georgia Meszaros simon
  */
 
-public class QuickSaveDataSource implements QuickSaveInterface {
+public abstract class QuickSaveDataSource implements QuickSaveInterface {
 
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS quickSaveFiles ("
