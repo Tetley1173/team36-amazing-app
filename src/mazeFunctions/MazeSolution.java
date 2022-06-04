@@ -109,19 +109,25 @@ public class MazeSolution {
 
             } finally {
                 if (validNeighbourCells.isEmpty()) break;
-                for (Cell c : validNeighbourCells) {
-                    if (c.getDistance() == -1 && !c.isVisited()) {
-                        c.setDistance(currentCell.getDistance() + 1);
-                        c.setParent(currentCell);
-                        c.setVisited(true);
-                        queue.offer(c);
-                        if (c == maze.getExitCell()) {
-                            hasSolution = true;
-                            goal = c;
+                else {
+                    for (Cell c : validNeighbourCells) {
+
+                        if (c.getDistance() == -1 && !c.isVisited()) {
+                            c.setDistance(currentCell.getDistance() + 1);
+                            c.setParent(currentCell);
+                            c.setVisited(true);
+                            queue.offer(c);
+                            if (c == maze.getExitCell()) {
+                                hasSolution = true;
+                                goal = c;
+                                break;
+                            }
                         }
                     }
+                    validNeighbourCells.clear();
+
                 }
-                validNeighbourCells.clear();
+
             }
 
 
@@ -144,6 +150,7 @@ public class MazeSolution {
                 optimalPath.add(currentCell);
                 currentCell = currentCell.getParent();
             }
+            optimalPath.add(maze.getEntryCell());
             pathPercentage = optimalPath.size() / (double)(maze.getRows() * maze.getCols()) * 100;
         }
 
