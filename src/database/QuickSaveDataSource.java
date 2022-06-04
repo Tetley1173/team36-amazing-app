@@ -82,16 +82,16 @@ public class QuickSaveDataSource implements QuickSaveInterface {
 
 
 
-    public QuickSaveFile getMazeImage(String name) {
+    public QuickSaveFile getMazeImage(String mazeName) {
 
         QuickSaveFile a = new QuickSaveFile();
-        ResultSet rs = null;
+        ResultSet resultSet = null;
         try {
-            getQuickSave.setString(1, name);
-            rs = getQuickSave.executeQuery();
-            rs.next();
-            a.setMazeName(rs.getString("name"));
-            a.setMazeImage(bytesToBufferedImage(rs.getBytes("imageFile")));
+            getQuickSave.setString(1, mazeName);
+            resultSet = getQuickSave.executeQuery();
+            resultSet.next();
+            a.setMazeName(resultSet.getString("mazeName"));
+            a.setMazeImage(bytesToBufferedImage(resultSet.getBytes("mazeImage")));
         } catch (SQLException ex) {
             ex.printStackTrace(); // Improve error handling behavior ############################################
         } catch (IOException e) {
@@ -102,31 +102,27 @@ public class QuickSaveDataSource implements QuickSaveInterface {
 
 
     /**
-     * Returns the size of the imageAsset table.
+     * Returns the size of the QuickSave table.
      *
      * @return an integer representing the number of rows in the imageAsset table.
      */
     public int getSize() {
-        ResultSet rs = null;
+        ResultSet resultSet = null;
         int rows = 0;
 
         try {
-            rs = rowCount.executeQuery();
-            rs.next();
-            rows = rs.getInt(1);
+            resultSet = rowCount.executeQuery();
+            resultSet.next();
+            rows = resultSet.getInt(1);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return rows;
     }
 
-    /**
-     * Unchanged from the week 6 tutorial. Deletes a row from the imageAsset table.
-     * Warning: This method is untested as of 31/05/2022.
-     */
-    public void deleteQuickSave(String name) {
+    public void deleteQuickSave(String mazeName) {
         try {
-            deleteQuickSave.setString(1, name);
+            deleteQuickSave.setString(1, mazeName);
             deleteQuickSave.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
