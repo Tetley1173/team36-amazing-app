@@ -108,7 +108,6 @@ public class MazeSolution {
             } catch (Exception e) {
 
             } finally {
-//                System.out.println(validNeighbourCells.size());
                 if (validNeighbourCells.isEmpty()) break;
                 for (Cell c : validNeighbourCells) {
                     if (c.getDistance() == -1 && !c.isVisited()) {

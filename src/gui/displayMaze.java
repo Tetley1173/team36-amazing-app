@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class displayMaze{
@@ -43,28 +45,28 @@ public class displayMaze{
         try {
             UP = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/up.png"));
         } catch (IOException e) {
-            throw new RuntimeException("No ENTRY IMAGE!!!");
+            throw new RuntimeException("No UP ARROW IMAGE!!!");
         }
     }
     static {
         try {
             DOWN = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/down.png"));
         } catch (IOException e) {
-            throw new RuntimeException("No ENTRY IMAGE!!!");
+            throw new RuntimeException("No DOWN ARROW IMAGE!!!");
         }
     }
     static {
         try {
             LEFT = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/left.png"));
         } catch (IOException e) {
-            throw new RuntimeException("No ENTRY IMAGE!!!");
+            throw new RuntimeException("No LEFT ARROW IMAGE!!!");
         }
     }
     static {
         try {
             RIGHT = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/right.png"));
         } catch (IOException e) {
-            throw new RuntimeException("No ENTRY IMAGE!!!");
+            throw new RuntimeException("No RIGHT ARROW IMAGE!!!");
         }
     }
 
@@ -75,6 +77,7 @@ public class displayMaze{
     public static int CELL_WIDTH, CELL_HEIGHT;
     public static int OFFSET_X, OFFSET_Y;
     public static wallButtonCollection[][] wallButtons;
+    public static DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
 
     public static void setCellSize(JPanel pnl, Maze maze) {
         CELL_WIDTH = (int) Math.floor((pnl.getWidth() - (BUTTON_OFFSET * maze.getCols()) - 2.0 * OFFSET) / maze.getCols());
@@ -278,7 +281,6 @@ public class displayMaze{
         pnl.repaint();
         pnl.revalidate();
     }
-    public void showOptimumPathReachingPercentage(JPanel pnl, Maze maze){}
     public static void showLogo(JPanel pnl, Maze maze) {
         ImageIcon logo = maze.getLogoIcon1();
         JLabel logoLabel = new JLabel(logo);
@@ -290,12 +292,35 @@ public class displayMaze{
         pnl.repaint();
         pnl.revalidate();
     }
-    public static void showDeadEndPercentage(JPanel pnl, Maze maze){
+    public static void showDeadEndPercentage (JPanel pnl, Maze maze){
         double deadEndPercentage = MazeGeneration.deadEndPercentage(maze);
-        pnl.add(new JLabel("Dead-end percentage: " + (new BigDecimal(deadEndPercentage)).round(new MathContext(4)).doubleValue() + "%"));
+        pnl.add(new JLabel(" Dead-end percentage: " + (new BigDecimal(deadEndPercentage)).round(new MathContext(4)).doubleValue() + "%"));
     }
-    public static void showDimensionOfMaze(JPanel pnl, Maze maze) {
-        pnl.add(new JLabel("ROWS: " + maze.getRows()));
-        pnl.add(new JLabel("COLS: " + maze.getCols()));
+    public static void showDimensionOfMaze (JPanel pnl, Maze maze) {
+        pnl.add(new JLabel(" ROWS: " + maze.getRows()));
+        pnl.add(new JLabel(" COLS: " + maze.getCols()));
+    }
+    public static void showAuthor (JPanel pnl, Maze maze) {
+        pnl.add(new JLabel(" Authors: " + (maze.getAuthor()==null? " - " : maze.getAuthor())));
+    }
+    public static void showCreatedDateTime (JPanel pnl, Maze maze) {
+        String createdTime = maze.getCreatedDateTime().format(format);
+        pnl.add(new JLabel(" Created time: " + createdTime));
+    }
+    public static void showLastEditedTime (JPanel pnl, Maze maze) {
+        String lastEditTime = maze.getCreatedDateTime().format(format);
+        pnl.add(new JLabel(" Last edited time: " + lastEditTime));
+    }
+    public static void showPathReachingPercentage (JPanel pnl,  MazeSolution mazeSolution) {
+        if (mazeSolution != null) {
+            double percentage = new BigDecimal(mazeSolution.getPathPercentage()).round(new MathContext(4)).doubleValue();
+            pnl.add(new JLabel(" Path reach percentage: " + percentage + "% "));
+            pnl.repaint();
+            pnl.revalidate();
+        }
+
+    }
+    public static void showMazeName (JPanel pnl, Maze maze) {
+        pnl.add(new JLabel(" Maze name: " + (maze.getMazeName() == null? " - " : maze.getMazeName())));
     }
 }

@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 
 
@@ -45,6 +47,8 @@ public class EditTab extends JFrame{
 
     private static boolean isEntryExitToggled = false;
     public static boolean isEntryExitToggled() { return isEntryExitToggled; }
+
+    private MazeSolution mazeSolution = null;
     private static boolean isSolutionToggled = false;
     public static boolean isSolutionToggled() { return isSolutionToggled; }
     private static boolean hasMaze = false;
@@ -300,8 +304,12 @@ public class EditTab extends JFrame{
         mazeEditPanel.revalidate();
 
         mazeInfoPanel.removeAll();
+//        displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
+        displayMaze.showCreatedDateTime(mazeInfoPanel, maze);
+        displayMaze.showLastEditedTime(mazeInfoPanel, maze);
+        displayMaze.showMazeName(mazeInfoPanel, maze);
+        displayMaze.showAuthor(mazeInfoPanel, maze);
         displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
-        displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
         mazeInfoPanel.repaint();
         mazeInfoPanel.revalidate();
     }
@@ -345,28 +353,43 @@ public class EditTab extends JFrame{
         isEntryExitToggled = !isEntryExitToggled;
         toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
         mazeEditPanel.removeAll();
+        mazeInfoPanel.removeAll();
+        displayMaze.showCreatedDateTime(mazeInfoPanel, maze);
+        displayMaze.showLastEditedTime(mazeInfoPanel, maze);
+        displayMaze.showMazeName(mazeInfoPanel, maze);
+        displayMaze.showAuthor(mazeInfoPanel, maze);
+        displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
         if (isEntryExitToggled) displayMaze.showEntryExit(mazeEditPanel, maze);
-        if (isSolutionToggled) displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
+        if (isSolutionToggled) {
+            displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
+            displayMaze.showPathReachingPercentage(mazeInfoPanel, mazeSolution);
+        }
         if(maze.hasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
         displayMaze.drawMaze(mazeEditPanel, maze);
         mazeEditPanel.repaint();
         mazeEditPanel.revalidate();
+        mazeInfoPanel.repaint();
+        mazeInfoPanel.revalidate();
     }
     private void setToggleOptimumPath(ActionEvent event) {
         isSolutionToggled = !isSolutionToggled;
         mazeEditPanel.removeAll();
-        MazeSolution mazeSolution;
+        mazeInfoPanel.removeAll();
+        displayMaze.showCreatedDateTime(mazeInfoPanel, maze);
+        displayMaze.showLastEditedTime(mazeInfoPanel, maze);
+        displayMaze.showMazeName(mazeInfoPanel, maze);
+        displayMaze.showAuthor(mazeInfoPanel, maze);
+        displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
         if (isSolutionToggled) {
             mazeSolution = new MazeSolution(maze);
             if (mazeSolution.isHasSolution()) {
                 toggleOptimumPath.setText("Hide Optimal Solution");
                 optimalPath = mazeSolution.getOptimalPath();
                 displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
-
-                System.out.println("Solvable");
-                System.out.println("Reach percentage: " + mazeSolution.getPathPercentage() + "%");
+                displayMaze.showPathReachingPercentage(mazeInfoPanel, mazeSolution);
             }
             else {
+                JOptionPane.showMessageDialog(this, "The maze is not solvable");
                 System.out.println("Not solvable");
                 isSolutionToggled = false;
             }
@@ -377,8 +400,11 @@ public class EditTab extends JFrame{
         displayMaze.drawMaze(mazeEditPanel, maze);
         if(maze.hasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
         if (isEntryExitToggled) displayMaze.showEntryExit(mazeEditPanel, maze);
-        mazeEditPanel.revalidate();
         mazeEditPanel.repaint();
+        mazeEditPanel.revalidate();
+        mazeInfoPanel.repaint();
+        mazeInfoPanel.revalidate();
+
 
 
     }
@@ -502,7 +528,7 @@ public class EditTab extends JFrame{
         return logoSetupPanel;
     }
     private JPanel createInfoPanel() {
-        JPanel infoPanel =  new JPanel(new GridLayout(3, 1));
+        JPanel infoPanel =  new JPanel(new GridLayout(7, 1));
         infoPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
         infoPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY,3));
         return infoPanel;
