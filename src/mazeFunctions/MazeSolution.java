@@ -4,6 +4,11 @@ import components.Cell;
 
 import java.util.*;
 
+/***
+ * This class is used for all solution-related methods for a maze
+ *
+ * @author Eric Ng
+ */
 public class MazeSolution {
     private Queue<Cell> queue = new LinkedList<>();
     ArrayList<Cell> optimalPath = new ArrayList<>();
@@ -11,6 +16,10 @@ public class MazeSolution {
     private boolean hasSolution;
     private double pathPercentage = -1;
 
+    /***
+     * Constructor of MazeSolution.
+     * @param maze a maze object
+     */
     public MazeSolution(Maze maze) {
         Solve(maze);
         computeOptimalPath(maze);
@@ -156,7 +165,24 @@ public class MazeSolution {
 
 
     }
+
+    /***
+     * Get the optimal path of a maze
+     * @return an ArrayList with elements of cell object. The ArrayList represents the optimal path of the maze
+     */
     public ArrayList<Cell> getOptimalPath() { return optimalPath; }
+
+    /***
+     * Get the percentage of the optimal path in the maze
+     * The equation to get the percentage:
+     *              percentage = number of cell in the optimal path / total cell in maze * 100 %
+     * @return the percentage of the optimal path
+     */
     public double getPathPercentage() { return pathPercentage; }
+
+    /***
+     *
+     * @return true if the mazeSolution object has a solution, false if it hasn't
+     */
     public boolean isHasSolution() { return hasSolution; }
 }

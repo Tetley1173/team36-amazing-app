@@ -7,7 +7,7 @@ import java.io.Serializable;
  * This class creates the quickSaveFiles table that contains the images for the maze. It contains methods for loading, saving and deleting
  * data from the database. Note that this was copied from the week 6 tutorial and adapted to be compatible with this project.
  *
- * @author Dilshan Perera & Georgia Meszaros Simon
+ * @author Dilshan Perera and Georgia Meszaros Simon
  */
 public class QuickSaveFile implements Comparable<QuickSaveFile>, Serializable {
 
@@ -63,19 +63,19 @@ public class QuickSaveFile implements Comparable<QuickSaveFile>, Serializable {
 
     /**
      *
-     * @param mazeName
+     * @param mazeName a string stores the name of the maze
      */
     public void setMazeName(String mazeName) { this.mazeName = mazeName; }
 
     /**
      *
-     * @return
+     * @return a string stores the author name
      */
     public String getAuthorName() { return authorName; }
 
     /**
      *
-     * @param authorName
+     * @param authorName a string stores the author name
      */
     public void setAuthorName(String authorName) { this.authorName = authorName; }
 

@@ -7,7 +7,11 @@ import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-
+/***
+ * This is an abstract class used for creating a maze object
+ *
+ * @author Eric Ng
+ */
 public abstract class Maze {
     private String mazeName = null;
 
@@ -25,7 +29,7 @@ public abstract class Maze {
     private ImageIcon logoIcon2;
 
     /***
-     *
+     * Set the maze name
      * @param mazeName name of the current maze
      */
     public void setMazeName(String mazeName) {
@@ -33,14 +37,14 @@ public abstract class Maze {
     }
 
     /***
-     *
+     * Get the maze name
      * @return the name of the current maze
      */
     public String getMazeName() { return mazeName; }
     private String authorName = null;
 
     /***
-     *
+     * Set the author name
      * @param authorName the author name
      */
     public void setAuthor(String authorName) {
@@ -48,22 +52,22 @@ public abstract class Maze {
     }
 
     /***
-     *
+     * Get the author name
      * @return the author name of the current maze
      */
     public String getAuthor() { return authorName; }
 
-    private LocalDateTime createdDateTime = null;
+    private LocalDateTime createdDateTime;
 
     /***
-     *
+     * Get the created time
      * @return the created datetime of the current maze
      */
     public LocalDateTime getCreatedDateTime() { return createdDateTime; }
-    private LocalDateTime lastEditedDateTime = null;
+    private LocalDateTime lastEditedDateTime;
 
     /***
-     *
+     * Set the last edited time
      * @param lastEditedDateTime the last edited datetime of the current maze
      */
     public void setLastEditedDateTime(LocalDateTime lastEditedDateTime) {
@@ -71,7 +75,7 @@ public abstract class Maze {
     }
 
     /***
-     *
+     * Get the last edited time
      * @return the last edited datetime of the current maze
      */
     public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
@@ -256,38 +260,133 @@ public abstract class Maze {
 
     /*
     Logo Methods ###########################################################################
+    */
+
+    /***
+     * Set the state of logo of the maze
+     * @param hasLogo true if the current maze has logo, false otherwise
      */
     public void setHasLogo(boolean hasLogo) { this.hasLogo = hasLogo; }
+
+    /***
+     * Return the state of logo of the maze
+     * @return true if the current maze has logo, false otherwise
+     */
     public boolean hasLogo() { return hasLogo; }
+
+    /***
+     * Set the logo of the maze
+     * @param logoIcon1 an ImageIcon object
+     */
     public void setLogoIcon1(ImageIcon logoIcon1) { this.logoIcon1 = logoIcon1; }
+
+    /***
+     * Get the logo of the maze
+     * @return an ImageIcon object
+     */
     public ImageIcon getLogoIcon1() { return logoIcon1; }
+
+    /***
+     * Set the preferred logo size on the maze (height and width) of the maze
+     * @param logoHeight the number of rows occupied by the logo
+     * @param logoWidth the number of columns occupied by the logo
+     */
     public void setLogoDimension(int logoHeight, int logoWidth) { // can be removed
         this.logoHeight = logoHeight;
         this.logoWidth = logoWidth;
     }
+
+    /***
+     * Get the height of the logo on the maze
+     * @return the number of rows occupied by the logo
+     */
     public int getLogoHeight() { return logoHeight; }// can be removed
+    /***
+     * Get the width of the logo on the maze
+     * @return the number of columns occupied by the logo
+     */
     public int getLogoWidth() { return logoWidth; }// can be removed
+
+    /***
+     * Set the top-left corner location of the logo on the maze
+     * @param row the top row of the logo on the maze
+     * @param col the most left col of the logo on the maze
+     */
     public void setLogoLocation(int row, int col) {// can be removed
         logoRow = row;
         logoCol = col;
     }
+
+    /***
+     * Get the top row of the logo on the maze
+     * @return the top row of the logo on the maze
+     */
     public int getLogoRow() { return logoRow; }
+
+    /***
+     * Get the most left col of the logo on the maze
+     * @return the most left col of the logo on the maze
+     */
     public int getLogoCol() { return logoCol; }
     /*
     End of Logo Methods ########################################################################
      */
 
-
+    /***
+     * Invert the wall of a specific cell
+     * @param row the row of the cell
+     * @param col the col of the cell
+     * @param index the wall index of the cell (0 - top, 1 - right, 2 - bottom, 3 - left)
+     */
     public void invertWall(int row, int col, int index) { maze[row][col].invertWall(index);}
+
+    /***
+     * Get the rows number (height) of the maze
+     * @return the rows number of the maze
+     */
     // Get method
     public int getRows() { return rows; }
+    /***
+     * Get the columns number (width) of the maze
+     * @return the columns number of the maze
+     */
     public int getCols() { return cols; }
 
+    /***
+     * Get the cell object in a specific location (row, col)
+     * @param row the number of row of the wanted cell
+     * @param col the number of column of the wanted cell
+     * @return the cell object in (row, col) in the maze
+     */
     public Cell getCell(int row, int col) { return maze[row][col]; }
+    /***
+     * Get the number of walls that is on in a specific cell
+     * @param row the number of row of the wanted cell
+     * @param col the number of column of the wanted cell
+     * @return the number of walls that is on in the cell object in (row, col)
+     */
     public int getWallSum(int row, int col) { return maze[row][col].sumWall(); }
+
+    /***
+     * Get the location of the entry
+     * @return a cell object represent the entry of the maze
+     */
     public Cell getEntryCell() { return entryCell; }
+    /***
+     * Get the location of the exit
+     * @return a cell object represent the exit of the maze
+     */
     public Cell getExitCell() { return exitCell; }
 
+    /***
+     * Set the entry of a maze
+     * @param entryCell the cell that represents the preferred entry
+     */
     public void setEntryCell(Cell entryCell) { this.entryCell = entryCell; }
+
+    /***
+     * Set the exit of a maze
+     * @param exitCell the cell that represents the preferred exit
+     */
     public void setExitCell(Cell exitCell) { this.exitCell = exitCell; }
 }

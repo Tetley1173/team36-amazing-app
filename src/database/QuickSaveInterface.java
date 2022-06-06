@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * Interface that defines the functionality of classes that store mazes into the database.
- * @author Dilshan Perera & Georgia Meszaros simon
+ * @author Dilshan Perera and Georgia Meszaros simon
  */
 
 public interface QuickSaveInterface {

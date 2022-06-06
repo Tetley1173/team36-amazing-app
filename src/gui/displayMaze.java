@@ -40,7 +40,9 @@ public class displayMaze{
             throw new RuntimeException("No EXIT IMAGE!!!");
         }
     }
+
     public static BufferedImage UP, DOWN, LEFT, RIGHT;
+    
     static {
         try {
             UP = ImageIO.read(new File("src/mazeFunctions/PATH_IMAGES/up.png"));

@@ -4,7 +4,17 @@ import components.Cell;
 
 import java.util.*;
 
+/***
+ * This class provides different methods for a maze object
+ *
+ * @author Eric Ng
+ */
 public class MazeGeneration {
+    /***
+     * Generate a maze automatically based on the empty maze
+     * @param maze an empty maze object. (All the wall in the maze are on)
+     * @return a maze-liked maze object
+     */
     public static Maze genMaze(Maze maze){
     /*
     Pseudo Code:
@@ -207,6 +217,11 @@ public class MazeGeneration {
         return maze;
     }
 
+    /***
+     * Calculate the percentage of dead-end cell in the maze (A cell with 3 walls on)
+     * @param maze a maze object
+     * @return the percentage of dead-end cell
+     */
     public static double deadEndPercentage(Maze maze) {
         int sumOfDeadEnd = 0;
         int rows = maze.getRows();

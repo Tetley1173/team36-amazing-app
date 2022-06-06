@@ -60,6 +60,9 @@ public class EditTab extends JFrame{
     public static ArrayList<Cell> getOptimalPath() { return optimalPath; }
     private static mazeCollection mazes;
 
+    /***
+     * Constructor of the edit tab
+     */
     public EditTab() {
         mazes = new mazeCollection();
         // create the edit tab
@@ -534,9 +537,22 @@ public class EditTab extends JFrame{
         return infoPanel;
     }
 
-
+    /***
+     *
+     * @return the JPanel object of edit tab
+     */
     public JPanel getTab() { return editTab; }
+
+    /***
+     *
+     * @return the current editing maze in the edit tab
+     */
     public static Maze getMaze() { return maze; }
+
+    /***
+     *
+     * @return an ArrayList contains all the stored maze object
+     */
     public static mazeCollection getMazes() { return mazes; }
 
 }
