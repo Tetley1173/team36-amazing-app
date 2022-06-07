@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-// Used for testing, delete when done !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 import static collections.HelperMethods.getExtension;
 import static collections.Main.*;
 
@@ -89,7 +88,7 @@ public class AssetsTab extends JFrame {
         widgetAdder(constraints);
 
         selectEntryImage.addActionListener( e -> imageExplorer(entryIcon, entry) );
-        selectEntryImage.addActionListener( e -> dbImageTester());
+//        selectEntryImage.addActionListener( e -> dbImageTester());
 
         selectExitImage.addActionListener( e -> imageExplorer(exitIcon, exit) );
         logo1stImage.addActionListener( e -> imageExplorer(logo1Icon, logo1) );
@@ -100,8 +99,8 @@ public class AssetsTab extends JFrame {
     /**
      * This method opens a file explorer for the user and handles its behavior.
      * It requires an image icon, so it knows where to put the image in the interface.
+     *
      * @param icon is the ImageIcon that a scaled version of the selected image will be put into.
-     * @return BufferedImage c which is the image selected by the user. Returns null if an error is thrown.
      */
     private void imageExplorer(ImageIcon icon,  ImageAsset asset) {
         final int maxWidth = 220;
@@ -173,34 +172,6 @@ public class AssetsTab extends JFrame {
             // once an asset table is made, make the image asset persistent.
         }
         // Else do nothing, it's possible to be passed a null asset if the user picks non.
-    }
-
-    // Test method for learning how to load images from the database and use them.
-    // Test method please delete when done ##########################################
-    // Test method please delete when done ##########################################
-    // Test method please delete when done ##########################################
-    // Test method please delete when done ##########################################
-    // Test method please delete when done ##########################################
-    // Test method please delete when done ##########################################
-    private void dbImageTester() {
-//        logo2Icon.setImage(mockImageObject.getImageFile());
-//        assetPanel.repaint();
-
-        logo1Icon.setImage(loadedMockImageFile.getImageFile());
-        assetPanel.repaint();
-
-        /*
-        check/load database table
-        put selected image into logo object
-        put selected image into asset object
-        get connection instance
-        put image in database
-        load image from database
-        close connection instance?
-        put image into test JFrame
-         */
-
-
     }
 
     /**
