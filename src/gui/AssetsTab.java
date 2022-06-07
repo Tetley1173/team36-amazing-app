@@ -47,11 +47,10 @@ public class AssetsTab extends JFrame {
     /**
      * Constructor that defines the contents of the Assets tab.
      *
-     * @param tabbedPane is the JTabbedPane that this content will be rendered in.
      * @author Shannon Tetley
      */
     @SuppressWarnings("SpellCheckingInspection")
-    public AssetsTab(JTabbedPane tabbedPane) {
+    public AssetsTab() {
 
         // Set up the default image.
         noSelectionImage.setName("default");
@@ -68,7 +67,6 @@ public class AssetsTab extends JFrame {
         // Create a panel that goes into the Assets tab.
         assetPanel = new JPanel(new GridBagLayout());
         assetPanel.setBackground(Color.DARK_GRAY);
-        tabbedPane.add("Assets", assetPanel);
 
         //Defaults
         constraints.fill = GridBagConstraints.NONE;
@@ -260,5 +258,6 @@ public class AssetsTab extends JFrame {
     public static ImageAsset getLogo2() {
         return logo2;
     }
+    public JPanel getTab() { return assetPanel; }
 
 }

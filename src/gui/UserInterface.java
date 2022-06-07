@@ -11,10 +11,6 @@ public class UserInterface extends JFrame implements ActionListener {
     private final int PREFERRED_WINDOWS_HEIGHT = 900;
     // Tabbed Panels
     private final JTabbedPane tabbedPane;
-    // Tabs
-//    private final EditTab edit;
-    private final AssetsTab asset;
-    private final ExportTab export;
 
     public UserInterface() {
         setTitle("Amazing Software");
@@ -25,9 +21,9 @@ public class UserInterface extends JFrame implements ActionListener {
         setLayout(new BorderLayout(5, 5));
 
         tabbedPane = new JTabbedPane();
-        asset = new AssetsTab(tabbedPane);
+        tabbedPane.add("Asset", (new AssetsTab()).getTab());
         tabbedPane.add("Edit", (new EditTab()).getTab());
-        export = new ExportTab(tabbedPane);
+        tabbedPane.add("Export", (new ExportTab()).getTab());
         getContentPane().add(tabbedPane);
 
         pack();

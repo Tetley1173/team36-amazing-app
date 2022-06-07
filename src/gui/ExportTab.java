@@ -34,9 +34,8 @@ public class ExportTab extends JFrame{
     private final JRadioButton size1, size2;
     private final JButton quickSave, export;
 
-    public ExportTab(JTabbedPane tabbedPane) {
+    public ExportTab() {
         layOut = new JPanel(new GridBagLayout());
-        tabbedPane.add("Export",layOut);
         titlelabel = BorderFactory.createTitledBorder("Export Configuration");
         layOut.setBorder(titlelabel);
 
@@ -81,4 +80,5 @@ public class ExportTab extends JFrame{
         c.gridheight = h;
         jp.add(com, c);
     }
+    public JPanel getTab() { return layOut; }
 }
