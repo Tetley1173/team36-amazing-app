@@ -10,9 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 
 
@@ -24,7 +21,9 @@ public class EditTab extends JFrame{
     public final static int LOGO_PANEL_WIDTH = 200;
     public final static int LOGO_SETUP_PANEL_HEIGHT = 100;
     private final static String IMAGE_OUTPUT_FORMAT = "png";
+    // Background color of the edit tab
     public final static Color MAZE_SETUP_PANEL_COLOR = new Color(0x4B566C);
+    // color of the functional buttons
     public final static Color BUTTON_COLOR = new Color(0xABA9C3);
     private final SpinnerNumberModel rowsDecisionNumModel = new SpinnerNumberModel(10, 2, 100, 1);
     private final SpinnerNumberModel colsDecisionNumModel = new SpinnerNumberModel(10, 2, 100, 1);
@@ -33,27 +32,22 @@ public class EditTab extends JFrame{
     private final Dimension spinnerDim = new Dimension(70, 20);
 
     // Panels
-    private final JPanel editTab, mazeEditPanel, setupAndInfoPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel;
+    private final JPanel editTab, mazeEditPanel, leftPanel, mazeSetupPanel, logoSetupPanel, mazeInfoPanel, rightPanel;
 
     // Buttons - Left panels
-    private final JButton mazeGeneration, BlankGenerate, discardButton, exportMazeImage;
+    private final JButton mazeGeneration, BlankGenerate, discardButton, manualLogoAdd;
     private final JButton toggleOptimumPath, toggleEntryExit;
     private final JSpinner rowDecision, colDecision, logoRowDecision, logoColDecision;
     private final JCheckBox insertLogo;
 
     // Buttons - Right panels
-    private final JButton saveMazeImage;
+    private final JButton saveMazeImage, exportMazeImage;
 
     private static boolean isDiscard = false;
-    public static boolean isIsDiscard() { return isDiscard; }
     private static boolean isEntryExitToggled = false;
-    public static boolean isEntryExitToggled() { return isEntryExitToggled; }
-
     private MazeSolution mazeSolution = null;
     private static boolean isSolutionToggled = false;
-    public static boolean isSolutionToggled() { return isSolutionToggled; }
     private static boolean hasMaze = false;
-    public static boolean hasMaze() { return hasMaze;}
 
     // Maze
     private static Maze maze;
@@ -71,7 +65,7 @@ public class EditTab extends JFrame{
         // the maze drawing panel
         mazeEditPanel = createMazeDrawPanel(MAZE_SETUP_PANEL_COLOR);
         // the left panel in the edit tab
-        setupAndInfoPanel = createButtonPanel(Color.DARK_GRAY);
+        leftPanel = createButtonPanel(Color.DARK_GRAY);
         // the top side of the left panel
         mazeSetupPanel = createSetupPanel();
         // logo setup panel
@@ -79,10 +73,7 @@ public class EditTab extends JFrame{
         // Panel displaying info of the maze
         mazeInfoPanel = createInfoPanel();
         // Temporary Panel on the right, will be using it in the future
-        JPanel rightPanel = new JPanel(new GridBagLayout());
-        rightPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
-        rightPanel.setPreferredSize(new Dimension(MAZE_SETUP_PANEL_WIDTH,MAZE_SETUP_PANEL_HEIGHT));
-        rightPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
+        rightPanel = createSetupPanel();
 
         // Spinners for rows and cols inputs
         // rows and cols
@@ -90,16 +81,16 @@ public class EditTab extends JFrame{
         colDecision = createSpinner(colsDecisionNumModel, spinnerDim, true);
 
         // Button for auto-gen maze display
-        mazeGeneration = createButton("Generate", true, this::mazeGen);
+        mazeGeneration = createButton("Generate", true, 80, 30, this::mazeGen);
         // Button for blank maze display
-        BlankGenerate = createButton("Blank", true, this::blankMazeGen);
+        BlankGenerate = createButton("Blank", true, 80, 30, this::blankMazeGen);
         // Button to erase the maze display
-        discardButton = createButton("Discard", false, this::discardMaze);
+        discardButton = createButton("Discard", false, 80, 30, this::discardMaze);
 
         // Toggle the optimum path (should be a colored line)
-        toggleOptimumPath = createButton("Show Optimum Solution", false, this::setToggleOptimumPath);
+        toggleOptimumPath = createButton("Show Optimum Solution", false, 80, 30, this::setToggleOptimumPath);
         // Toggle the Entry and Exit (Red - Entry, Green, Exit)
-        toggleEntryExit= createButton("Show Entry/Exit", false, this::setToggleEntryExit);
+        toggleEntryExit= createButton("Show Entry/Exit", false, 80, 30, this::setToggleEntryExit);
         // Save the screenshot of the maze
 
 
@@ -107,24 +98,25 @@ public class EditTab extends JFrame{
         logoRowDecision = createSpinner(logoRowsNumModel, spinnerDim, false);
         logoColDecision =  createSpinner(logoColsNumModel, spinnerDim, false);
         insertLogo = createCheckbox(this::putLogo);
+        manualLogoAdd = createButton("Place Logo Manually", false, 80, 30, this::placeLogoManually);
 
         LogoSetupPanelLayoutSetup(logoSetupPanel);
         InfoPanelLayoutSetup(mazeSetupPanel);
 
-        saveMazeImage = createButton("Save", false, this::saveMaze);
-        exportMazeImage = createButton("Export as image",false, this::FolderExplorer);
+        saveMazeImage = createButton("Save", false, 160, 30, this::saveMaze);
+        exportMazeImage = createButton("Export as image",false, 160, 30, this::FolderExplorer);
         rightPanelSetup(rightPanel);
 
 
         editTab.add(mazeEditPanel, BorderLayout.CENTER);
-        editTab.add(setupAndInfoPanel, BorderLayout.WEST);
+        editTab.add(leftPanel, BorderLayout.WEST);
         editTab.add(rightPanel, BorderLayout.EAST);
-        setupAndInfoPanel.add(mazeSetupPanel, BorderLayout.NORTH);
+        leftPanel.add(mazeSetupPanel, BorderLayout.NORTH);
 
 
         JPanel pnl = new JPanel(new BorderLayout());
         pnl.setBackground(MAZE_SETUP_PANEL_COLOR);
-        setupAndInfoPanel.add(pnl, BorderLayout.CENTER);
+        leftPanel.add(pnl, BorderLayout.CENTER);
         pnl.add(logoSetupPanel, BorderLayout.NORTH);
 
         pnl.add(mazeInfoPanel, BorderLayout.SOUTH);
@@ -192,11 +184,13 @@ public class EditTab extends JFrame{
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 1; gbc.gridy = 0;
         logoSetupPanel.add(insertLogo, gbc);
-        gbc.anchor = GridBagConstraints.LINE_START;
         gbc.gridy = 1;
         logoSetupPanel.add(logoRowDecision, gbc);
         gbc.gridy = 2;
         logoSetupPanel.add(logoColDecision, gbc);
+        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        logoSetupPanel.add(manualLogoAdd, gbc);
     }
     private void rightPanelSetup(JPanel rightPanel) {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -211,36 +205,29 @@ public class EditTab extends JFrame{
         rightPanel.add(exportMazeImage, gbc);
     }
     private void FolderExplorer(ActionEvent event) {
-        FileDialog folder = new FileDialog(new Frame(), "Save Image", FileDialog.SAVE);
-        folder.setMultipleMode(false);
-        folder.setVisible(true);
-        if(folder.getDirectory().length() > 0){
-            String aPath = folder.getFile();
-            System.out.println(aPath);
             try {
-                BufferedImage img = new BufferedImage(mazeEditPanel.getWidth(), mazeEditPanel.getHeight(), BufferedImage.TYPE_INT_RGB);
-                mazeEditPanel.paint(img.getGraphics());
-                ImageIO.write(img, IMAGE_OUTPUT_FORMAT, new File(folder.getDirectory(), folder.getFile() + "." + IMAGE_OUTPUT_FORMAT));
-                JOptionPane.showMessageDialog(this,
-                        "Done!",
-                        "Image Export", JOptionPane.INFORMATION_MESSAGE);
+                FileDialog folder = new FileDialog(new Frame(), "Save Image", FileDialog.SAVE);
+                folder.setMultipleMode(false);
+                folder.setVisible(true);
+                String aPath = folder.getFile();
+//                System.out.println(aPath);
+                if (aPath.length() > 0) {
+                    BufferedImage img = new BufferedImage(mazeEditPanel.getWidth(), mazeEditPanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    mazeEditPanel.paint(img.getGraphics());
+                    ImageIO.write(img, IMAGE_OUTPUT_FORMAT, new File(folder.getDirectory(), folder.getFile() + "." + IMAGE_OUTPUT_FORMAT));
+                    JOptionPane.showMessageDialog(this,
+                            "Done!",
+                            "Image Export", JOptionPane.INFORMATION_MESSAGE);
+                }
             } catch (NullPointerException e) {
-                e.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Missing image file, please select an appropriate image file.",
                         "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception e) {
-                e.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Invalid folder selected, please select an appropriate file.",
                         "Invalid folder selection: Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        else {
-            JOptionPane.showMessageDialog(this,
-                    "Missing image file, please select an appropriate image file.",
-                    "Missing image file: Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
     private void mazeGen(ActionEvent event) {
         try {
@@ -264,15 +251,7 @@ public class EditTab extends JFrame{
             int logoHeight = (int) logoRowDecision.getValue();
             int logoWidth = (int) logoColDecision.getValue();
             if (logoHeight >= rows - 1 || logoWidth >= cols - 1)
-                throw new Exception("The logo is too big.\n" + " Choose a smaller size of logo or a bigger size of maze");
-            // Choose Logo
-            // Now will be using the entry image for testing
-            BufferedImage companyLogo;
-            try {
-                companyLogo = ImageIO.read(new File("src/mazeFunctions/ENTRY_EXIT_IMAGES/Entry_red_circle.png"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                throw new Exception("The logo is too big.\n" + " Choose a smaller size for logo or a bigger size for maze");
             maze = new MazeWithoutImage(rows, cols);
             displayMaze.setWallButtons(maze);
             maze.setHasLogo(true);
@@ -282,6 +261,7 @@ public class EditTab extends JFrame{
             int logoCol = CELL_ID % rows;
             maze.setLogoLocation(logoRow, logoCol);
             maze.spareLocation(logoRow, logoCol, logoHeight, logoWidth);
+            maze.setLogoIcon1(AssetsTab.getLogo1().getAsset());
             displayMaze.setCellSize(mazeEditPanel, maze);
         }
         else {
@@ -296,6 +276,8 @@ public class EditTab extends JFrame{
         insertLogo.setEnabled(false);
         logoRowDecision.setEnabled(false);
         logoColDecision.setEnabled(false);
+        if (maze.hasLogo()) manualLogoAdd.setEnabled(true);
+        else manualLogoAdd.setEnabled(false);
         // remove all the things in the maze panel
         mazeEditPanel.removeAll();
 
@@ -305,7 +287,6 @@ public class EditTab extends JFrame{
         mazeEditPanel.revalidate();
 
         mazeInfoPanel.removeAll();
-//        displayMaze.showDimensionOfMaze(mazeInfoPanel, maze);
         displayMaze.showCreatedDateTime(mazeInfoPanel, maze);
         displayMaze.showLastEditedTime(mazeInfoPanel, maze);
         displayMaze.showMazeName(mazeInfoPanel, maze);
@@ -345,6 +326,7 @@ public class EditTab extends JFrame{
         logoColDecision.setValue(2);
         toggleEntryExit.setSelected(false);
         toggleOptimumPath.setSelected(false);
+        manualLogoAdd.setEnabled(false);
         mazeEditPanel.removeAll();
         mazeEditPanel.repaint();
         mazeEditPanel.revalidate();
@@ -356,23 +338,12 @@ public class EditTab extends JFrame{
         isEntryExitToggled = !isEntryExitToggled;
         toggleEntryExit.setText(isEntryExitToggled? "Hide Entry & Exit":"Show Entry and Exit");
         mazeEditPanel.removeAll();
-        mazeInfoPanel.removeAll();
-        displayMaze.showCreatedDateTime(mazeInfoPanel, maze);
-        displayMaze.showLastEditedTime(mazeInfoPanel, maze);
-        displayMaze.showMazeName(mazeInfoPanel, maze);
-        displayMaze.showAuthor(mazeInfoPanel, maze);
-        displayMaze.showDeadEndPercentage(mazeInfoPanel, maze);
         if (isEntryExitToggled) displayMaze.showEntryExit(mazeEditPanel, maze);
-        if (isSolutionToggled) {
-            displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
-            displayMaze.showPathReachingPercentage(mazeInfoPanel, mazeSolution);
-        }
+        if (isSolutionToggled) displayMaze.showOptimumPath(mazeEditPanel, maze, optimalPath);
         if(maze.hasLogo()) displayMaze.showLogo(mazeEditPanel, maze);
         displayMaze.drawMaze(mazeEditPanel, maze);
         mazeEditPanel.repaint();
         mazeEditPanel.revalidate();
-        mazeInfoPanel.repaint();
-        mazeInfoPanel.revalidate();
     }
     private void setToggleOptimumPath(ActionEvent event) {
         isSolutionToggled = !isSolutionToggled;
@@ -410,6 +381,8 @@ public class EditTab extends JFrame{
 
 
 
+    }
+    private void placeLogoManually(ActionEvent event) {
     }
     private void putLogo(ActionEvent event) {
         logoRowDecision.setEnabled(!logoRowDecision.isEnabled());
@@ -473,11 +446,11 @@ public class EditTab extends JFrame{
 
     }
 
-    private JButton createButton(String buttonName, boolean isEnable, ActionListener action) {
+    private JButton createButton(String buttonName, boolean isEnable, int width, int height, ActionListener action) {
         JButton btn = new JButton(buttonName);
         btn.setBackground(BUTTON_COLOR);
         btn.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-        btn.setPreferredSize(new Dimension (80, 30));
+        btn.setPreferredSize(new Dimension (width, height));
         btn.setEnabled(isEnable);
         btn.addActionListener(action);
         return btn;
@@ -525,7 +498,7 @@ public class EditTab extends JFrame{
     }
     private JPanel createLogoSetupPanel() {
         JPanel logoSetupPanel = new JPanel(new GridBagLayout());
-        logoSetupPanel.setPreferredSize(new Dimension(LOGO_PANEL_WIDTH, LOGO_SETUP_PANEL_HEIGHT));
+        logoSetupPanel.setPreferredSize(new Dimension(LOGO_PANEL_WIDTH, LOGO_SETUP_PANEL_HEIGHT + 40));
         logoSetupPanel.setBackground(MAZE_SETUP_PANEL_COLOR);
         logoSetupPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
         return logoSetupPanel;
@@ -554,5 +527,28 @@ public class EditTab extends JFrame{
      * @return an ArrayList contains all the stored maze object
      */
     public static mazeCollection getMazes() { return mazes; }
+
+    /***
+     *
+     * @return true if no maze is shown on the maze drawing panel, false otherwise
+     */
+    public static boolean isIsDiscard() { return isDiscard; }
+
+    /***
+     *
+     * @return true if the entry/exit image is shown on the maze drawing panel, false otherwise
+     */
+    public static boolean isEntryExitToggled() { return isEntryExitToggled; }
+
+    /***
+     *
+     * @return true if the solution path is shown on the maze drawing panel, false otherwise
+     */
+    public static boolean isSolutionToggled() { return isSolutionToggled; }
+    /***
+     *
+     * @return true if the maze is shown on the maze drawing panel, false otherwise
+     */
+    public static boolean hasMaze() { return hasMaze;}
 
 }

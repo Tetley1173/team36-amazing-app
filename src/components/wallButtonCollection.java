@@ -21,7 +21,6 @@ public class wallButtonCollection implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Action for wallButtons
-        // System.out.println("pressed a wall");
         wallButton button = (wallButton) e.getSource();
         int row = button.getRow();
         int col = button.getCol();
@@ -31,7 +30,5 @@ public class wallButtonCollection implements ActionListener {
         if (button.getBackground() == wallButton.wallColor) button.setBackground(displayMaze.bgColor);
         else if (button.getBackground() == displayMaze.bgColor) button.setBackground(wallButton.wallColor);
         EditTab.getMaze().getCell(row, col).invertWall(wallIndex);
-//        Test if the wall state is updated after the actionPerformed
-//        System.out.println(EditTab.maze.getCell(row, col).sumWall());
     }
 }

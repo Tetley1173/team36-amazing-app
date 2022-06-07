@@ -63,20 +63,6 @@ public class MazeGeneration {
             // Find number of neighbour cell which has 4 intact walls
             ArrayList<int[]> neighbourCellList = new ArrayList<>();
 
-//            for (int i = 0; i < 3; i++) {
-//                int nextRow = currentRow + dy[i];
-//                int nextCol = currentCol + dx[i];
-//                if (nextRow >= 0 && nextCol >= 0 && nextRow < 20 && nextCol < 20) {
-//                    if (maze.getWallSum(nextRow, nextCol) == 4) {
-//                        neighbourCellList.add(new int[]{nextRow, nextCol});
-//                    }
-//                }
-//            }
-//            for (int[] temp: neighbourCellList) {
-//                System.out.println(temp[0] + ", " + temp[1]);
-//            }
-//            System.out.println("\n");
-
             if (currentRow == 0) {
                 if (maze.getWallSum(currentRow + 1, currentCol) == 4) {
                     neighbourCellList.add(new int[]{ currentRow + 1 , currentCol });
@@ -164,14 +150,10 @@ public class MazeGeneration {
                 }
             }
             int noOfCells = neighbourCellList.size();
-            // Check the number of available neighbour cells
-            //System.out.println("number of cell: " + noOfCells);
 
             // Randomly choose 1 neighbourCell
             int[] nextNeighbour;
             if (noOfCells >= 1) {
-//                if (noOfCells == 1) nextNeighbour = neighbourCellList.get(0);
-//                else
                     nextNeighbour = neighbourCellList.get(rand.nextInt(noOfCells));
                 if (nextNeighbour[0] < currentRow) {
                     maze.invertWall(currentRow, currentCol, 0);
@@ -192,8 +174,6 @@ public class MazeGeneration {
                 cellStack.push(maze.getCell(currentRow, currentCol));
                 currentRow = nextNeighbour[0];
                 currentCol = nextNeighbour[1];
-                // Check the current location
-                //System.out.println("CurrentCell: " + nextNeighbour[0] + ", " + nextNeighbour[1]);
                 visitedCells++;
             }
             else {

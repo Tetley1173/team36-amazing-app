@@ -35,11 +35,11 @@ public class AssetsTab extends JFrame {
     private final ImageIcon logo1Icon = new ImageIcon();
     private final ImageIcon logo2Icon = new ImageIcon();
 
-    public static ImageAssetFile noSelectionImage = new ImageAssetFile();
-    public static ImageAsset entry = new ImageAsset("entry", "entry", noSelectionImage);
-    public static ImageAsset exit = new ImageAsset("exit", "exit", noSelectionImage);
-    public static ImageAsset logo1 = new ImageAsset("logo1", "logo1", noSelectionImage);
-    public static ImageAsset logo2 = new ImageAsset("logo2", "logo2", noSelectionImage);
+    private static ImageAssetFile noSelectionImage = new ImageAssetFile();
+    private static ImageAsset entry = new ImageAsset("entry", "entry", noSelectionImage);
+    private static ImageAsset exit = new ImageAsset("exit", "exit", noSelectionImage);
+    private static ImageAsset logo1 = new ImageAsset("logo1", "logo1", noSelectionImage);
+    private static ImageAsset logo2 = new ImageAsset("logo2", "logo2", noSelectionImage);
 
 
 
@@ -203,8 +203,8 @@ public class AssetsTab extends JFrame {
      * @param h the grid height of the component
      * @author Cay Horstmann
      */
-    private void addToPanel(JPanel jp,Component c, GridBagConstraints
-            constraints,int x, int y, int w, int h) {
+    private void addToPanel(JPanel jp,Component c, GridBagConstraints constraints,
+                            int x, int y, int w, int h) {
         constraints.gridx = x;
         constraints.gridy = y;
         constraints.gridwidth = w;

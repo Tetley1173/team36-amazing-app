@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -220,7 +219,6 @@ public class displayMaze{
         pnl.repaint();
         pnl.revalidate();
     }
-
     public static void showEntryExit(JPanel pnl, Maze maze) {
         ImageIcon defaultEntryIcon = new ImageIcon(DEFAULT_ENTRY_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
         ImageIcon defaultExitIcon = new ImageIcon(DEFAULT_EXIT_IMAGE.getScaledInstance(CELL_WIDTH * 3 / 4, CELL_HEIGHT * 3 / 4, Image.SCALE_DEFAULT));
@@ -323,7 +321,6 @@ public class displayMaze{
             pnl.repaint();
             pnl.revalidate();
         }
-
     }
     public static void showMazeName (JPanel pnl, Maze maze) {
         pnl.add(new JLabel(" Maze name: " + (maze.getMazeName() == null? " - " : maze.getMazeName())));

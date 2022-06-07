@@ -4,6 +4,8 @@ import components.Cell;
 import gui.displayMaze;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.util.Random;
 
@@ -23,7 +25,7 @@ public abstract class Maze {
     private Cell entryCell, exitCell;
 
     private boolean hasLogo = false;
-    private ImageIcon logoIcon1 = new ImageIcon();
+    private BufferedImage logoIcon1;
 
     private int logoRow, logoCol;
     private int logoHeight = -1;
@@ -96,10 +98,6 @@ public abstract class Maze {
                 maze[row][col] = new Cell(row, col);
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
-
-
-        logoIcon1.setImage(getLogo1().getAsset());
-//        logoIcon2.setImage(getLogo2().getAsset());
 
         createdDateTime = LocalDateTime.now();
         lastEditedDateTime = createdDateTime;
@@ -239,13 +237,14 @@ public abstract class Maze {
      * Set the logo of the maze
      * @param logoIcon1 an ImageIcon object
      */
-    public void setLogoIcon1(ImageIcon logoIcon1) { this.logoIcon1 = logoIcon1; }
+    public void setLogoIcon1(BufferedImage logoIcon1) { this.logoIcon1 = logoIcon1; }
 
     /***
      * Get the logo of the maze
      * @return an ImageIcon object
      */
-    public ImageIcon getLogoIcon1() { return logoIcon1; }
+    public ImageIcon getLogoIcon1() {
+        return new ImageIcon(logoIcon1.getScaledInstance(displayMaze.CELL_WIDTH * logoWidth + displayMaze.OFFSET_X, displayMaze.CELL_HEIGHT * logoHeight  + displayMaze.OFFSET_Y, Image.SCALE_DEFAULT)); }
 
     /***
      * Set the preferred logo size on the maze (height and width) of the maze
