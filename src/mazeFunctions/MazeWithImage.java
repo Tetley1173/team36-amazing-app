@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutionException;
  * @author Eric Ng
  */
 public class MazeWithImage extends Maze{
-    ImageIcon entryImage = null;
-    ImageIcon exitImage = null;
+    ImageIcon entryImage = new ImageIcon();
+    ImageIcon exitImage = new ImageIcon();
 
     /***
      * Constructor of MazeWithImage

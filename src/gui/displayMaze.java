@@ -90,14 +90,17 @@ public class displayMaze{
             pnl.addComponentListener(new ComponentAdapter() {
                 @Override
                 public void componentResized(ComponentEvent e) {
-                    pnl.removeAll();
-                    displayMaze.resizeMaze(pnl, EditTab.getMaze());
-                    displayMaze.drawMaze(pnl, EditTab.getMaze());
-                    if (EditTab.isEntryExitToggled()) showEntryExit(pnl, EditTab.getMaze());
-                    if (EditTab.isSolutionToggled()) showOptimumPath(pnl, EditTab.getMaze(), EditTab.getOptimalPath());
-                    if (EditTab.getMaze().hasLogo()) showLogo(pnl, EditTab.getMaze());
-                    pnl.repaint();
-                    pnl.revalidate();
+                    if (!EditTab.isIsDiscard()) {
+                        pnl.removeAll();
+                        displayMaze.resizeMaze(pnl, EditTab.getMaze());
+                        displayMaze.drawMaze(pnl, EditTab.getMaze());
+                        if (EditTab.isEntryExitToggled()) showEntryExit(pnl, EditTab.getMaze());
+                        if (EditTab.isSolutionToggled()) showOptimumPath(pnl, EditTab.getMaze(), EditTab.getOptimalPath());
+                        if (EditTab.getMaze().hasLogo()) showLogo(pnl, EditTab.getMaze());
+                        pnl.repaint();
+                        pnl.revalidate();
+                    }
+
                 }
             });
         }

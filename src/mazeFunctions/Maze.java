@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import static gui.AssetsTab.getLogo1;
+
 /***
  * This is an abstract class used for creating a maze object
  *
@@ -21,7 +23,7 @@ public abstract class Maze {
     private Cell entryCell, exitCell;
 
     private boolean hasLogo = false;
-    private ImageIcon logoIcon1;
+    private ImageIcon logoIcon1 = new ImageIcon();
 
     private int logoRow, logoCol;
     private int logoHeight = -1;
@@ -95,8 +97,8 @@ public abstract class Maze {
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
 
-        // These fields cause an error for unknown reasons.
-//        logoIcon1.setImage(getLogo1().getAsset());
+
+        logoIcon1.setImage(getLogo1().getAsset());
 //        logoIcon2.setImage(getLogo2().getAsset());
 
         createdDateTime = LocalDateTime.now();

@@ -44,7 +44,8 @@ public class EditTab extends JFrame{
     // Buttons - Right panels
     private final JButton saveMazeImage;
 
-
+    private static boolean isDiscard = false;
+    public static boolean isIsDiscard() { return isDiscard; }
     private static boolean isEntryExitToggled = false;
     public static boolean isEntryExitToggled() { return isEntryExitToggled; }
 
@@ -243,6 +244,7 @@ public class EditTab extends JFrame{
     }
     private void mazeGen(ActionEvent event) {
         try {
+            isDiscard = false;
             hasMaze = true;
             createMazeObject();
             maze = MazeGeneration.genMaze(maze);
@@ -281,10 +283,6 @@ public class EditTab extends JFrame{
             maze.setLogoLocation(logoRow, logoCol);
             maze.spareLocation(logoRow, logoCol, logoHeight, logoWidth);
             displayMaze.setCellSize(mazeEditPanel, maze);
-            maze.setLogoIcon1( new ImageIcon(companyLogo.getScaledInstance(
-                    (logoWidth * (displayMaze.CELL_WIDTH + displayMaze.BUTTON_OFFSET)) - displayMaze.BUTTON_OFFSET,
-                    (logoHeight * (displayMaze.CELL_HEIGHT + displayMaze.BUTTON_OFFSET)) - displayMaze.BUTTON_OFFSET,
-                    Image.SCALE_DEFAULT)));
         }
         else {
             maze = new MazeWithoutImage(rows, cols);
@@ -319,6 +317,7 @@ public class EditTab extends JFrame{
 
     private void blankMazeGen(ActionEvent event) {
         try {
+            isDiscard = false;
             hasMaze = true;
             createMazeObject();
             // Display the auto-gen maze
@@ -331,6 +330,7 @@ public class EditTab extends JFrame{
     }
     private void discardMaze(ActionEvent event) {
         componentReset();
+        isDiscard = true;
         hasMaze = false;
         isSolutionToggled = false;
         toggleOptimumPath.setText("Show Optimal Solution");
