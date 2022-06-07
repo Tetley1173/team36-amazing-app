@@ -10,7 +10,7 @@ import java.util.Random;
 /***
  * This is an abstract class used for creating a maze object
  *
- * @author Eric Ng
+ * @author Eric Ng, minor additions by Shannon Tetley
  */
 public abstract class Maze {
     private String mazeName = null;
@@ -80,48 +80,6 @@ public abstract class Maze {
      */
     public LocalDateTime getLastEditedDateTime() { return lastEditedDateTime; }
 
-
-    /*
-    ImageAsset fields for all logos, entry and exit
-     */
-
-//    private ImageAsset logo1;
-//    private ImageAsset logo2;
-//    private ImageAsset entryIcon = null;
-//    private ImageAsset exitIcon = null;
-
-//    /*
-//    Fields added by Shannon to facilitate import of assets.
-//     */
-//    private boolean hasEntry = false;   // Indicates if an image has been allocated to the entry.
-//    private ImageAsset entryAsset;     // ImageAsset object that defines what image is used for the entry.
-//    private ImageIcon entryIcon = null; // The ImageIcon that the asset will be displayed in.
-//    private int entryRow, entryCol;
-//    private int entryHeight = -1;
-//    private int entryWidth = -1;
-//    // Note to Shannon most of these fields should be fields of the ImageAsset class instead.
-//
-//    private boolean hasExit = false;
-//    private ImageAsset entry1Asset;
-//    private ImageIcon exitIcon = null;
-//    private int exitRow, exitCol;
-//    private int exitHeight = -1;
-//    private int exitWidth = -1;
-//
-//    private boolean hasLogo1 = false;
-//    private ImageAsset logo1Asset;
-//    private ImageIcon logo1Icon = null;
-//    private int logo1Row, logo1Col;
-//    private int logo1Height = -1;
-//    private int logo1Width = -1;
-//
-//    private boolean hasLogo2 = false;
-//    private ImageAsset logo2Asset;
-//    private ImageIcon logo2Icon = null;
-//    private int logo2Row, logo2Col;
-//    private int logo2Height = -1;
-//    private int logo2Width = -1;
-
     /***
      * Constructor of a maze object
      * @param rows the number of rows (height) of the maze
@@ -137,6 +95,7 @@ public abstract class Maze {
         entryCell = maze[0][0];
         exitCell = maze[rows - 1][cols - 1];
 
+        // These fields cause an error for unknown reasons.
 //        logoIcon1.setImage(getLogo1().getAsset());
 //        logoIcon2.setImage(getLogo2().getAsset());
 

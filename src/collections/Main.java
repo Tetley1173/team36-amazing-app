@@ -5,6 +5,7 @@ import database.ImageAssetDataSource;
 public class Main {
     // Create the image asset table.
     public static ImageAssetDataSource assetsTable = new ImageAssetDataSource();
+    public static UserInterface frame;
 
     /**
      * Entry point for the program. The user interface is called from here.
@@ -13,9 +14,8 @@ public class Main {
      */
     public static void main (String[] args){
 
-
         // Start the user interface.
-        UserInterface frame = new UserInterface();
+        frame = new UserInterface();
         frame.setVisible(true);
 
     }

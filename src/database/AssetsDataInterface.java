@@ -2,8 +2,6 @@ package database;
 
 import mazeFunctions.ImageAssetFile;
 
-import java.util.Set;
-
 /**
  * Interface that defines the functionality of classes that store assets into the database.
  * Adapted from the week 6 tutorial.
@@ -36,16 +34,16 @@ public interface AssetsDataInterface {
 
     /**
      * Deletes a Person from the address book.
-     * Make sure this is done somewhere in the system to remove unneeded assets ################################
      * Maybe manually by the user or conditionally when a maze is deleted.
      *
      * @param name The name to delete from the address book.
      */
+    @SuppressWarnings("unused")
     void deleteAsset(String name);
 
     /**
      * Finalizes any resources used by the data source and ensures data is
-     * persisited.
+     * persisted.
      */
     void close();
 }

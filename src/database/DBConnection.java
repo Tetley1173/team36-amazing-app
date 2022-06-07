@@ -1,5 +1,6 @@
 package database;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,6 +8,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import static collections.Main.frame;
 
 // This class was copied from the week 6 practical.
 
@@ -18,8 +21,9 @@ public class DBConnection {
     private static Connection instance = null;
 
     /**
-     * Constructor intializes the connection.
+     * Constructor initializes the connection.
      */
+    @SuppressWarnings("SpellCheckingInspection")
     private DBConnection() {
 
         Properties props = new Properties();
@@ -40,11 +44,24 @@ public class DBConnection {
                     password);
             // Put meaningful exception behavior here. ##########################################################
         } catch (SQLException sqle) {
-            System.err.println(sqle);
+            System.err.println();
+            sqle.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                    "An error has occured connecting to the database",
+                    "Database connection: Error", JOptionPane.ERROR_MESSAGE);
+
         } catch (FileNotFoundException fnfe) {
-            System.err.println(fnfe);
+            System.err.println();
+            fnfe.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                    "An error has occured loading the database props file.",
+                    "Props file: Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
+            System.err.println();
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                    "An error has occured while loading the database props file.",
+                    "JavaIO: Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -53,6 +70,7 @@ public class DBConnection {
      *
      * @return a handle to the singleton instance of the UrlSet.
      */
+    @SuppressWarnings("InstantiationOfUtilityClass")
     public static Connection getInstance() {
         if (instance == null) {
             new DBConnection();
@@ -61,4 +79,3 @@ public class DBConnection {
     }
 
 }
-// test

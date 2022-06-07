@@ -1,6 +1,5 @@
 package mazeFunctions;
 
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -18,6 +17,8 @@ public class ImageAsset {
     // 1 of 4 possible asset types. entry, exit, logo1, and logo2.
     private String assetType;
     // List of mazes this asset is used with.
+    // - This field is unimplemented because the project is not ready to handle multiple mazes gracefully.
+    @SuppressWarnings("FieldMayBeFinal")
     private ArrayList<String> mazeAssociation = new ArrayList<>();
 
     // Maze related variables.
@@ -25,7 +26,6 @@ public class ImageAsset {
     private int height = -1;
     private int width = -1;
 
-    // Add methods to check if the file is in the database already then load that one instead.
     // Constructor
     /**
      * No args constructor.
@@ -35,6 +35,7 @@ public class ImageAsset {
 
     /**
      * Constructor to set values for the assets details.
+     *
      * @param name the name of the asset instance.
      * @param type the type of asset this is. Options are logo1, logo2, image1, image2. (names need updating)
      * @param file the file used for this asset, check that a duplicate isn't being created, reference an existing file if possible.
@@ -87,11 +88,10 @@ public class ImageAsset {
     public  void setAsset(BufferedImage b) { imageFile.setImageFile(b); }
     /**
      * Extracts the BufferedImage object held by the ImageAssetFile associated with this object.
+     *
      * @return BufferedImage that this object represents.
      */
     public BufferedImage getAsset() {
-//        ImageAssetFile temp = new ImageAssetFile();
-//        temp = this.getImageFile();
         return imageFile.getImageFile();
     }
 
@@ -163,7 +163,5 @@ public class ImageAsset {
     public int getWidth() {
         return width;
     }
-
-    // Stretch gaol make add to database method
 
 }

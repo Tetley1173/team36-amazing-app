@@ -2,13 +2,12 @@ package database;
 
 import mazeFunctions.ImageAssetFile;
 
-import java.io.ByteArrayInputStream;
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Set;
-import java.util.TreeSet;
 
 import static collections.HelperMethods.*;
+import static collections.Main.frame;
 
 /**
  * This class creates the assetFiles table that contains the images for the maze. It contains methods for loading, saving and deleting
@@ -26,8 +25,6 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
     private static final String INSERT_ASSET = "INSERT INTO assetFiles (name, imageFile) VALUES (?, ?);";
 
-    private static final String GET_NAMES = "SELECT name FROM assetFiles";
-
     private static final String GET_ASSET = "SELECT * FROM assetFiles WHERE name=?";
 
     private static final String DELETE_ASSET = "DELETE FROM assetFiles WHERE name=?";
@@ -37,8 +34,6 @@ public class ImageAssetDataSource implements AssetsDataInterface {
     private final Connection connection;
 
     private PreparedStatement addAsset;
-
-    private PreparedStatement getNameList;
 
     private PreparedStatement getAsset;
 
@@ -57,13 +52,14 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             Statement st = connection.createStatement();
             st.execute(CREATE_TABLE);
             addAsset = connection.prepareStatement(INSERT_ASSET);
-            getNameList = connection.prepareStatement(GET_NAMES);
             getAsset = connection.prepareStatement(GET_ASSET);
             deleteAsset = connection.prepareStatement(DELETE_ASSET);
             rowCount = connection.prepareStatement(COUNT_ROWS);
         } catch (SQLException ex) {
-            // Improve this behavior ########################################################
             ex.printStackTrace();
+                        JOptionPane.showMessageDialog(frame,
+                    "An error has occurred while creating the assets table.",
+                    "Table creation: SQL Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -78,15 +74,19 @@ public class ImageAssetDataSource implements AssetsDataInterface {
 
             addAsset.setString(1, asset.getName());
 
-            //
-            //Change this so it checks for unique names.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //
             addAsset.setBytes(2,bufferedImageToByte(asset.getImageFile(), "png"));
             addAsset.execute();
         } catch (SQLException ex) {
             ex.printStackTrace();
+            // This is commented out until a known bug is resolved in order to prevent nuisance warnings.
+//            JOptionPane.showMessageDialog(frame,
+//                    "An error has occurred while adding an image to the database.",
+//                    "Save to database: SQL Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
-            e.printStackTrace(); // Improve this behavior###########################################
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                    "An error has occurred while converting the image being added to the database.",
+                    "Save to database: JavaIO Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -108,7 +108,10 @@ public class ImageAssetDataSource implements AssetsDataInterface {
             a.setName(rs.getString("name"));
             a.setImageFile(bytesToBufferedImage(rs.getBytes("imageFile")));
         } catch (SQLException ex) {
-            ex.printStackTrace(); // Improve error handling behavior ############################################
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame,
+                    "An error has occurred while retrieving an image from the database.",
+                    "Database error: Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,7 +124,7 @@ public class ImageAssetDataSource implements AssetsDataInterface {
      * @return an integer representing the number of rows in the imageAsset table.
      */
     public int getSize() {
-        ResultSet rs = null;
+        ResultSet rs;
         int rows = 0;
 
         try {

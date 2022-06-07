@@ -14,9 +14,6 @@ import java.util.Objects;
 import static collections.HelperMethods.getExtension;
 import static collections.Main.*;
 
-// Stretch goal: Make a title for the assets tab so the user knows why they are selecting images.
-
-
 /**
  * Defines what is rendered on the Assets Tab in the user interface.
  * @author Shannon Tetley
@@ -49,20 +46,21 @@ public class AssetsTab extends JFrame {
 
     /**
      * Constructor that defines the contents of the Assets tab.
+     *
      * @param tabbedPane is the JTabbedPane that this content will be rendered in.
      * @author Shannon Tetley
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public AssetsTab(JTabbedPane tabbedPane) {
-        // Error catch to check that this is being called with a JTabbedPane as its argument.
-        // Consider whether that should happen here or in the method that calls it.
 
         // Set up the default image.
         noSelectionImage.setName("default");
-        String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.jpg";
+        final String defaultImagePath = "src/gui/imageAssets/DefaultImageSelection200x200.png";
         BufferedImage c = null;
         try {
             c = ImageIO.read(new File(defaultImagePath));
         } catch (IOException e) {
+            // The file path is hard coded therefore it shouldn't throw an error when running the read method.
             e.printStackTrace();
         }
         noSelectionImage.setImageFile(c);
@@ -72,7 +70,7 @@ public class AssetsTab extends JFrame {
         assetPanel.setBackground(Color.DARK_GRAY);
         tabbedPane.add("Assets", assetPanel);
 
-         //Defaults
+        //Defaults
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.weightx = 100;
@@ -88,29 +86,22 @@ public class AssetsTab extends JFrame {
         widgetAdder(constraints);
 
         selectEntryImage.addActionListener( e -> imageExplorer(entryIcon, entry) );
-//        selectEntryImage.addActionListener( e -> dbImageTester());
-
         selectExitImage.addActionListener( e -> imageExplorer(exitIcon, exit) );
         logo1stImage.addActionListener( e -> imageExplorer(logo1Icon, logo1) );
         logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon, logo2) );
 
     }
 
-    /**
-     * This method opens a file explorer for the user and handles its behavior.
-     * It requires an image icon, so it knows where to put the image in the interface.
-     *
-     * @param icon is the ImageIcon that a scaled version of the selected image will be put into.
-     */
-    private void imageExplorer(ImageIcon icon,  ImageAsset asset) {
+    // This method opens a file explorer for the user and handles its behavior.
+    // It requires an image icon, so it knows where to put the image in the interface.
+    @SuppressWarnings("UnnecessaryReturnStatement")
+    private void imageExplorer(ImageIcon icon, ImageAsset asset) {
         final int maxWidth = 220;
-//        final int minWidth = 10;
         final int maxHeight = 220;
-//        final int minHeight = 10;
 
         FileDialog fd = new FileDialog(new JFrame(), "Select Image");
         // Set a filter
-        fd.setFile("*.png"); // Note that this causes a minor error in the interface, please document this. ############
+        fd.setFile("*.png");
         fd.setMultipleMode(false);
 
         fd.setVisible(true);
@@ -118,13 +109,9 @@ public class AssetsTab extends JFrame {
         // Check the file got loaded/exists. File length of 0 implies that no file was loaded.
         if(f.length > 0){
             String aPath = fd.getFiles()[0].getAbsolutePath();
-//            System.out.println(aPath);
             BufferedImage c;
             try {
                 c = ImageIO.read(new File(aPath));
-                // Once used for checking the size of the image.
-//                int cWidth = c.getWidth();
-//                int cHeight = c.getHeight();
 
                 // Check that the file selected is a png.
                 if (Objects.equals(getExtension(aPath), "png") || Objects.equals(getExtension(aPath), "PNG")) {
@@ -164,21 +151,13 @@ public class AssetsTab extends JFrame {
             asset.setAsset(image); // put the image arg into the image file object.
 
             // Add the asset file to the database
-            // Add a check here to prevent entry of existing image file into database.!!!!!!!!!!!!!!!!
             assetsTable.addImageFile(asset.getImageFile());
-            // Add the image to the interface. (This is done in the explorer method)
-            // Set the new image to the image that goes into the maze. Talk to Eric about this.
-
-            // once an asset table is made, make the image asset persistent.
         }
         // Else do nothing, it's possible to be passed a null asset if the user picks non.
     }
 
-    /**
-     * Helper method used for hiding repeated calls to the addToPanel and addImageLabel methods.
-     *
-     * @param constraints constraints for the grid bag layout.
-     */
+    // Helper method used for hiding repeated calls to the addToPanel and addImageLabel methods.
+    // @param constraints, constraints for the grid bag layout.
     private void widgetAdder(GridBagConstraints constraints) {
         // Add the elements defined above to the Asset panel that's inside the Assets tab.
         addToPanel(assetPanel, selectEntryImage, constraints,0,0,2,1);
@@ -206,6 +185,7 @@ public class AssetsTab extends JFrame {
      * @param h     number of grid positions the image occupies height wise.
      * @author Shannon Tetley
      */
+    @SuppressWarnings("SameParameterValue")
     private void addImageLabel(JLabel label, ImageIcon icon, ImageAsset asset, int x, int y, int w, int h) {
         icon.setImage(asset.getAsset());
         label.setIcon(icon);
@@ -235,7 +215,6 @@ public class AssetsTab extends JFrame {
     }
 
     /**
-     * Used for loading assets from the database.
      * @param e set the name of the image object.
      */
     public static void setEntry(ImageAsset e) { entry = e; }
@@ -247,7 +226,6 @@ public class AssetsTab extends JFrame {
     }
 
     /**
-     * Used for loading assets from the database.
      * @param x set the name of the image object.
      */
     public static void setExit(ImageAsset x) { exit = x; }
@@ -259,9 +237,9 @@ public class AssetsTab extends JFrame {
     }
 
     /**
-     * Used for loading assets from the database.
      * @param l set the name of the image object.
      */
+    @SuppressWarnings("unused")
     public static void setLogo1(ImageAsset l) { logo1 = l; }
     /**
      * @return the name of the image object.
@@ -271,13 +249,14 @@ public class AssetsTab extends JFrame {
     }
 
     /**
-     * Used for loading assets from the database.
      * @param l set the name of the image object.
      */
+    @SuppressWarnings("unused")
     public static void setLogo2(ImageAsset l) { logo2 = l; }
     /**
      * @return the name of the image object.
      */
+    @SuppressWarnings("unused")
     public static ImageAsset getLogo2() {
         return logo2;
     }

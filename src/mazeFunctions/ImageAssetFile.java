@@ -6,13 +6,10 @@ import java.io.Serializable;
 /**
  * This class is used for storing images in the database and is necessary because multiple instances
  * of the ImageAsset class can refer to a single instance of this class.
+ *
  * @author Shannon Tetley
  */
 public class ImageAssetFile implements Comparable<ImageAssetFile>, Serializable {
-
-    // Note that it is best practice implementing a serialVersionUID here.
-    // This is an example of what to do. It's not deemed necessary at this stage.
-    //private static final long serialVersionUID = -7092701502990374424L;
 
     // Set once asset is in the database.
     private String uniqueKey = null;
@@ -28,7 +25,9 @@ public class ImageAssetFile implements Comparable<ImageAssetFile>, Serializable 
 
     /**
      * Constructor to set values for the assets details.
-     * @param //type the type of asset this is. Options are logo1, logo2, image1, image2. (names need updating)
+     *
+     * @param name String - the name of the image file being created.
+     * @param i the BufferedImage that will be put in the database.
      */
     public ImageAssetFile(String name, BufferedImage i) {
         this.uniqueKey = "code to set the unique ID";
@@ -36,54 +35,51 @@ public class ImageAssetFile implements Comparable<ImageAssetFile>, Serializable 
         this.name = name;
     }
 
-    public void addToDatabase(){
-
-    }
-
-    public void deleteFromDatabase() {
-
-    }
+    // These are planned but unimplemented methods for adding and removing the asset to the database.
+//    public void addToDatabase(){
+//
+//    }
+//
+//    public void deleteFromDatabase() {
+//
+//    }
 
     /**
-     *
-      * @return
+     * It was planned to use this field as the primary key for the database table.
+     * Time constraints prevented its implementation.
      */
     public String getUniqueKey() {
         return uniqueKey;
     }
     /**
-     *
-     * @param uniqueKey
+     * It was planned to use this field as the primary key for the database table.
+     * Time constraints prevented its implementation.
      */
     public void setUniqueKey(String uniqueKey) {
         this.uniqueKey = uniqueKey;
     }
 
     /**
-     *
-     * @return
+     * @return the imageFile object this asset is associated with.
      */
     public BufferedImage getImageFile() {
         return imageFile;
     }
     /**
-     *
-     * @param imageFile
+     * @param imageFile the imageFile that this asset points to.
      */
     public void setImageFile(BufferedImage imageFile) {
         this.imageFile = imageFile;
     }
 
     /**
-     *
-     * @return
+     * @return the name of the asset.
      */
     public String getName() {
         return name;
     }
     /**
-     *
-     * @param name
+     * @param name String - the name this asset will be given.
      */
     public void setName(String name) {
         this.name = name;
