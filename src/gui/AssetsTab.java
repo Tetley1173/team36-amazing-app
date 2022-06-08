@@ -35,14 +35,16 @@ public class AssetsTab extends JFrame {
     private final ImageIcon logo1Icon = new ImageIcon();
     private final ImageIcon logo2Icon = new ImageIcon();
 
-    private static ImageAssetFile noSelectionImage = new ImageAssetFile();
+    private static final ImageAssetFile noSelectionImage = new ImageAssetFile();
     private static ImageAsset entry = new ImageAsset("entry", "entry", noSelectionImage);
     private static ImageAsset exit = new ImageAsset("exit", "exit", noSelectionImage);
     private static ImageAsset logo1 = new ImageAsset("logo1", "logo1", noSelectionImage);
     private static ImageAsset logo2 = new ImageAsset("logo2", "logo2", noSelectionImage);
 
-
-
+    private ImageAssetFile entryFile = new ImageAssetFile("entry", null);
+    private ImageAssetFile exitFile = new ImageAssetFile("exit", null);
+    private ImageAssetFile logo1File = new ImageAssetFile("logo1", null);
+    private ImageAssetFile logo2File = new ImageAssetFile("logo2", null);
 
     /**
      * Constructor that defines the contents of the Assets tab.
@@ -83,17 +85,17 @@ public class AssetsTab extends JFrame {
         // This method adds all the buttons et cetera, to the assets panel.
         widgetAdder(constraints);
 
-        selectEntryImage.addActionListener( e -> imageExplorer(entryIcon, entry) );
-        selectExitImage.addActionListener( e -> imageExplorer(exitIcon, exit) );
-        logo1stImage.addActionListener( e -> imageExplorer(logo1Icon, logo1) );
-        logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon, logo2) );
+        selectEntryImage.addActionListener( e -> imageExplorer(entryIcon, entry, entryFile) );
+        selectExitImage.addActionListener( e -> imageExplorer(exitIcon, exit, exitFile) );
+        logo1stImage.addActionListener( e -> imageExplorer(logo1Icon, logo1, logo1File) );
+        logo2ndImage.addActionListener( e -> imageExplorer(logo2Icon, logo2, logo2File) );
 
     }
 
     // This method opens a file explorer for the user and handles its behavior.
     // It requires an image icon, so it knows where to put the image in the interface.
     @SuppressWarnings("UnnecessaryReturnStatement")
-    private void imageExplorer(ImageIcon icon, ImageAsset asset) {
+    private void imageExplorer(ImageIcon icon, ImageAsset asset, ImageAssetFile assetFile) {
         final int maxWidth = 220;
         final int maxHeight = 220;
 
@@ -118,7 +120,7 @@ public class AssetsTab extends JFrame {
 
                     icon.setImage(scaleImage);
                     assetPanel.repaint();
-                    userSelectsImage(asset, c);
+                    userSelectsImage(asset, assetFile, c);
                 }
                 else {
                     JOptionPane.showMessageDialog(this,
@@ -143,10 +145,13 @@ public class AssetsTab extends JFrame {
 
     // This method allows the user to select an image with the imageExplorer method. It then puts the returned image into
     // the database and an asset object.
-    private void userSelectsImage(ImageAsset asset, BufferedImage image) {
+    private void userSelectsImage(ImageAsset asset, ImageAssetFile newFile, BufferedImage image) {
 
         if (asset != null) {
-            asset.setAsset(image); // put the image arg into the image file object.
+            // put the image into the ImageAssetFile.
+            newFile.setImageFile(image);
+            // Associate the new ImageAssetFile with the asset.
+            asset.setImageFile(newFile);
 
             // Add the asset file to the database
             assetsTable.addImageFile(asset.getImageFile());
