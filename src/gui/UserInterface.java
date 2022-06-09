@@ -23,7 +23,7 @@ public class UserInterface extends JFrame implements ActionListener {
         tabbedPane = new JTabbedPane();
         tabbedPane.add("Asset", (new AssetsTab()).getTab());
         tabbedPane.add("Edit", (new EditTab()).getTab());
-        tabbedPane.add("Export", (new ExportTab()).getTab());
+//        tabbedPane.add("Export", (new ExportTab()).getTab());
         getContentPane().add(tabbedPane);
 
         pack();
