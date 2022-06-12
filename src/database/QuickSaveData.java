@@ -39,7 +39,7 @@
 //        }
 //
 //        /**
-//         * Based on the name of the person in the address book, delete the person.
+//         * Based on the name of the person in the Quicksave, delete the person.
 //         *
 //         * @param key
 //         */
@@ -52,7 +52,7 @@
 //        }
 //
 //        /**
-//         * Saves the data in the address book using a persistence
+//         * Saves the data in the Quicksave using a persistence
 //         * mechanism.
 //         */
 //        public void persist() {

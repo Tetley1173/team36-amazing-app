@@ -104,7 +104,7 @@ public abstract class QuickSaveDataSource implements QuickSaveInterface {
     /**
      * Returns the size of the QuickSave table.
      *
-     * @return an integer representing the number of rows in the imageAsset table.
+     * @return an integer representing the number of rows in the Quicksave table.
      */
     public int getSize() {
         ResultSet resultSet = null;

@@ -26,20 +26,7 @@ public interface QuickSaveInterface {
      */
     QuickSaveFile getMazeImage(String name);
 
-    /**
-     * Gets the number of addresses in the address book.
-     * @return size of address book.
-     */
-    int getSize();
 
-    /**
-     * Deletes a Person from the address book.
-     * Make sure this is done somewhere in the system to remove unneeded assets ################################
-     * Maybe manually by the user or conditionally when a maze is deleted.
-     *
-     * @param name The name to delete from the address book.
-     */
-    void deleteAsset(String name);
 
     /**
      * Finalizes any resources used by the data source and ensures data is
@@ -47,13 +34,7 @@ public interface QuickSaveInterface {
      */
     void close();
 
-    /**
-     * Retrieves a set of names from the data source that are used in
-     * the name list.
-     *
-     * @return set of names.
-     */
-    Set<String> nameSet();
+
 
 }
 
